@@ -1,455 +1,626 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta name="google-adsense-account" content="ca-pub-7453399945201277">
-    <meta name="google-site-verification" content="rXTtLPJavFhXvJ7TGofxQ3XXGZXb_B8dzSBNAPZwLFk" />
-    <link rel="icon" type="image/png" href="/resim.png">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giriş Yap - İtemlerinMarketi</title>
-    <link rel="stylesheet" href="/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background: #0a0a1a;
-            color: #e8e8f0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background:
-                radial-gradient(ellipse at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 90% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 70%);
-            z-index: -1;
-            pointer-events: none;
-        }
+// ============================================
+// 1. ENV YÜKLE (EN ÜSTTE)
+// ============================================
+require('dotenv').config();
 
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 16px 40px;
-            background: rgba(10, 10, 26, 0.85);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 100;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        header .logo {
-            font-size: 20px;
-            font-weight: 700;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        header .logo i {
-            color: #6366f1;
-        }
-        header nav a {
-            color: #8a8aaa;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        header nav a:hover {
-            background: rgba(255, 255, 255, 0.06);
-            color: white;
-        }
+// ============================================
+// 2. IPv4 ZORLAMA
+// ============================================
+const dns = require('dns');
+dns.setDefaultResultOrder('ipv4first');
 
-        .login-container {
-            max-width: 420px;
-            width: 100%;
-            margin-top: 60px;
-            background: rgba(20, 20, 42, 0.85);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-        }
-        .login-container h1 {
-            font-size: 28px;
-            font-weight: 800;
-            color: white;
-            text-align: center;
-            margin-bottom: 4px;
-        }
-        .login-container .alt-baslik {
-            text-align: center;
-            color: #8a8aaa;
-            font-size: 14px;
-            margin-bottom: 28px;
-        }
-        .login-container .alt-baslik a {
-            color: #a5b4fc;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        .login-container .alt-baslik a:hover {
-            color: white;
-        }
+const express = require('express');
+const session = require('express-session');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const nodemailer = require('nodemailer');
+const mongoose = require('mongoose');
 
-        .alert {
-            padding: 12px 16px;
-            border-radius: 10px;
-            margin-bottom: 16px;
-            font-size: 14px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .alert.error {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.15);
-            color: #f87171;
-        }
-        .alert.success {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.15);
-            color: #34d399;
-        }
-        .alert i {
-            font-size: 16px;
-        }
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-        .form-box label {
-            display: block;
-            color: #c4c4d4;
-            font-size: 13px;
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
-        .form-box input {
-            width: 100%;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 10px;
-            color: white;
-            font-size: 14px;
-            transition: all 0.3s;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-            margin-bottom: 16px;
-        }
-        .form-box input:focus {
-            border-color: #6366f1;
-            outline: none;
-            background: rgba(255, 255, 255, 0.06);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-        .form-box input::placeholder {
-            color: #5a5a7a;
-        }
+// ============================================
+// 3. SESSION AYARLARI
+// ============================================
+app.use(session({
+    secret: 'itemlerinmarketi_super_secret_key_2026',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false, maxAge: 7 * 24 * 60 * 60 * 1000 } // 7 gün
+}));
 
-        .btn-primary {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: 'Inter', sans-serif;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: white;
-            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25);
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.35);
-        }
+// ============================================
+// 4. PASSPORT AYARLARI
+// ============================================
+app.use(passport.initialize());
+app.use(passport.session());
 
-        .google-btn {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Inter', sans-serif;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.04);
-            color: #c4c4d4;
-        }
-        .google-btn:hover {
-            background: rgba(255, 255, 255, 0.08);
-            color: white;
-            transform: translateY(-2px);
-        }
-        .google-btn img {
-            width: 20px;
-            height: 20px;
-        }
+// Kullanıcı serileştirme
+passport.serializeUser((user, done) => {
+    done(null, user.kullaniciAdi);
+});
 
-        .ayirici {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin: 20px 0;
-            color: #5a5a7a;
-            font-size: 13px;
-        }
-        .ayirici::before,
-        .ayirici::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.06);
-        }
+passport.deserializeUser((kullaniciAdi, done) => {
+    const kullanicilar = JSON.parse(global.kullanicilarJSON || '[]');
+    const user = kullanicilar.find(u => u.kullaniciAdi === kullaniciAdi);
+    done(null, user || null);
+});
 
-        .kayit-link {
-            text-align: center;
-            margin-top: 20px;
-            color: #8a8aaa;
-            font-size: 14px;
+// GOOGLE STRATEJİSİ
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID || 'YOUR_GOOGLE_CLIENT_ID',
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'YOUR_GOOGLE_CLIENT_SECRET',
+    callbackURL: process.env.GOOGLE_CALLBACK_URL || '/auth/google/callback'
+}, async (accessToken, refreshToken, profile, done) => {
+    try {
+        const email = profile.emails && profile.emails[0] ? profile.emails[0].value : null;
+        const googleId = profile.id;
+        const displayName = profile.displayName || email || 'Google_Kullanici';
+        
+        // Kullanıcıyı localStorage'dan kontrol et
+        let kullanicilar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
+        let user = kullanicilar.find(u => u.googleId === googleId || u.email === email);
+        
+        if (!user) {
+            // Yeni kullanıcı oluştur
+            const yeniKullanici = {
+                kullaniciAdi: displayName.replace(/\s/g, '_').toLowerCase() + '_' + Date.now().toString().slice(-4),
+                sifre: 'google_oauth_' + googleId,
+                email: email || '',
+                googleId: googleId,
+                bakiye: 0, // ✅ 100 TL DEĞİL, 0 TL!
+                rol: 'uye',
+                googleConnected: true,
+                createdAt: new Date()
+            };
+            kullanicilar.push(yeniKullanici);
+            localStorage.setItem('kullanicilar', JSON.stringify(kullanicilar));
+            user = yeniKullanici;
         }
-        .kayit-link a {
-            color: #a5b4fc;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-        .kayit-link a:hover {
-            color: white;
-        }
+        
+        // Kullanıcıyı global olarak sakla
+        global.kullanicilarJSON = JSON.stringify(kullanicilar);
+        
+        return done(null, user);
+        
+    } catch (hata) {
+        console.error('❌ Google auth hatası:', hata.message);
+        return done(hata, null);
+    }
+}));
 
-        .admin-badge {
-            text-align: center;
-            margin-top: 12px;
-            font-size: 12px;
-            color: #5a5a7a;
-        }
-        .admin-badge span {
-            color: #f59e0b;
-        }
+// ============================================
+// 5. GOOGLE AUTH ROUTE'LARI
+// ============================================
+app.get('/auth/google',
+    passport.authenticate('google', { scope: ['profile', 'email'] })
+);
 
-        @media (max-width: 480px) {
-            header {
-                padding: 12px 20px;
-            }
-            header .logo {
-                font-size: 16px;
-            }
-            .login-container {
-                padding: 24px;
-                margin-top: 80px;
-            }
-            .login-container h1 {
-                font-size: 24px;
-            }
-        }
-    </style>
-</head>
-<body>
+app.get('/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    (req, res) => {
+        // Başarılı giriş
+        const user = req.user;
+        localStorage.setItem('aktifKullanici', JSON.stringify({
+            kullaniciAdi: user.kullaniciAdi,
+            rol: user.rol || 'uye',
+            bakiye: user.bakiye || 0,
+            email: user.email || '',
+            googleConnected: true
+        }));
+        res.redirect('/');
+    }
+);
 
-    <header>
-        <div class="logo">
-            <i class="fas fa-store"></i> İtemlerinMarketi
+// ============================================
+// 6. MONGODB BAĞLANTISI
+// ============================================
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://ananiyiyemmm1461_db_user:hi62FFFCM51crtFs@cluster0.f5jakqu.mongodb.net/itemlerinmarketi?retryWrites=true&w=majority&appName=Cluster0';
+
+const mongooseOptions = {
+    serverSelectionTimeoutMS: 30000,
+    socketTimeoutMS: 45000,
+    family: 4,
+    maxPoolSize: 10,
+    minPoolSize: 2
+};
+
+console.log('📡 MongoDB bağlanıyor...');
+mongoose.connect(MONGODB_URI, mongooseOptions)
+    .then(() => {
+        console.log('✅ MongoDB bağlantısı başarılı!');
+        console.log(`   📁 Veritabanı: itemlerinmarketi`);
+        varsayilanIlanEkle();
+    })
+    .catch(err => {
+        console.error('❌ MongoDB bağlantı hatası:', err.message);
+        console.log('⚠️  Bağlantı yeniden deneniyor...');
+        setTimeout(() => {
+            mongoose.connect(MONGODB_URI, mongooseOptions);
+        }, 5000);
+    });
+
+mongoose.connection.on('disconnected', () => {
+    console.log('⚠️  MongoDB bağlantısı kesildi, yeniden bağlanılıyor...');
+    setTimeout(() => {
+        mongoose.connect(MONGODB_URI, mongooseOptions);
+    }, 5000);
+});
+
+// ============================================
+// 7. ŞEMALAR
+// ============================================
+const ilanSchema = new mongoose.Schema({
+    baslik: { type: String, required: true },
+    fiyat: { type: Number, required: true },
+    detay: { type: String, default: '' },
+    sure: { type: String, default: '24 Saat' },
+    resim: { type: String, default: '' },
+    satici: { type: String, required: true },
+    aktiflikDurumu: { type: String, default: 'aktif' },
+    createdAt: { type: Date, default: Date.now }
+});
+
+const Ilan = mongoose.model('Ilan', ilanSchema);
+
+// ============================================
+// 8. VARSAYILAN İLAN EKLE
+// ============================================
+async function varsayilanIlanEkle() {
+    try {
+        const count = await Ilan.countDocuments();
+        if (count === 0) {
+            const varsayilan = new Ilan({
+                baslik: 'Valorant Vandal Skinli Hesap',
+                fiyat: 450,
+                detay: 'Full skinli Valorant hesabı, ilk mail geliyor. Hemen teslim!',
+                sure: '15 Dakika',
+                resim: '',
+                satici: 'Ahmet',
+                aktiflikDurumu: 'aktif'
+            });
+            await varsayilan.save();
+            console.log('✅ Varsayılan ilan eklendi!');
+        }
+    } catch (err) {
+        console.log('⚠️ Varsayılan ilan eklenemedi:', err.message);
+    }
+}
+
+// ============================================
+// 9. NODEMAILER
+// ============================================
+const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+        user: 'itemlerinmarketi@gmail.com',
+        pass: process.env.GMAIL_PASS || 'gtsi fkgs ypna kran'
+    },
+    tls: {
+        rejectUnauthorized: false,
+        ciphers: 'SSLv3'
+    }
+});
+
+async function epostaGonder(alici, konu, mesaj) {
+    try {
+        const mailOptions = {
+            from: 'itemlerinmarketi@gmail.com',
+            to: alici,
+            subject: konu,
+            html: mesaj
+        };
+        const bilgi = await transporter.sendMail(mailOptions);
+        console.log('✅ E-posta gönderildi:', bilgi.messageId);
+        return { success: true };
+    } catch (hata) {
+        console.error('❌ E-posta hatası:', hata.message);
+        return { success: false, error: hata.message };
+    }
+}
+
+// ============================================
+// 10. EXPRESS AYARLARI
+// ============================================
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.static('public'));
+app.set('view engine', 'ejs');
+
+// ============================================
+// 10.5 TÜM EJS SAYFALARINA OTOMATİK ADSENSE EKLEME
+// ============================================
+app.use((req, res, next) => {
+    const originalRender = res.render;
+    res.render = function(view, options, callback) {
+        if (!options) options = {};
+        if (typeof options === 'function') {
+            callback = options;
+            options = {};
+        }
+        const adsenseScript = `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7453399945201277" crossorigin="anonymous"></script>`;
+        options.head_extra = (options.head_extra || '') + adsenseScript;
+        originalRender.call(this, view, options, callback);
+    };
+    next();
+});
+
+// ============================================
+// 11. E-POSTA DOĞRULAMA
+// ============================================
+app.post('/api/eposta-dogrula', async (req, res) => {
+    const { eposta, kullaniciAdi } = req.body;
+    if (!eposta || !kullaniciAdi) {
+        return res.json({ success: false, message: 'E-posta ve kullanıcı adı gerekli!' });
+    }
+    const kod = Math.floor(100000 + Math.random() * 900000).toString();
+    const htmlMesaj = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0f172a; color: #f8fafc; padding: 30px; border-radius: 12px; border: 1px solid #334155;">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h1 style="color: #38bdf8; margin: 0;">🛡️ İtemlerinMarketi</h1>
+                <p style="color: #94a3b8; margin: 5px 0 0 0;">Güvenli Ticaret Platformu</p>
+            </div>
+            <div style="background: #1e293b; padding: 25px; border-radius: 8px; border: 1px solid #334155;">
+                <h2 style="color: #f8fafc; margin-top: 0;">📧 E-posta Doğrulama</h2>
+                <p style="color: #cbd5e1;">Merhaba <strong style="color: #38bdf8;">${kullaniciAdi}</strong>,</p>
+                <p style="color: #cbd5e1;">Hesabınızı doğrulamak için aşağıdaki kodu kullanın:</p>
+                <div style="background: #0f172a; padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0; border: 2px dashed #a855f7;">
+                    <span style="font-size: 36px; font-weight: bold; letter-spacing: 8px; color: #a855f7;">${kod}</span>
+                </div>
+                <p style="color: #94a3b8; font-size: 13px;">⚠️ Bu kod <strong>5 dakika</strong> geçerlidir.</p>
+            </div>
         </div>
-        <nav>
-            <a href="/"><i class="fas fa-home"></i> Ana Sayfa</a>
-        </nav>
-    </header>
+    `;
+    const sonuc = await epostaGonder(eposta, `🔐 İtemlerinMarketi - E-posta Doğrulama Kodu`, htmlMesaj);
+    if (sonuc.success) {
+        res.json({ success: true, message: 'Doğrulama kodu gönderildi!', kod: kod });
+    } else {
+        res.json({ success: false, message: 'E-posta gönderilemedi: ' + sonuc.error });
+    }
+});
 
-    <div class="login-container">
+// ============================================
+// 12. ANA SAYFA
+// ============================================
+app.get('/', async (req, res) => {
+    try {
+        const ilanlar = await Ilan.find().sort({ createdAt: -1 });
+        res.render('index', { 
+            ilanlar, 
+            aktif: null,
+            title: 'İtemlerinMarketi - Güvenli Ticaret ve Oyun İlanları',
+            description: 'İtemlerinMarketi, güvenli ticaret platformu. Valorant, PUBG, CS:GO ve daha fazlası için oyun hesapları, e-pinler ve sanal ürünler. Hemen ilan ver veya satın al!'
+        });
+    } catch (hata) {
+        console.error('❌ Ana sayfa hatası:', hata.message);
+        res.render('index', { ilanlar: [], aktif: null });
+    }
+});
 
-        <h1><i class="fas fa-sign-in-alt" style="color:#6366f1;"></i> Giriş Yap</h1>
-        <p class="alt-baslik">Hesabına giriş yap ve alışverişe başla!</p>
-
-        <!-- ✅ HATA VE MESAJ GÖSTERİMİ - DÜZELTİLDİ -->
-        <% if (hata) { %>
-            <div class="alert error"><i class="fas fa-exclamation-circle"></i> <%= hata %></div>
-        <% } %>
-        <% if (mesaj) { %>
-            <div class="alert success"><i class="fas fa-check-circle"></i> <%= mesaj %></div>
-        <% } %>
-
-        <!-- GOOGLE İLE GİRİŞ -->
-        <button class="google-btn" onclick="googleGiris()">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20" height="20">
-                <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" />
-                <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" />
-                <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z" />
-                <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z" />
-            </svg>
-            Google ile Giriş Yap
-        </button>
-
-        <div class="ayirici">veya</div>
-
-        <!-- FORM -->
-        <form id="loginForm" class="form-box">
-            <label for="kullaniciAdi"><i class="fas fa-user"></i> Kullanıcı Adı</label>
-            <input type="text" id="kullaniciAdi" placeholder="Kullanıcı adını gir" required autocomplete="username">
-
-            <label for="sifre"><i class="fas fa-lock"></i> Şifre</label>
-            <input type="password" id="sifre" placeholder="Şifreni gir" required autocomplete="current-password">
-
-            <button type="submit" class="btn-primary"><i class="fas fa-sign-in-alt"></i> Giriş Yap</button>
-        </form>
-
-        <div class="kayit-link">
-            Hesabın yok mu? <a href="/register">Kayıt Ol</a>
-        </div>
-
-        <div class="admin-badge">
-            <i class="fas fa-shield-alt" style="color:#f59e0b;"></i>
-            Admin girişi için <span>admin9595</span> / <span>1453Cinar</span>
-        </div>
-
-    </div>
-
-    <script>
-        // ============================================
-        // GİRİŞ YAP - TAM SCRIPT
-        // ============================================
-
-        // ============================================
-        // GOOGLE İLE GİRİŞ
-        // ============================================
-        function googleGiris() {
-            const devam = confirm(
-                '🔐 Google ile giriş yapmak istiyorsan devam et.\n\n' +
-                '(Demo modunda: Google hesabı yerine "google_kullanici" olarak giriş yapılacaktır.)'
-            );
-            if (devam) {
-                const googleKullanici = {
-                    kullaniciAdi: 'google_kullanici',
-                    email: 'googleuser@gmail.com',
-                    rol: 'uye',
-                    bakiye: 100
-                };
-                let kullanicilar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
-                const mevcut = kullanicilar.find(u => u.kullaniciAdi === googleKullanici.kullaniciAdi);
-                if (!mevcut) {
-                    kullanicilar.push({
-                        kullaniciAdi: googleKullanici.kullaniciAdi,
-                        sifre: 'google_oauth',
-                        bakiye: googleKullanici.bakiye,
-                        email: googleKullanici.email,
-                        googleConnected: true
-                    });
-                    localStorage.setItem('kullanicilar', JSON.stringify(kullanicilar));
-                }
-                localStorage.setItem('aktifKullanici', JSON.stringify({
-                    kullaniciAdi: googleKullanici.kullaniciAdi,
-                    rol: googleKullanici.rol,
-                    bakiye: googleKullanici.bakiye,
-                    googleConnected: true
-                }));
-                alert('✅ Google ile başarıyla giriş yaptın kanka!');
-                window.location.href = '/';
-            }
+// ============================================
+// 13. İLAN DETAY SAYFASI
+// ============================================
+app.get('/ilan/:id', async (req, res) => {
+    try {
+        const ilanId = req.params.id;
+        if (!mongoose.Types.ObjectId.isValid(ilanId)) {
+            return res.redirect('/');
         }
+        const ilan = await Ilan.findById(ilanId);
+        if (!ilan) {
+            return res.status(404).render('ilan-detay', { ilan: null, aktif: null });
+        }
+        res.render('ilan-detay', { ilan, aktif: null });
+    } catch (hata) {
+        console.error('❌ İlan detay hatası:', hata.message);
+        res.redirect('/');
+    }
+});
 
-        // ============================================
-        // NORMAL GİRİŞ
-        // ============================================
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const kAdi = document.getElementById('kullaniciAdi').value.trim();
-            const sifre = document.getElementById('sifre').value.trim();
-
-            if (!kAdi || !sifre) {
-                alert('⚠️ Lütfen kullanıcı adı ve şifreni gir!');
-                return;
-            }
-
-            // Admin Kontrolü
-            if (kAdi === 'admin9595' && sifre === '1453Cinar') {
-                localStorage.setItem('aktifKullanici', JSON.stringify({
-                    kullaniciAdi: kAdi,
-                    rol: 'admin',
-                    bakiye: 99999
-                }));
-                window.location.href = '/yonetici-paneli';
-                return;
-            }
-
-            // Normal Kullanıcı Kontrolü
-            const kayitliKullanicilar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
-            const user = kayitliKullanicilar.find(u => u.kullaniciAdi === kAdi && u.sifre === sifre);
-
-            if (user) {
-                localStorage.setItem('aktifKullanici', JSON.stringify({
-                    kullaniciAdi: user.kullaniciAdi,
-                    rol: user.rol || 'uye',
-                    bakiye: user.bakiye || 0,
-                    email: user.email || ''
-                }));
-                window.location.href = '/';
-            } else {
-                const kullaniciVar = kayitliKullanicilar.find(u => u.kullaniciAdi === kAdi);
-                if (kullaniciVar) {
-                    alert('❌ Şifren yanlış kanka! Tekrar dene.');
-                } else {
-                    alert('❌ Bu kullanıcı adı kayıtlı değil! Önce kayıt ol.');
-                }
-                document.getElementById('sifre').value = '';
-                document.getElementById('sifre').focus();
-            }
+// ============================================
+// 14. İLAN EKLEME API
+// ============================================
+app.post('/api/ilan-ekle', async (req, res) => {
+    try {
+        const { baslik, fiyat, detay, sure, resim, satici } = req.body;
+        const yeniIlan = new Ilan({
+            baslik,
+            fiyat: parseFloat(fiyat),
+            detay: detay || '',
+            sure: sure || '24 Saat',
+            resim: resim || '',
+            satici,
+            aktiflikDurumu: 'aktif'
         });
+        const kaydedilenIlan = await yeniIlan.save();
+        res.json({ success: true, ilan: kaydedilenIlan });
+    } catch (hata) {
+        console.error('❌ İlan ekleme hatası:', hata.message);
+        res.json({ success: false, error: hata.message });
+    }
+});
 
-        // ============================================
-        // ENTER İLE GÖNDER
-        // ============================================
-        document.getElementById('sifre').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
-            }
-        });
+// ============================================
+// 15. İLAN DETAY API (GET)
+// ============================================
+app.get('/api/ilan/:id', async (req, res) => {
+    try {
+        const ilanId = req.params.id;
+        let ilan = null;
+        if (mongoose.Types.ObjectId.isValid(ilanId)) {
+            ilan = await Ilan.findById(ilanId);
+        }
+        if (ilan) {
+            res.json({ success: true, ilan: ilan });
+        } else {
+            res.json({ success: false, message: 'İlan bulunamadı' });
+        }
+    } catch (hata) {
+        console.error('❌ İlan getirme hatası:', hata.message);
+        res.json({ success: false, error: hata.message });
+    }
+});
 
-        document.getElementById('kullaniciAdi').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('sifre').focus();
-            }
-        });
+// ============================================
+// 16. İLAN DÜZENLEME API (POST)
+// ============================================
+app.post('/api/ilan-duzenle', async (req, res) => {
+    try {
+        const { id, baslik, fiyat, detay, sure, resim } = req.body;
+        if (!id || !baslik || !fiyat) {
+            return res.json({ success: false, message: 'Başlık, fiyat ve ID gerekli!' });
+        }
+        let ilan = null;
+        if (mongoose.Types.ObjectId.isValid(id)) {
+            ilan = await Ilan.findById(id);
+        }
+        if (!ilan) {
+            return res.json({ success: false, message: 'İlan bulunamadı!' });
+        }
+        ilan.baslik = baslik;
+        ilan.fiyat = parseFloat(fiyat);
+        ilan.detay = detay || '';
+        ilan.sure = sure || '24 Saat';
+        if (resim && resim.length > 0) {
+            ilan.resim = resim;
+        }
+        await ilan.save();
+        res.json({ success: true, message: 'İlan başarıyla güncellendi!' });
+    } catch (hata) {
+        console.error('❌ İlan güncelleme hatası:', hata.message);
+        res.json({ success: false, error: hata.message });
+    }
+});
 
-        console.log('🔐 İtemlerinMarketi - Giriş sayfası yüklendi!');
-    </script>
+// ============================================
+// 17. İLAN DURUM DEĞİŞTİRME API (POST)
+// ============================================
+app.post('/api/ilan-durum-degis', async (req, res) => {
+    try {
+        const { id, durum } = req.body;
+        if (!id || !durum) {
+            return res.json({ success: false, message: 'ID ve durum gerekli!' });
+        }
+        let ilan = null;
+        if (mongoose.Types.ObjectId.isValid(id)) {
+            ilan = await Ilan.findById(id);
+        }
+        if (!ilan) {
+            return res.json({ success: false, message: 'İlan bulunamadı!' });
+        }
+        ilan.aktiflikDurumu = durum;
+        await ilan.save();
+        res.json({ success: true, message: 'İlan durumu güncellendi!' });
+    } catch (hata) {
+        console.error('❌ Durum değiştirme hatası:', hata.message);
+        res.json({ success: false, error: hata.message });
+    }
+});
 
-</body>
-</html>
+// ============================================
+// 18. İLAN SİL API (DELETE)
+// ============================================
+app.delete('/api/ilan-sil/:id', async (req, res) => {
+    try {
+        const ilanId = req.params.id;
+        let ilan = null;
+        if (mongoose.Types.ObjectId.isValid(ilanId)) {
+            ilan = await Ilan.findById(ilanId);
+        }
+        if (!ilan) {
+            return res.json({ success: false, message: 'İlan bulunamadı!' });
+        }
+        await Ilan.findByIdAndDelete(ilanId);
+        res.json({ success: true, message: 'İlan silindi!' });
+    } catch (hata) {
+        console.error('❌ İlan silme hatası:', hata.message);
+        res.json({ success: false, error: hata.message });
+    }
+});
+
+// ============================================
+// 19. KVKK SAYFASI
+// ============================================
+app.get('/kvkk', (req, res) => {
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="tr">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>KVKK Aydınlatma Metni - İtemlerinMarketi</title>
+            <link rel="stylesheet" href="/style.css">
+            <style>
+                body { background: #0f172a; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; padding: 20px; }
+                .kvkk-container { max-width: 800px; margin: 40px auto; background: #1e293b; border-radius: 16px; padding: 40px; border: 1px solid #334155; box-shadow: 0 8px 40px rgba(0,0,0,0.5); }
+                .kvkk-container h1 { color: #38bdf8; margin-top: 0; display: flex; align-items: center; gap: 12px; }
+                .kvkk-container h2 { color: #a855f7; margin-top: 30px; }
+                .kvkk-container h3 { color: #fbbf24; margin-top: 20px; }
+                .kvkk-container p { color: #94a3b8; line-height: 1.8; font-size: 15px; }
+                .kvkk-container ul { color: #94a3b8; padding-left: 20px; line-height: 1.8; }
+                .kvkk-container .highlight { color: #fbbf24; font-weight: 600; }
+                .kvkk-container .btn-geri { background: #334155; color: #94a3b8; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-decoration: none; display: inline-block; transition: background 0.2s; margin-top: 20px; }
+                .kvkk-container .btn-geri:hover { background: #475569; color: white; }
+                .kvkk-container .border-box { background: #0f172a; padding: 20px; border-radius: 8px; border-left: 3px solid #a855f7; margin: 15px 0; }
+                .kvkk-container .tarih { color: #64748b; font-size: 13px; margin-top: 30px; border-top: 1px solid #334155; padding-top: 20px; }
+            </style>
+        </head>
+        <body>
+            <div class="kvkk-container">
+                <a href="/" class="btn-geri">← Ana Sayfaya Dön</a>
+                <h1><span>📜</span> KVKK Aydınlatma Metni</h1>
+                <p style="color:#94a3b8; margin-top:-5px; font-size:14px;">6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında</p>
+                <h2>1. Veri Sorumlusu</h2>
+                <p>İtemlerinMarketi olarak, kişisel verilerinizin güvenliğine önem veriyoruz. Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) uyarınca <span class="highlight">veri sorumlusu</span> sıfatıyla yürütülen veri işleme faaliyetleri hakkında sizi bilgilendirmek amacıyla hazırlanmıştır.</p>
+                <h2>2. Hangi Kişisel Verileriniz İşleniyor?</h2>
+                <div class="border-box">
+                    <ul>
+                        <li><strong>Kimlik Bilgileri:</strong> Ad, soyad, kullanıcı adı, e-posta adresi, telefon numarası</li>
+                        <li><strong>İletişim Bilgileri:</strong> E-posta adresi, telefon numarası</li>
+                        <li><strong>İşlem Güvenliği Bilgileri:</strong> IP adresi, cihaz bilgileri, log kayıtları</li>
+                        <li><strong>Finansal Bilgiler:</strong> Cüzdan bakiyesi, para çekme/iade talepleri</li>
+                        <li><strong>Kimlik Doğrulama Bilgileri:</strong> Para çekme işlemlerinde talep edilen kimlik fotoğrafları</li>
+                    </ul>
+                </div>
+                <h2>3. Kişisel Verileriniz Hangi Amaçla İşleniyor?</h2>
+                <ul>
+                    <li>✅ Üyelik işlemlerinin gerçekleştirilmesi</li>
+                    <li>✅ İlan verme ve satın alma işlemlerinin yürütülmesi</li>
+                    <li>✅ Para yatırma ve çekme işlemlerinin gerçekleştirilmesi</li>
+                    <li>✅ Güvenli ticaret ortamının sağlanması</li>
+                    <li>✅ Dolandırıcılık ve yasa dışı faaliyetlerin önlenmesi</li>
+                    <li>✅ Yasal yükümlülüklerin yerine getirilmesi</li>
+                    <li>✅ Müşteri hizmetleri ve destek taleplerinin yönetilmesi</li>
+                </ul>
+                <h2>4. Kişisel Verileriniz Kimlere ve Hangi Amaçla Aktarılıyor?</h2>
+                <p>Kişisel verileriniz, yasal yükümlülüklerin yerine getirilmesi amacıyla <span class="highlight">resmi kurum ve kuruluşlara</span> aktarılabilir. Ayrıca, hizmet sağlayıcılarımız (barındırma, e-posta vb.) ile işbirliği içinde çalışmaktayız. Verileriniz <strong>3. şahıslarla ticari amaçla paylaşılmaz</strong>.</p>
+                <h2>5. Kişisel Verileriniz Ne Kadar Süreyle Saklanıyor?</h2>
+                <p>Kişisel verileriniz, işleme amaçlarının gerektirdiği süre boyunca ve yasal saklama yükümlülüklerimiz kapsamında saklanmaktadır. Süre sonunda verileriniz <span class="highlight">güvenli bir şekilde imha edilir</span>.</p>
+                <h2>6. Kişisel Verileriniz Üzerindeki Haklarınız</h2>
+                <div class="border-box">
+                    <p>KVKK’nın 11. maddesi uyarınca aşağıdaki haklara sahipsiniz:</p>
+                    <ul>
+                        <li>🔹 Kişisel verilerinizin işlenip işlenmediğini öğrenme</li>
+                        <li>🔹 İşlenme amacını ve amaca uygun kullanılıp kullanılmadığını öğrenme</li>
+                        <li>🔹 Yurt içinde veya yurt dışında aktarıldığı 3. kişileri bilme</li>
+                        <li>🔹 Eksik veya yanlış işlenen verilerin düzeltilmesini isteme</li>
+                        <li>🔹 Kişisel verilerinizin silinmesini veya yok edilmesini isteme</li>
+                        <li>🔹 İşlenen verilerin münhasıran otomatik sistemler ile analiz edilmesi nedeniyle aleyhinize bir sonucun ortaya çıkmasına itiraz etme</li>
+                    </ul>
+                </div>
+                <h2>7. KVKK Başvuru ve İletişim</h2>
+                <p>KVKK kapsamında haklarınızı kullanmak veya sorularınız için bize <span class="highlight">itemlerinmarketi@gmail.com</span> adresinden ulaşabilirsiniz. Başvurularınız, KVKK'nın 13. maddesi uyarınca <strong>30 gün</strong> içinde sonuçlandırılacaktır.</p>
+                <div class="tarih">
+                    <p>📅 <strong>Son Güncelleme:</strong> 18 Ağustos 2026</p>
+                    <p style="font-size:12px; color:#64748b;">Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu ve ilgili mevzuat hükümleri doğrultusunda hazırlanmıştır.</p>
+                </div>
+                <a href="/" class="btn-geri">🏠 Ana Sayfaya Dön</a>
+            </div>
+        </body>
+        </html>
+    `);
+});
+
+// ============================================
+// 20. ROUTE'LAR
+// ============================================
+let bakiyeBildirimleri = [];
+
+app.get('/bakiye', (req, res) => {
+    res.render('bakiye', { 
+        mesaj: null, 
+        aktif: null 
+    });
+});
+
+// ✅ LOGIN SAYFASI - GÜNCELLENDİ (Google butonu aktif)
+app.get('/login', (req, res) => {
+    const mesaj = req.query.mesaj || null;
+    res.render('login', { 
+        hata: null, 
+        mesaj: mesaj,
+        aktif: null,
+        googleClientId: process.env.GOOGLE_CLIENT_ID || 'YOUR_GOOGLE_CLIENT_ID'
+    });
+});
+
+app.get('/register', (req, res) => {
+    res.render('register', { 
+        aktif: null,
+        mesaj: null 
+    });
+});
+
+app.get('/yonetici-paneli', (req, res) => {
+    res.render('admin', { 
+        bakiyeBildirimleri, 
+        aktif: null 
+    });
+});
+
+app.get('/para-cek', (req, res) => {
+    res.render('paracek', { 
+        aktif: null,
+        mesaj: null 
+    });
+});
+
+app.get('/ilan-duzenle', (req, res) => {
+    res.render('ilan_duzenle', { 
+        aktif: null,
+        mesaj: null 
+    });
+});
+
+app.get('/profil', (req, res) => { 
+    res.render('profil', { 
+        aktif: null,
+        mesaj: null 
+    });
+});
+
+app.get('/destek-talebi', (req, res) => {
+    res.render('destek_talebi', { 
+        aktif: null,
+        mesaj: null 
+    });
+});
+
+app.post('/bakiye-bildirimi', (req, res) => {
+    const { kullaniciAdi, miktar } = req.body;
+    bakiyeBildirimleri.push({
+        id: bakiyeBildirimleri.length + 1,
+        kullaniciAdi,
+        miktar: parseFloat(miktar),
+        durum: "Beklemede",
+        tarih: new Date()
+    });
+    res.render('bakiye', { 
+        mesaj: "Havale bildirimin iletildi!", 
+        aktif: null 
+    });
+});
+
+app.post('/bakiye-islem/:id/:aksiyon', (req, res) => {
+    const bildirim = bakiyeBildirimleri.find(b => b.id === parseInt(req.params.id));
+    if (bildirim && bildirim.durum === "Beklemede") {
+        bildirim.durum = req.params.aksiyon === "onayla" ? "Onaylandı" : "Reddedildi";
+    }
+    res.redirect('/yonetici-paneli');
+});
+
+// ============================================
+// 21. SUNUCUYU BAŞLAT
+// ============================================
+app.listen(PORT, () => {
+    console.log(`✅ İtemlerinMarketi çalışıyor: http://localhost:${PORT}`);
+    console.log(`📧 E-posta gönderimi hazır! (itemlerinmarketi@gmail.com)`);
+    console.log(`🔒 IPv4 zorlama aktif!`);
+    console.log(`📜 KVKK sayfası: /kvkk`);
+    console.log(`🔐 Google OAuth hazır!`);
+});
+
+process.on('uncaughtException', (err) => console.error('❌ Hata:', err.message));
+process.on('unhandledRejection', (err) => console.error('❌ Promise hatası:', err.message));
