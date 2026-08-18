@@ -18,155 +18,161 @@
     <link rel="canonical" href="https://itemlerinmarketi.onrender.com/ilan/<%= ilan ? ilan._id || ilan.id : '' %>" />
     
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            background: #0f172a;
-            color: #e2e8f0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a1a;
+            color: #e8e8f0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
             padding: 20px;
+            line-height: 1.6;
         }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
         .ilan-detay-container {
             max-width: 800px;
-            margin: 40px auto;
-            background: #1e293b;
-            border-radius: 16px;
+            margin: 20px auto;
+            background: rgba(20, 20, 42, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
             padding: 40px;
-            border: 1px solid #334155;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
         }
-        .ilan-detay-container .ilan-resim {
+
+        .btn-geri {
+            background: rgba(255, 255, 255, 0.04);
+            color: #8a8aaa;
+            padding: 8px 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-geri:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
+        .ilan-resim {
             width: 100%;
             max-height: 400px;
             object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #334155;
+            border-radius: 14px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            background: rgba(0, 0, 0, 0.2);
         }
-        .ilan-detay-container .ilan-baslik {
-            color: #38bdf8;
-            font-size: 32px;
-            margin: 0 0 10px 0;
-        }
-        .ilan-detay-container .ilan-fiyat {
-            color: #10b981;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .ilan-detay-container .ilan-bilgi {
-            color: #94a3b8;
-            margin: 10px 0;
-            font-size: 16px;
-        }
-        .ilan-detay-container .ilan-bilgi strong {
-            color: #e2e8f0;
-        }
-        .ilan-detay-container .ilan-aciklama {
-            background: #0f172a;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            border-left: 3px solid #6366f1;
-            color: #cbd5e1;
-            line-height: 1.6;
-        }
-        .ilan-detay-container .buton-grup {
+        .resim-yok {
+            width: 100%;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 14px;
             display: flex;
-            gap: 15px;
-            margin-top: 25px;
-            flex-wrap: wrap;
-        }
-        .ilan-detay-container .btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .ilan-detay-container .btn:hover {
-            transform: scale(1.05);
-        }
-        .btn-satin-al {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-        }
-        .btn-satin-al:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-        .btn-mesaj {
-            background: #1e293b;
-            color: #38bdf8;
-            border: 1px solid #38bdf8;
-        }
-        .btn-geri {
-            background: #334155;
-            color: #94a3b8;
-        }
-        .btn-geri:hover {
-            background: #475569;
-            color: white;
-        }
-        .ilan-detay-container .link-kopyala {
-            background: #0f172a;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
             align-items: center;
-            border: 1px solid #334155;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            margin-bottom: 20px;
+            color: #3a3a5a;
+            font-size: 18px;
+        }
+        .resim-yok i {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .ilan-baslik {
+            color: white;
+            font-size: 32px;
+            font-weight: 800;
+            margin: 0 0 8px 0;
+            display: flex;
+            align-items: center;
             flex-wrap: wrap;
+            gap: 10px;
         }
-        .ilan-detay-container .link-kopyala input {
-            flex: 1;
-            padding: 10px;
-            background: #1e293b;
-            border: 1px solid #475569;
-            border-radius: 6px;
-            color: white;
-            font-size: 14px;
-            min-width: 200px;
-        }
-        .ilan-detay-container .link-kopyala button {
-            background: #6366f1;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-        .ilan-detay-container .link-kopyala button:hover {
-            background: #4f46e5;
-        }
+
         .durum-rozet {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
+            padding: 4px 14px;
+            border-radius: 50px;
             font-size: 12px;
             font-weight: 600;
-            margin-left: 10px;
         }
         .durum-aktif {
-            background: #065f46;
-            color: #6ee7b7;
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
         }
         .durum-pasif {
-            background: #7f1d1d;
-            color: #fca5a5;
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
         }
+
+        .ilan-fiyat {
+            color: #34d399;
+            font-size: 32px;
+            font-weight: 800;
+        }
+
+        .guvenli-havuz {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.1);
+            color: #a5b4fc;
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-size: 12px;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            margin-top: 4px;
+        }
+
+        .ilan-bilgi-grup {
+            margin: 16px 0;
+        }
+        .ilan-bilgi {
+            color: #8a8aaa;
+            margin: 6px 0;
+            font-size: 15px;
+        }
+        .ilan-bilgi strong {
+            color: #c4c4d4;
+        }
+        .ilan-bilgi i {
+            width: 20px;
+            color: #6366f1;
+        }
+
         .satici-kart {
-            background: #0f172a;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            border: 1px solid #334155;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin: 16px 0;
+            border: 1px solid rgba(255, 255, 255, 0.04);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -176,137 +182,298 @@
         .satici-kart .satici-bilgi {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
         .satici-kart .satici-avatar {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            background: #334155;
+            background: rgba(99, 102, 241, 0.15);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            color: #38bdf8;
+            font-weight: 700;
+            color: #a5b4fc;
             font-size: 18px;
         }
         .satici-kart .satici-adi {
-            color: #f8fafc;
+            color: white;
             font-weight: 600;
             font-size: 16px;
         }
         .satici-kart .satici-uzmanlik {
-            color: #94a3b8;
+            color: #5a5a7a;
             font-size: 13px;
         }
         .satici-kart .mesaj-at-btn {
-            background: #6366f1;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
+            background: rgba(99, 102, 241, 0.15);
+            color: #a5b4fc;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            padding: 8px 18px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            transition: background 0.2s;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
         }
         .satici-kart .mesaj-at-btn:hover {
-            background: #4f46e5;
+            background: rgba(99, 102, 241, 0.25);
         }
-        .guvenli-havuz {
-            display: inline-block;
-            background: #1e1b4b;
-            color: #a855f7;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            border: 1px solid #a855f7;
-            margin-top: 5px;
+
+        .ilan-aciklama {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 16px 0;
+            border-left: 3px solid #6366f1;
+            color: #c4c4d4;
+            line-height: 1.7;
         }
-        .btn-duzenle {
-            background: #38bdf8;
-            color: #0f172a;
-            padding: 10px 20px;
+        .ilan-aciklama strong {
+            color: #38bdf8;
+        }
+        .ilan-aciklama p {
+            margin-top: 10px;
+            margin-bottom: 0;
+        }
+
+        .buton-grup {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 12px 30px;
             border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            flex: 1;
+            justify-content: center;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        .btn-satin-al {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2);
+        }
+        .btn-satin-al:hover {
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.3);
+        }
+        .btn-satin-al:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        .btn-mesaj {
+            background: rgba(255, 255, 255, 0.04);
+            color: #c4c4d4;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .btn-mesaj:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
+        .link-kopyala {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            flex-wrap: wrap;
+        }
+        .link-kopyala span {
+            color: #8a8aaa;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        .link-kopyala input {
+            flex: 1;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            min-width: 180px;
+            font-family: 'Inter', sans-serif;
+        }
+        .link-kopyala input:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+        .link-kopyala button {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 10px 24px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        .link-kopyala button:hover {
+            transform: scale(1.03);
+        }
+
+        .btn-duzenle {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.1);
+            padding: 10px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
         }
         .btn-duzenle:hover {
-            transform: scale(1.05);
+            background: rgba(56, 189, 248, 0.25);
         }
+
         .btn-rapor-et {
-            background: #dc2626;
-            color: white;
-            padding: 10px 20px;
-            border: none;
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.1);
+            padding: 10px 24px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
         }
         .btn-rapor-et:hover {
-            transform: scale(1.05);
+            background: rgba(239, 68, 68, 0.25);
         }
+
         .ilan-bulunamadi {
             text-align: center;
             padding: 60px 20px;
         }
         .ilan-bulunamadi h1 {
-            color: #ef4444;
+            color: #f87171;
             font-size: 48px;
+            font-weight: 800;
         }
         .ilan-bulunamadi p {
-            color: #94a3b8;
+            color: #8a8aaa;
             font-size: 18px;
             margin: 20px 0;
         }
         .ilan-bulunamadi a {
-            color: #38bdf8;
+            color: white;
             text-decoration: none;
             display: inline-block;
-            margin-top: 20px;
+            margin-top: 16px;
             padding: 12px 30px;
-            background: #1e293b;
-            border-radius: 8px;
-            border: 1px solid #38bdf8;
+            background: rgba(99, 102, 241, 0.15);
+            border-radius: 10px;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            transition: all 0.3s;
         }
+        .ilan-bulunamadi a:hover {
+            background: rgba(99, 102, 241, 0.25);
+        }
+
         #duzenleBtnContainer {
-            margin-top: 15px;
+            margin-top: 16px;
+            display: flex;
+            gap: 10px;
         }
-        @media (max-width: 600px) {
+
+        .paylas-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 11px;
+            color: #5a5a7a;
+        }
+
+        @media (max-width: 640px) {
             .ilan-detay-container {
-                padding: 20px;
+                padding: 24px;
+                margin: 10px;
             }
-            .ilan-detay-container .ilan-baslik {
+            .ilan-baslik {
                 font-size: 24px;
             }
-            .ilan-detay-container .ilan-fiyat {
+            .ilan-fiyat {
+                font-size: 26px;
+            }
+            .buton-grup .btn {
+                flex: 1 1 100%;
+            }
+            .satici-kart {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .satici-kart .mesaj-at-btn {
+                width: 100%;
+            }
+        }
+        @media (max-width: 480px) {
+            .ilan-detay-container {
+                padding: 16px;
+                margin: 0;
+                border-radius: 12px;
+            }
+            .ilan-baslik {
+                font-size: 20px;
+            }
+            .ilan-fiyat {
                 font-size: 22px;
+            }
+            .link-kopyala input {
+                min-width: 100px;
             }
         }
     </style>
 </head>
 <body>
+
     <div class="ilan-detay-container">
-        <a href="/" class="btn btn-geri" style="margin-bottom:20px;">← Ana Sayfaya Dön</a>
+
+        <a href="/" class="btn-geri"><i class="fas fa-arrow-left"></i> Ana Sayfaya Dön</a>
 
         <% if (!ilan) { %>
             <!-- İLAN BULUNAMADI -->
             <div class="ilan-bulunamadi">
-                <h1>🔍 İlan Bulunamadı</h1>
+                <h1><i class="fas fa-search" style="color:#f87171;"></i></h1>
+                <h1>İlan Bulunamadı</h1>
                 <p>Bu ilan artık mevcut değil veya kaldırılmış.</p>
-                <a href="/">🏠 Ana Sayfaya Dön</a>
+                <a href="/"><i class="fas fa-home"></i> Ana Sayfaya Dön</a>
             </div>
         <% } else { %>
-            <!-- İLAN GÖRSELİ -->
+
+            <!-- RESİM -->
             <% if (ilan.resim && ilan.resim.length > 0 && ilan.resim !== 'undefined') { %>
-                <img src="<%= ilan.resim %>" alt="<%= ilan.baslik %>" class="ilan-resim" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23334155%22 stroke-width=%222%22><rect x=%223%22 y=%223%22 width=%2218%22 height=%2218%22 rx=%222%22/><circle cx=%228.5%22 cy=%228.5%22 r=%221.5%22/><path d=%22M21 15l-5-5L5 21%22/></svg>'">>
+                <img src="<%= ilan.resim %>" alt="<%= ilan.baslik %>" class="ilan-resim" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%233a3a5a%22 stroke-width=%222%22><rect x=%223%22 y=%223%22 width=%2218%22 height=%2218%22 rx=%222%22/><circle cx=%228.5%22 cy=%228.5%22 r=%221.5%22/><path d=%22M21 15l-5-5L5 21%22/></svg>'">
             <% } else { %>
-                <div style="width:100%; height:200px; background:#0f172a; border-radius:12px; display:flex; align-items:center; justify-content:center; border:1px solid #334155; margin-bottom:20px; color:#475569; font-size:18px;">
-                    📦 Ürün Resmi Yok
+                <div class="resim-yok">
+                    <div>
+                        <i class="fas fa-image" style="color:#3a3a5a;"></i>
+                        <div>📦 Ürün Resmi Yok</div>
+                    </div>
                 </div>
             <% } %>
 
-            <!-- BAŞLIK ve DURUM -->
+            <!-- BAŞLIK -->
             <h1 class="ilan-baslik">
                 <%= ilan.baslik %>
                 <span class="durum-rozet <%= ilan.aktiflikDurumu === 'pasif' ? 'durum-pasif' : 'durum-aktif' %>">
@@ -316,15 +483,15 @@
 
             <!-- FİYAT -->
             <div class="ilan-fiyat"><%= ilan.fiyat %> TL</div>
+            <div class="guvenli-havuz"><i class="fas fa-shield-alt"></i> Güvenli Havuz</div>
 
-            <!-- GÜVENLİ HAVUZ BADGE -->
-            <div class="guvenli-havuz">🔒 Güvenli Havuz</div>
-
-            <!-- İLAN BİLGİLERİ -->
-            <div class="ilan-bilgi"><strong>Satıcı:</strong> <%= ilan.satici %></div>
-            <div class="ilan-bilgi"><strong>Teslimat Süresi:</strong> ⏱️ <%= ilan.sure || '24 Saat' %></div>
-            <div class="ilan-bilgi"><strong>İlan No:</strong> #<%= ilan._id || ilan.id %></div>
-            <div class="ilan-bilgi"><strong>Yayınlanma Tarihi:</strong> <%= new Date(ilan.createdAt || Date.now()).toLocaleDateString('tr-TR') %></div>
+            <!-- BİLGİLER -->
+            <div class="ilan-bilgi-grup">
+                <div class="ilan-bilgi"><i class="fas fa-user"></i> <strong>Satıcı:</strong> <%= ilan.satici %></div>
+                <div class="ilan-bilgi"><i class="fas fa-clock"></i> <strong>Teslimat Süresi:</strong> ⏱️ <%= ilan.sure || '24 Saat' %></div>
+                <div class="ilan-bilgi"><i class="fas fa-hashtag"></i> <strong>İlan No:</strong> #<%= ilan._id || ilan.id %></div>
+                <div class="ilan-bilgi"><i class="fas fa-calendar-alt"></i> <strong>Yayınlanma:</strong> <%= new Date(ilan.createdAt || Date.now()).toLocaleDateString('tr-TR') %></div>
+            </div>
 
             <!-- SATICI KARTI -->
             <div class="satici-kart">
@@ -332,230 +499,217 @@
                     <div class="satici-avatar"><%= ilan.satici.charAt(0).toUpperCase() %></div>
                     <div>
                         <div class="satici-adi"><%= ilan.satici %></div>
-                        <div class="satici-uzmanlik">🛒 Aktif Satıcı</div>
+                        <div class="satici-uzmanlik"><i class="fas fa-store"></i> Aktif Satıcı</div>
                     </div>
                 </div>
-                <button class="mesaj-at-btn" onclick="sohbetOdasiTetikle('<%= ilan.satici %>')">💬 Mesaj At</button>
+                <button class="mesaj-at-btn" onclick="sohbetOdasiTetikle('<%= ilan.satici %>')"><i class="fas fa-comment"></i> Mesaj At</button>
             </div>
 
             <!-- AÇIKLAMA -->
             <% if (ilan.detay) { %>
                 <div class="ilan-aciklama">
-                    <strong style="color:#38bdf8;">📝 Ürün Açıklaması</strong>
-                    <p style="margin-top:10px; margin-bottom:0;"><%= ilan.detay %></p>
+                    <strong><i class="fas fa-align-left"></i> Ürün Açıklaması</strong>
+                    <p><%= ilan.detay %></p>
                 </div>
             <% } %>
 
             <!-- BUTONLAR -->
             <div class="buton-grup">
                 <button class="btn btn-satin-al" id="satinAlBtn" onclick="ilanSatinAl('<%= ilan._id || ilan.id %>', <%= ilan.fiyat %>, '<%= ilan.satici %>', '<%= ilan.baslik.replace(/'/g, "\\'") %>')" <%= ilan.aktiflikDurumu === 'pasif' ? 'disabled' : '' %>>
-                    🛒 Satın Al
+                    <i class="fas fa-shopping-cart"></i> Satın Al
                 </button>
-                <button class="btn btn-mesaj" onclick="sohbetOdasiTetikle('<%= ilan.satici %>')">💬 Satıcıya Mesaj At</button>
+                <button class="btn btn-mesaj" onclick="sohbetOdasiTetikle('<%= ilan.satici %>')">
+                    <i class="fas fa-comment"></i> Satıcıya Mesaj At
+                </button>
             </div>
 
             <!-- LİNK KOPYALA -->
             <div class="link-kopyala">
-                <span style="color:#94a3b8; font-size:14px;">🔗 İlan Linki:</span>
+                <span><i class="fas fa-link"></i> İlan Linki:</span>
                 <input type="text" id="ilanLinkInput" value="https://itemlerinmarketi.onrender.com/ilan/<%= ilan._id || ilan.id %>" readonly>
-                <button onclick="kopyalaLink()">📋 Kopyala</button>
+                <button onclick="kopyalaLink()"><i class="fas fa-copy"></i> Kopyala</button>
             </div>
 
-            <!-- DÜZENLE / RAPOR ET BUTON ALANI -->
+            <!-- DÜZENLE / RAPOR ET -->
             <div id="duzenleBtnContainer"></div>
-            
+
         <% } %>
+
     </div>
 
     <script>
-    // ============================================
-    // İLAN DETAY SAYFASI - TAM SCRIPT
-    // ============================================
-    
-    const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
-    const ilanSatici = '<%= ilan ? ilan.satici : "" %>';
-    const ilanId = '<%= ilan ? (ilan._id || ilan.id) : "" %>';
+        // ============================================
+        // İLAN DETAY SAYFASI - TAM SCRIPT
+        // ============================================
 
-    // ============================================
-    // DÜZENLE / RAPOR ET BUTONU KONTROLÜ
-    // ============================================
-    const duzenleContainer = document.getElementById('duzenleBtnContainer');
-    if (duzenleContainer && ilanSatici) {
-        if (aktif && (aktif.kullaniciAdi === 'admin9595' || aktif.kullaniciAdi === ilanSatici)) {
-            // İLAN SAHİBİ VEYA ADMİN İSE: DÜZENLE BUTONU
-            duzenleContainer.innerHTML = `
-                <button class="btn btn-duzenle" onclick="window.location.href='/ilan-duzenle?id=${ilanId}'">
-                    ⚙️ İlanı Düzenle
-                </button>
-            `;
-        } else if (aktif) {
-            // GİRİŞ YAPMIŞSA ANCAK İLAN SAHİBİ DEĞİLSE: RAPOR ET BUTONU
-            duzenleContainer.innerHTML = `
-                <button class="btn btn-rapor-et" onclick="raporEt('${ilanId}')">
-                    🚨 İlanı Rapor Et
-                </button>
-            `;
-        } else {
-            // GİRİŞ YAPMAMIŞSA HİÇBİR ŞEY GÖSTERME
-            duzenleContainer.innerHTML = ``;
-        }
-    }
+        const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
+        const ilanSatici = '<%= ilan ? ilan.satici : "" %>';
+        const ilanId = '<%= ilan ? (ilan._id || ilan.id) : "" %>';
 
-    // ============================================
-    // İLAN RAPOR ET
-    // ============================================
-    function raporEt(id) {
-        const sebep = prompt("Bu ilanı neden rapor ediyorsun? (Örn: Sahte ilan, dolandırıcılık, uygunsuz içerik vb.)");
-        if (sebep && sebep.trim().length > 0) {
-            // Admin'e bildirim gönder (LocalStorage üzerinden)
-            const adminMesaj = `🚨 YENİ RAPOR!\nRapor eden: ${aktif.kullaniciAdi}\nİlan ID: ${id}\nSebep: ${sebep}`;
-            
-            // Bildirim sistemini kullan
-            bildirimEkle('admin9595', adminMesaj);
-            
-            alert("✅ Raporunuz başarıyla iletilmiştir. Yönetici tarafından incelenecektir.");
-            console.log("Rapor gönderildi:", { id, sebep });
-        } else {
-            alert("Rapor atmak için lütfen bir sebep yazınız.");
-        }
-    }
-
-    // ============================================
-    // KOPYALA
-    // ============================================
-    function kopyalaLink() {
-        const input = document.getElementById('ilanLinkInput');
-        if (!input) return;
-        input.select();
-        input.setSelectionRange(0, 99999);
-        navigator.clipboard.writeText(input.value).then(() => {
-            alert('✅ İlan linki kopyalandı!');
-        }).catch(() => {
-            document.execCommand('copy');
-            alert('✅ İlan linki kopyalandı!');
-        });
-    }
-
-    // ============================================
-    // SATIN AL
-    // ============================================
-    function ilanSatinAl(id, fiyat, satici, baslik) {
-        if (!aktif) {
-            alert('⚠️ Satın almak için önce giriş yapmalısın kanka!');
-            window.location.href = '/login';
-            return;
-        }
-        
-        if (aktif.kullaniciAdi === satici) {
-            alert('❌ Kendi ilanını satın alamazsın kanka!');
-            return;
-        }
-        
-        if ((aktif.bakiye || 0) < parseFloat(fiyat)) {
-            alert(`❌ Bakiyen yetersiz! Cüzdanında ${aktif.bakiye || 0} TL var.`);
-            return;
-        }
-
-        if (confirm(`"${baslik}" ilanını ${fiyat} TL'ye satın almak istediğine emin misin?`)) {
-            // Bakiye düş
-            let kullanicilar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
-            const aIdx = kullanicilar.findIndex(u => u.kullaniciAdi === aktif.kullaniciAdi);
-            if (aIdx !== -1) {
-                kullanicilar[aIdx].bakiye = parseFloat((kullanicilar[aIdx].bakiye - fiyat).toFixed(2));
-                localStorage.setItem('kullanicilar', JSON.stringify(kullanicilar));
-                aktif.bakiye = kullanicilar[aIdx].bakiye;
-                localStorage.setItem('aktifKullanici', JSON.stringify(aktif));
-                
-                // Cüzdan güncelle
-                const cuzdanElement = document.getElementById('cuzdanBakiyeYazi');
-                if (cuzdanElement) {
-                    cuzdanElement.innerText = aktif.bakiye + " ₺";
-                }
+        // ============================================
+        // DÜZENLE / RAPOR ET BUTONU
+        // ============================================
+        const duzenleContainer = document.getElementById('duzenleBtnContainer');
+        if (duzenleContainer && ilanSatici) {
+            if (aktif && (aktif.kullaniciAdi === 'admin9595' || aktif.kullaniciAdi === ilanSatici)) {
+                duzenleContainer.innerHTML = `
+                    <button class="btn-duzenle" onclick="window.location.href='/ilan-duzenle?id=${ilanId}'">
+                        <i class="fas fa-edit"></i> İlanı Düzenle
+                    </button>
+                `;
+            } else if (aktif) {
+                duzenleContainer.innerHTML = `
+                    <button class="btn-rapor-et" onclick="raporEt('${ilanId}')">
+                        <i class="fas fa-flag"></i> İlanı Rapor Et
+                    </button>
+                `;
             }
+        }
 
-            // Bildirim gönder
-            bildirimEkle(satici, `🎉 "${baslik}" ilanınız ${aktif.kullaniciAdi} tarafından satın alındı! Teslimat için iletişime geçin.`);
-            bildirimEkle(aktif.kullaniciAdi, `🛍️ "${baslik}" ilanını başarıyla satın aldınız! Para havuzda güvende.`);
+        // ============================================
+        // RAPOR ET
+        // ============================================
+        function raporEt(id) {
+            const sebep = prompt("Bu ilanı neden rapor ediyorsun? (Örn: Sahte ilan, dolandırıcılık, uygunsuz içerik vb.)");
+            if (sebep && sebep.trim().length > 0) {
+                const adminMesaj =
+                    `🚨 YENİ RAPOR!\nRapor eden: ${aktif.kullaniciAdi}\nİlan ID: ${id}\nSebep: ${sebep}`;
+                bildirimEkle('admin9595', adminMesaj);
+                alert("✅ Raporunuz başarıyla iletilmiştir. Yönetici tarafından incelenecektir.");
+            } else {
+                alert("Rapor atmak için lütfen bir sebep yazınız.");
+            }
+        }
 
-            // İlanı sil (MongoDB)
-            fetch(`/api/ilan-sil/${id}`, {
-                method: 'DELETE'
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    alert('✅ Satın alma başarılı! Para güvenli havuzda. Satıcı ile iletişime geçin.');
-                    window.location.href = '/';
-                } else {
-                    alert('❌ İlan silinirken hata: ' + data.error);
-                }
-            })
-            .catch(err => {
-                alert('❌ Bağlantı hatası: ' + err.message);
+        // ============================================
+        // KOPYALA
+        // ============================================
+        function kopyalaLink() {
+            const input = document.getElementById('ilanLinkInput');
+            if (!input) return;
+            input.select();
+            input.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(input.value).then(() => {
+                alert('✅ İlan linki kopyalandı!');
+            }).catch(() => {
+                document.execCommand('copy');
+                alert('✅ İlan linki kopyalandı!');
             });
         }
-    }
 
-    // ============================================
-    // SOHBET ODASI TETİKLE
-    // ============================================
-    function sohbetOdasiTetikle(saticiAdi) {
-        if (!aktif) {
-            alert('⚠️ Mesaj atmak için önce giriş yapmalısın kanka!');
-            window.location.href = '/login';
-            return;
-        }
-        if (aktif.kullaniciAdi === saticiAdi) {
-            alert('📝 Kendine mesaj atamazsın kanka!');
-            return;
-        }
-        // Ana sayfaya yönlendir ve sohbeti aç
-        localStorage.setItem('sohbet_acilacak_kullanici', saticiAdi);
-        window.location.href = '/';
-    }
-
-    // ============================================
-    // BİLDİRİM EKLE
-    // ============================================
-    function bildirimEkle(kime, metin) {
-        let tumBildirimler = JSON.parse(localStorage.getItem(`bildirimler_${kime}`) || '[]');
-        tumBildirimler.unshift({ 
-            id: Date.now(), 
-            metin: metin, 
-            durum: 'yeni', 
-            tarih: new Date().toLocaleTimeString() 
-        });
-        localStorage.setItem(`bildirimler_${kime}`, JSON.stringify(tumBildirimler));
-    }
-
-    // ============================================
-    // SATIN AL BUTONU (pasif ilanlarda devre dışı)
-    // ============================================
-    const aktiflikDurumu = '<%= ilan ? ilan.aktiflikDurumu : "pasif" %>';
-    if (aktiflikDurumu === 'pasif') {
-        const btn = document.getElementById('satinAlBtn');
-        if (btn) {
-            btn.disabled = true;
-            btn.textContent = '⛔ Liste Dışı';
-        }
-    }
-
-    // ============================================
-    // ENTER İLE KOPYALA
-    // ============================================
-    const linkInput = document.getElementById('ilanLinkInput');
-    if (linkInput) {
-        linkInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                kopyalaLink();
+        // ============================================
+        // SATIN AL
+        // ============================================
+        function ilanSatinAl(id, fiyat, satici, baslik) {
+            if (!aktif) {
+                alert('⚠️ Satın almak için önce giriş yapmalısın kanka!');
+                window.location.href = '/login';
+                return;
             }
-        });
-    }
+            if (aktif.kullaniciAdi === satici) {
+                alert('❌ Kendi ilanını satın alamazsın kanka!');
+                return;
+            }
+            if ((aktif.bakiye || 0) < parseFloat(fiyat)) {
+                alert(`❌ Bakiyen yetersiz! Cüzdanında ${aktif.bakiye || 0} TL var.`);
+                return;
+            }
+            if (confirm(`"${baslik}" ilanını ${fiyat} TL'ye satın almak istediğine emin misin?`)) {
+                let kullanicilar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
+                const aIdx = kullanicilar.findIndex(u => u.kullaniciAdi === aktif.kullaniciAdi);
+                if (aIdx !== -1) {
+                    kullanicilar[aIdx].bakiye = parseFloat((kullanicilar[aIdx].bakiye - fiyat).toFixed(2));
+                    localStorage.setItem('kullanicilar', JSON.stringify(kullanicilar));
+                    aktif.bakiye = kullanicilar[aIdx].bakiye;
+                    localStorage.setItem('aktifKullanici', JSON.stringify(aktif));
+                    const cuzdanElement = document.getElementById('cuzdanBakiyeYazi');
+                    if (cuzdanElement) {
+                        cuzdanElement.innerText = aktif.bakiye + " ₺";
+                    }
+                }
+                bildirimEkle(satici,
+                    `🎉 "${baslik}" ilanınız ${aktif.kullaniciAdi} tarafından satın alındı! Teslimat için iletişime geçin.`
+                    );
+                bildirimEkle(aktif.kullaniciAdi,
+                `🛍️ "${baslik}" ilanını başarıyla satın aldınız! Para havuzda güvende.`);
+                fetch(`/api/ilan-sil/${id}`, {
+                        method: 'DELETE'
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('✅ Satın alma başarılı! Para güvenli havuzda. Satıcı ile iletişime geçin.');
+                            window.location.href = '/';
+                        } else {
+                            alert('❌ İlan silinirken hata: ' + data.error);
+                        }
+                    })
+                    .catch(err => {
+                        alert('❌ Bağlantı hatası: ' + err.message);
+                    });
+            }
+        }
 
-    console.log('📄 İlan detay sayfası yüklendi!');
-    console.log('📦 İlan:', '<%= ilan ? ilan.baslik : "Bulunamadı" %>');
-    console.log('👤 Satıcı:', ilanSatici);
-    console.log('📌 ID:', ilanId);
+        // ============================================
+        // SOHBET ODASI TETİKLE
+        // ============================================
+        function sohbetOdasiTetikle(saticiAdi) {
+            if (!aktif) {
+                alert('⚠️ Mesaj atmak için önce giriş yapmalısın kanka!');
+                window.location.href = '/login';
+                return;
+            }
+            if (aktif.kullaniciAdi === saticiAdi) {
+                alert('📝 Kendine mesaj atamazsın kanka!');
+                return;
+            }
+            localStorage.setItem('sohbet_acilacak_kullanici', saticiAdi);
+            window.location.href = '/';
+        }
+
+        // ============================================
+        // BİLDİRİM EKLE
+        // ============================================
+        function bildirimEkle(kime, metin) {
+            let tumBildirimler = JSON.parse(localStorage.getItem(`bildirimler_${kime}`) || '[]');
+            tumBildirimler.unshift({
+                id: Date.now(),
+                metin: metin,
+                durum: 'yeni',
+                tarih: new Date().toLocaleTimeString()
+            });
+            localStorage.setItem(`bildirimler_${kime}`, JSON.stringify(tumBildirimler));
+        }
+
+        // ============================================
+        // PASİF İLAN KONTROLÜ
+        // ============================================
+        const aktiflikDurumu = '<%= ilan ? ilan.aktiflikDurumu : "pasif" %>';
+        if (aktiflikDurumu === 'pasif') {
+            const btn = document.getElementById('satinAlBtn');
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = '⛔ Liste Dışı';
+            }
+        }
+
+        // ============================================
+        // ENTER İLE KOPYALA
+        // ============================================
+        const linkInput = document.getElementById('ilanLinkInput');
+        if (linkInput) {
+            linkInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    kopyalaLink();
+                }
+            });
+        }
+
+        console.log('📄 İlan detay sayfası yüklendi!');
+        console.log('📦 İlan:', '<%= ilan ? ilan.baslik : "Bulunamadı" %>');
+        console.log('👤 Satıcı:', ilanSatici);
+        console.log('📌 ID:', ilanId);
     </script>
+
 </body>
 </html>

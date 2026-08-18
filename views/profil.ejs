@@ -5,239 +5,489 @@
     <meta name="google-site-verification" content="rXTtLPJavFhXvJ7TGofxQ3XXGZXb_B8dzSBNAPZwLFk" />
     <link rel="icon" type="image/png" href="/resim.png">
     <meta charset="UTF-8">
-    <title>Profilimi Düzenle - İtemlerinMarketi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profilim - İtemlerinMarketi</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/otpauth@9.3.2/dist/otpauth.umd.min.js"></script>
     <style>
-        .profil-duzenle-kapsayici {
-            max-width: 600px;
-            margin: 40px auto;
-            background: #1e293b;
-            padding: 30px;
-            border-radius: 12px;
-            border: 1px solid #334155;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .profil-duzenle-kapsayici h2 {
-            color: #38bdf8;
+        body {
+            background: #0a0a1a;
+            color: #e8e8f0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 40px;
+            background: rgba(10, 10, 26, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        header .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        header .logo i {
+            color: #6366f1;
+        }
+        header nav a {
+            color: #8a8aaa;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        header nav a:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: white;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .profil-duzenle-kapsayici {
+            background: rgba(20, 20, 42, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 36px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            display: none;
+        }
+
+        .sayfa-baslik {
+            font-size: 26px;
+            font-weight: 800;
+            color: white;
             text-align: center;
-            margin-top: 0;
+            margin-bottom: 4px;
+        }
+        .sayfa-baslik i {
+            color: #6366f1;
+        }
+        .sayfa-alt {
+            color: #8a8aaa;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .avatar-wrapper {
+            text-align: center;
+            margin-bottom: 20px;
         }
         .profil-buyuk-avatar {
             width: 120px;
             height: 120px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid #10b981;
-            margin: 0 auto 15px auto;
-            display: block;
-            background: #0f172a;
+            border: 3px solid rgba(99, 102, 241, 0.3);
+            background: rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
         }
+        .profil-buyuk-avatar:hover {
+            border-color: #6366f1;
+            transform: scale(1.02);
+        }
+
         .resim-yukle-etiket {
             display: inline-block;
-            background: #334155;
-            color: #38bdf8;
-            padding: 8px 16px;
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.04);
+            color: #a5b4fc;
+            padding: 8px 20px;
+            border-radius: 50px;
             font-size: 13px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            margin-bottom: 25px;
-            border: 1px solid #475569;
-            transition: background 0.2s;
+            margin-top: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
         }
-        .resim-yukle-etiket:hover { background: #475569; }
+        .resim-yukle-etiket:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #6366f1;
+        }
+
         .profil-formu label {
             display: block;
-            text-align: left;
-            color: #94a3b8;
+            color: #c4c4d4;
             font-size: 13px;
-            margin-bottom: 5px;
+            font-weight: 500;
+            margin-bottom: 4px;
         }
         .profil-formu input {
             width: 100%;
-            padding: 10px;
-            background: #0f172a;
-            border: 1px solid #475569;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
             color: white;
-            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s;
             box-sizing: border-box;
-            margin-bottom: 20px;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 16px;
+        }
+        .profil-formu input:focus {
+            border-color: #6366f1;
+            outline: none;
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
         .profil-formu input:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
 
-        .badge-dogrulandi {
-            display: inline-block;
-            background: #065f46;
-            color: #34d399;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-left: 10px;
-        }
-        .badge-dogrulanmadi {
-            display: inline-block;
-            background: #7f1d1d;
-            color: #fca5a5;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-left: 10px;
-        }
-
-        .twofa-kapsayici {
-            background: #0f172a;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0 0 0;
-            border: 1px solid #334155;
-        }
-        .twofa-kapsayici h3 {
-            color: #a855f7;
-            margin-top: 0;
-        }
-        .qr-kod {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            display: inline-block;
-            margin: 10px auto;
-        }
-        .qr-kod img {
-            width: 160px;
-            height: 160px;
-        }
-        .yedek-anahtar {
-            background: #1e293b;
-            padding: 12px;
-            border-radius: 6px;
-            font-family: monospace;
-            font-size: 18px;
-            letter-spacing: 2px;
-            color: #fbbf24;
-            border: 1px dashed #fbbf24;
-            word-break: break-all;
-            margin: 10px 0;
-        }
-        .twofa-btn {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
+        .btn-kaydet {
+            width: 100%;
+            padding: 14px;
             border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-weight: bold;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        .twofa-btn:hover { transform: scale(1.03); }
-        .twofa-btn.aktif { background: linear-gradient(135deg, #ef4444, #dc2626); }
-        .twofa-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-kaydet:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.3);
+        }
 
         .ayirici {
             border: none;
-            border-top: 1px solid #334155;
-            margin: 25px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            margin: 24px 0;
+        }
+
+        /* ===== 2FA ===== */
+        .twofa-kapsayici {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .twofa-kapsayici h3 {
+            color: #a855f7;
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .twofa-kapsayici .twofa-alt {
+            color: #8a8aaa;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .badge-dogrulandi {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-dogrulanmadi {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .qr-kod {
+            background: white;
+            padding: 12px;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 8px auto;
+        }
+        .qr-kod img {
+            width: 150px;
+            height: 150px;
+            display: block;
+        }
+
+        .yedek-anahtar {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            letter-spacing: 2px;
+            color: #fbbf24;
+            border: 1px dashed rgba(251, 191, 36, 0.2);
+            word-break: break-all;
+            margin: 8px 0;
+        }
+
+        .twofa-btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+        }
+        .twofa-btn:hover {
+            transform: scale(1.03);
+        }
+        .twofa-btn.aktif {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        .twofa-btn.aktif:hover {
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3);
+        }
+        .twofa-btn.ac {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+        }
+        .twofa-btn.ac:hover {
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+        .twofa-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
         }
 
         .kod-input-grubu {
             display: flex;
             gap: 10px;
-            margin-top: 8px;
+            margin-top: 10px;
             flex-wrap: wrap;
             align-items: center;
         }
         .kod-input-grubu input {
             flex: 1;
             min-width: 150px;
-            padding: 8px;
-            background: #0f172a;
-            border: 1px solid #475569;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
             color: white;
-            border-radius: 4px;
-            margin-bottom: 0;
             text-align: center;
-            font-size: 20px;
+            font-size: 22px;
             letter-spacing: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        .kod-input-grubu input:focus {
+            border-color: #6366f1;
+            outline: none;
         }
         .kod-input-grubu button {
-            padding: 8px 16px;
-            background: #6366f1;
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 700;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
         }
         .kod-input-grubu button:hover {
-            background: #4f46e5;
+            transform: scale(1.03);
+        }
+
+        .twofa-sonuc {
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        .twofa-sonuc.success {
+            color: #34d399;
+        }
+        .twofa-sonuc.error {
+            color: #f87171;
+        }
+        .twofa-sonuc.info {
+            color: #38bdf8;
+        }
+
+        .uyari-metni {
+            color: #f87171;
+            font-size: 11px;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        @media (max-width: 640px) {
+            header {
+                padding: 12px 20px;
+            }
+            .container {
+                padding: 20px 16px;
+            }
+            .profil-duzenle-kapsayici {
+                padding: 24px;
+            }
+            .sayfa-baslik {
+                font-size: 22px;
+            }
+            .qr-kod img {
+                width: 120px;
+                height: 120px;
+            }
+        }
+        @media (max-width: 480px) {
+            .profil-duzenle-kapsayici {
+                padding: 16px;
+            }
+            .sayfa-baslik {
+                font-size: 18px;
+            }
+            .profil-buyuk-avatar {
+                width: 90px;
+                height: 90px;
+            }
         }
     </style>
 </head>
 <body>
+
     <header>
-        <div class="header-sol-bölüm">
-            <a href="/"><img src="/gif.png" alt="İtemlerinMarketi" class="logo-img" onerror="this.onerror=null; this.outerHTML='İtemlerinMarketi';"></a>
+        <div class="logo">
+            <i class="fas fa-store"></i> İtemlerinMarketi
         </div>
-        <nav><a href="/">🏠 Ana Sayfaya Dön</a></nav>
+        <nav>
+            <a href="/"><i class="fas fa-home"></i> Ana Sayfa</a>
+            <a href="/profil" style="color:white; background:rgba(99,102,241,0.1);"><i class="fas fa-user"></i> Profil</a>
+        </nav>
     </header>
-    
+
     <div class="container">
-        <div class="profil-duzenle-kapsayici" id="profilIcerik" style="display: none;">
-            <h2>👤 Profil Ayarları</h2>
-            <p style="color: #94a3b8; font-size: 13px; text-align: center; margin-bottom: 20px;">
-                Kullanıcı adı, fotoğraf ve güvenlik ayarlarını yönet.
-            </p>
+        <div class="profil-duzenle-kapsayici" id="profilIcerik">
 
-            <!-- PROFİL BİLGİLERİ -->
+            <div class="sayfa-baslik">
+                <i class="fas fa-user-circle"></i> Profil Ayarları
+            </div>
+            <p class="sayfa-alt">Kullanıcı adı, fotoğraf ve güvenlik ayarlarını yönet.</p>
+
+            <!-- ===== PROFİL BİLGİLERİ ===== -->
             <form id="profilGuncelleFormu" class="profil-formu">
-                <img src="/profil.jpg" id="avatarOnizleme" class="profil-buyuk-avatar">
-                
-                <label class="resim-yukle-etiket" for="yeniAvatarInput">📷 Yeni Fotoğraf Seç</label>
-                <input type="file" id="yeniAvatarInput" accept="image/*" style="display: none;">
 
-                <label>Kullanıcı Adınız (En az 3 harf, 1 büyük, 1 küçük):</label>
+                <div class="avatar-wrapper">
+                    <img src="/profil.jpg" id="avatarOnizleme" class="profil-buyuk-avatar">
+                    <div>
+                        <label class="resim-yukle-etiket" for="yeniAvatarInput">
+                            <i class="fas fa-camera"></i> Yeni Fotoğraf Seç
+                        </label>
+                        <input type="file" id="yeniAvatarInput" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+
+                <label for="profilKullaniciAdi"><i class="fas fa-user"></i> Kullanıcı Adı</label>
                 <input type="text" id="profilKullaniciAdi" required autocomplete="off">
+                <div style="color:#5a5a7a; font-size:12px; margin-top:-10px; margin-bottom:12px;">
+                    En az 3 harf, 1 büyük ve 1 küçük harf içermeli
+                </div>
 
-                <button type="submit" class="btn" style="width: 100%; padding: 12px;">✓ Değişiklikleri Uygula</button>
+                <button type="submit" class="btn-kaydet">
+                    <i class="fas fa-save"></i> Değişiklikleri Uygula
+                </button>
             </form>
 
             <hr class="ayirici">
 
-            <!-- 2FA -->
+            <!-- ===== 2FA ===== -->
             <div class="twofa-kapsayici">
-                <h3>🔐 İki Faktörlü Doğrulama (2FA)</h3>
-                <p style="color: #94a3b8; font-size: 13px;">
-                    Hesabınıza ekstra güvenlik katmanı ekleyin. Google Authenticator veya Authy kullanın.
-                </p>
-                
+                <h3><i class="fas fa-shield-alt"></i> İki Faktörlü Doğrulama (2FA)</h3>
+                <p class="twofa-alt">Hesabına ekstra güvenlik katmanı ekle. Google Authenticator veya Authy kullan.</p>
+
                 <div id="twofaDurum" style="margin: 10px 0;">
-                    <span class="badge-dogrulanmadi">❌ 2FA Kapalı</span>
+                    <span class="badge-dogrulanmadi"><i class="fas fa-times-circle"></i> 2FA Kapalı</span>
                 </div>
 
                 <div id="qrKodAlani" style="text-align: center;">
                     <div class="qr-kod">
                         <img id="qrKodImg" src="" alt="QR Kod">
                     </div>
-                    <p style="color: #94a3b8; font-size: 12px;">QR kodu Google Authenticator ile tara</p>
-                    
+                    <p style="color:#8a8aaa; font-size:12px;">QR kodu Google Authenticator ile tara</p>
+
                     <div class="yedek-anahtar" id="yedekAnahtarAlani">XXXX-XXXX-XXXX-XXXX</div>
-                    <button class="twofa-btn" onclick="kopyalaYedekAnahtar()" style="padding: 6px 14px; font-size: 12px;">📋 Kopyala</button>
-                    <p style="color: #ef4444; font-size: 11px; margin-top: 5px;">⚠️ Bu anahtarı güvenli bir yerde sakla! Kaybedersen hesabına erişemezsin.</p>
+                    <button class="twofa-btn ac" onclick="kopyalaYedekAnahtar()" style="padding:6px 16px; font-size:12px;">
+                        <i class="fas fa-copy"></i> Kopyala
+                    </button>
+                    <div class="uyari-metni">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Bu anahtarı güvenli bir yerde sakla! Kaybedersen hesabına erişemezsin.
+                    </div>
                 </div>
 
-                <button class="twofa-btn" id="twofaToggleBtn" style="margin-top: 10px; width: 100%;">🔐 2FA'yı Aç</button>
-                
-                <div id="twofaDogrulaAlani" style="margin-top: 15px;">
-                    <p style="color: #94a3b8; font-size: 13px;">Google Authenticator'dan kodu gir:</p>
+                <button class="twofa-btn ac" id="twofaToggleBtn" style="margin-top: 12px; width: 100%;">
+                    <i class="fas fa-lock"></i> 2FA'yı Aç
+                </button>
+
+                <div id="twofaDogrulaAlani" style="margin-top: 14px;">
+                    <p style="color:#8a8aaa; font-size:13px;">Google Authenticator'dan kodu gir:</p>
                     <div class="kod-input-grubu">
                         <input type="text" id="twofaDogrulaInput" placeholder="6 haneli kod" maxlength="6">
-                        <button class="twofa-btn" id="twofaDogrulaBtn" style="padding: 10px 20px;">✅ Onayla</button>
+                        <button id="twofaDogrulaBtn"><i class="fas fa-check"></i> Onayla</button>
                     </div>
-                    <div id="twofaSonuc" style="margin-top: 8px; font-size: 13px;"></div>
+                    <div id="twofaSonuc" class="twofa-sonuc"></div>
                 </div>
             </div>
 
@@ -245,237 +495,270 @@
     </div>
 
     <script>
-    // ============================================
-    // TÜM DEĞİŞKENLER
-    // ============================================
-    const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
-    let yeniProfilBase64 = "";
-    let twofaSecret = "";
-    let twofaAktif = false;
+        // ============================================
+        // PROFİL - TAM SCRIPT
+        // ============================================
 
-    // ============================================
-    // 2FA SECRET ÜRET
-    // ============================================
-    function twofaSecretUret() {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-        let secret = '';
-        for (let i = 0; i < 16; i++) {
-            secret += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return secret;
-    }
+        const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
+        let yeniProfilBase64 = "";
+        let twofaSecret = "";
+        let twofaAktif = false;
 
-    // ============================================
-    // 2FA DURUMUNU GÜNCELLE
-    // ============================================
-    function twofaDurumuGuncelle() {
-        twofaAktif = localStorage.getItem(`twofa_aktif_${aktif?.kullaniciAdi}`) === 'true';
-        const durum = document.getElementById('twofaDurum');
-        const btn = document.getElementById('twofaToggleBtn');
-        
-        if (twofaAktif) {
-            durum.innerHTML = '<span class="badge-dogrulandi">✅ 2FA Aktif</span>';
-            btn.textContent = '🔒 2FA\'yı Kapat';
-            btn.classList.add('aktif');
-            document.getElementById('qrKodAlani').style.opacity = '0.5';
-            document.getElementById('twofaDogrulaAlani').style.display = 'none';
+        // ============================================
+        // GİRİŞ KONTROLÜ
+        // ============================================
+        if (!aktif) {
+            alert('Profilinizi düzenlemek için önce giriş yapmalısın kanka!');
+            window.location.href = '/login';
         } else {
-            durum.innerHTML = '<span class="badge-dogrulanmadi">❌ 2FA Kapalı</span>';
-            btn.textContent = '🔐 2FA\'yı Aç';
-            btn.classList.remove('aktif');
-            document.getElementById('qrKodAlani').style.opacity = '1';
-            document.getElementById('twofaDogrulaAlani').style.display = 'block';
-            
-            twofaSecret = localStorage.getItem(`twofa_secret_${aktif?.kullaniciAdi}`);
-            if (!twofaSecret) {
-                twofaSecret = twofaSecretUret();
-                localStorage.setItem(`twofa_secret_${aktif?.kullaniciAdi}`, twofaSecret);
+            document.getElementById('profilIcerik').style.display = 'block';
+            document.getElementById('profilKullaniciAdi').value = aktif.kullaniciAdi;
+
+            let mevcutResim = localStorage.getItem(`profil_resim_${aktif.kullaniciAdi}`);
+            if (mevcutResim) {
+                document.getElementById('avatarOnizleme').src = mevcutResim;
+                yeniProfilBase64 = mevcutResim;
             }
-            
-            document.getElementById('qrKodImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=otpauth://totp/ItemlerinMarketi:${aktif?.kullaniciAdi}?secret=${twofaSecret}&issuer=ItemlerinMarketi`;
-            document.getElementById('yedekAnahtarAlani').textContent = twofaSecret.match(/.{4}/g).join('-');
-        }
-    }
-
-    function kopyalaYedekAnahtar() {
-        const anahtar = document.getElementById('yedekAnahtarAlani').textContent;
-        navigator.clipboard.writeText(anahtar).then(() => {
-            alert('✅ Yedek anahtar kopyalandı! Güvenli bir yerde sakla.');
-        }).catch(() => {
-            prompt('Anahtarı kopyala:', anahtar);
-        });
-    }
-
-    // ============================================
-    // SAYFA YÜKLENDİĞİNDE
-    // ============================================
-    if (!aktif) {
-        alert('Profilinizi düzenlemek için önce giriş yapmalısınız!');
-        window.location.href = '/login';
-    } else {
-        document.getElementById('profilIcerik').style.display = 'block';
-        document.getElementById('profilKullaniciAdi').value = aktif.kullaniciAdi;
-
-        let mevcutResim = localStorage.getItem(`profil_resim_${aktif.kullaniciAdi}`);
-        if (mevcutResim) {
-            document.getElementById('avatarOnizleme').src = mevcutResim;
-            yeniProfilBase64 = mevcutResim;
+            twofaDurumuGuncelle();
         }
 
-        twofaDurumuGuncelle();
-    }
-
-    // ============================================
-    // AVATAR YÜKLEME
-    // ============================================
-    document.getElementById('yeniAvatarInput').addEventListener('change', function() {
-        const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('avatarOnizleme').src = e.target.result;
-                yeniProfilBase64 = e.target.result;
+        // ============================================
+        // 2FA SECRET ÜRET
+        // ============================================
+        function twofaSecretUret() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+            let secret = '';
+            for (let i = 0; i < 16; i++) {
+                secret += chars.charAt(Math.floor(Math.random() * chars.length));
             }
-            reader.readAsDataURL(file);
-        }
-    });
-
-    // ============================================
-    // PROFİL GÜNCELLEME
-    // ============================================
-    document.getElementById('profilGuncelleFormu').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const yeniIsim = document.getElementById('profilKullaniciAdi').value.trim();
-        
-        if (yeniIsim.length < 3) {
-            alert("Hata: Kullanıcı adınız en az 3 karakterden oluşmalıdır!");
-            return;
-        }
-        if (!/[A-ZÇĞİÖŞÜ]/.test(yeniIsim)) {
-            alert("Hata: Yeni isminiz en az bir tane BÜYÜK HARF içermelidir!");
-            return;
-        }
-        if (!/[a-zçğıöşü]/.test(yeniIsim)) {
-            alert("Hata: Yeni isminiz en az bir tane küçük harf içermelidir!");
-            return;
+            return secret;
         }
 
-        let kullanicilar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
-        
-        if (yeniIsim.toLowerCase() !== aktif.kullaniciAdi.toLowerCase()) {
-            const isimKullaniliyorMu = kullanicilar.some(u => u.kullaniciAdi.toLowerCase() === yeniIsim.toLowerCase());
-            if (isimKullaniliyorMu) {
-                alert("Hata: Bu kullanıcı adı başka bir üye tarafından kapılmış!");
-                return;
-            }
-        }
+        // ============================================
+        // 2FA DURUMUNU GÜNCELLE
+        // ============================================
+        function twofaDurumuGuncelle() {
+            twofaAktif = localStorage.getItem(`twofa_aktif_${aktif?.kullaniciAdi}`) === 'true';
+            const durum = document.getElementById('twofaDurum');
+            const btn = document.getElementById('twofaToggleBtn');
+            const qrAlani = document.getElementById('qrKodAlani');
+            const dogrulaAlani = document.getElementById('twofaDogrulaAlani');
 
-        const uIdx = kullanicilar.findIndex(u => u.kullaniciAdi === aktif.kullaniciAdi);
-        if (uIdx !== -1) {
-            kullanicilar[uIdx].kullaniciAdi = yeniIsim;
-            localStorage.setItem('kullanicilar', JSON.stringify(kullanicilar));
-        }
-
-        let pazardakiIlanlar = JSON.parse(localStorage.getItem('pazardakiIlanlar') || '[]');
-        pazardakiIlanlar.forEach(ilan => {
-            if (ilan.satici === aktif.kullaniciAdi) {
-                ilan.satici = yeniIsim;
-            }
-        });
-        localStorage.setItem('pazardakiIlanlar', JSON.stringify(pazardakiIlanlar));
-
-        if (yeniProfilBase64) {
-            localStorage.setItem(`profil_resim_${yeniIsim}`, yeniProfilBase64);
-        }
-
-        aktif.kullaniciAdi = yeniIsim;
-        localStorage.setItem('aktifKullanici', JSON.stringify(aktif));
-
-        alert('✅ Profil başarıyla güncellendi!');
-        window.location.href = '/';
-    });
-
-    // ============================================
-    // 2FA AÇ/KAPA BUTONU
-    // ============================================
-    document.getElementById('twofaToggleBtn').addEventListener('click', function() {
-        if (twofaAktif) {
-            if (confirm('2FA\'yı kapatmak istediğinize emin misiniz?')) {
-                localStorage.setItem(`twofa_aktif_${aktif.kullaniciAdi}`, 'false');
-                twofaDurumuGuncelle();
-                document.getElementById('twofaSonuc').innerHTML = '<span style="color:#f59e0b;">🔓 2FA devre dışı bırakıldı.</span>';
-                document.getElementById('twofaDogrulaInput').value = '';
-            }
-        } else {
-            document.getElementById('twofaSonuc').innerHTML = '<span style="color:#38bdf8;">📱 Google Authenticator\'dan kodu girip "Onayla"ya bas.</span>';
-            document.getElementById('twofaDogrulaInput').focus();
-        }
-    });
-
-    // ============================================
-    // 2FA DOĞRULAMA
-    // ============================================
-    document.getElementById('twofaDogrulaBtn').addEventListener('click', function() {
-        const girilenKod = document.getElementById('twofaDogrulaInput').value.trim();
-        const sonucAlani = document.getElementById('twofaSonuc');
-        
-        if (!girilenKod || girilenKod.length !== 6) {
-            sonucAlani.innerHTML = '<span style="color:#ef4444;">❌ Lütfen 6 haneli kodu girin!</span>';
-            return;
-        }
-
-        const secret = localStorage.getItem(`twofa_secret_${aktif.kullaniciAdi}`);
-        if (!secret) {
-            sonucAlani.innerHTML = '<span style="color:#ef4444;">❌ Secret bulunamadı! Sayfayı yenileyin.</span>';
-            return;
-        }
-
-        try {
-            if (typeof OTPAuth === 'undefined') {
-                sonucAlani.innerHTML = '<span style="color:#ef4444;">❌ Kütüphane yüklenemedi! Sayfayı yenileyin.</span>';
-                return;
-            }
-
-            const secretObj = OTPAuth.Secret.fromBase32(secret);
-            const totp = new OTPAuth.TOTP({
-                secret: secretObj,
-                algorithm: 'SHA1',
-                digits: 6,
-                period: 30
-            });
-
-            const delta = totp.validate({
-                token: girilenKod,
-                window: 1
-            });
-
-            if (delta !== null && delta !== false) {
-                localStorage.setItem(`twofa_aktif_${aktif.kullaniciAdi}`, 'true');
-                sonucAlani.innerHTML = '<span style="color:#10b981;">✅ 2FA başarıyla etkinleştirildi! 🎉</span>';
-                twofaDurumuGuncelle();
-                document.getElementById('twofaDogrulaInput').value = '';
+            if (twofaAktif) {
+                durum.innerHTML = '<span class="badge-dogrulandi"><i class="fas fa-check-circle"></i> 2FA Aktif</span>';
+                btn.innerHTML = '<i class="fas fa-unlock"></i> 2FA\'yı Kapat';
+                btn.className = 'twofa-btn aktif';
+                qrAlani.style.opacity = '0.4';
+                qrAlani.style.pointerEvents = 'none';
+                dogrulaAlani.style.display = 'none';
             } else {
-                sonucAlani.innerHTML = '<span style="color:#ef4444;">❌ Geçersiz kod! Lütfen Google Authenticator kodunu kontrol edin.</span>';
+                durum.innerHTML = '<span class="badge-dogrulanmadi"><i class="fas fa-times-circle"></i> 2FA Kapalı</span>';
+                btn.innerHTML = '<i class="fas fa-lock"></i> 2FA\'yı Aç';
+                btn.className = 'twofa-btn ac';
+                qrAlani.style.opacity = '1';
+                qrAlani.style.pointerEvents = 'auto';
+                dogrulaAlani.style.display = 'block';
+
+                twofaSecret = localStorage.getItem(`twofa_secret_${aktif?.kullaniciAdi}`);
+                if (!twofaSecret) {
+                    twofaSecret = twofaSecretUret();
+                    localStorage.setItem(`twofa_secret_${aktif?.kullaniciAdi}`, twofaSecret);
+                }
+
+                document.getElementById('qrKodImg').src =
+                    `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=otpauth://totp/ItemlerinMarketi:${aktif?.kullaniciAdi}?secret=${twofaSecret}&issuer=ItemlerinMarketi`;
+                document.getElementById('yedekAnahtarAlani').textContent = twofaSecret.match(/.{4}/g).join('-');
+            }
+        }
+
+        // ============================================
+        // YEDEK ANAHTAR KOPYALA
+        // ============================================
+        function kopyalaYedekAnahtar() {
+            const anahtar = document.getElementById('yedekAnahtarAlani').textContent;
+            navigator.clipboard.writeText(anahtar).then(() => {
+                alert('✅ Yedek anahtar kopyalandı! Güvenli bir yerde sakla.');
+            }).catch(() => {
+                prompt('Anahtarı kopyala:', anahtar);
+            });
+        }
+
+        // ============================================
+        // AVATAR YÜKLEME
+        // ============================================
+        document.getElementById('yeniAvatarInput').addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('❌ Dosya boyutu 2MB\'dan büyük! Lütfen daha küçük bir dosya seç.');
+                    this.value = '';
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('avatarOnizleme').src = e.target.result;
+                    yeniProfilBase64 = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // ============================================
+        // PROFİL GÜNCELLEME
+        // ============================================
+        document.getElementById('profilGuncelleFormu').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const yeniIsim = document.getElementById('profilKullaniciAdi').value.trim();
+
+            // Validasyon
+            if (yeniIsim.length < 3) {
+                alert('❌ Kullanıcı adınız en az 3 karakterden oluşmalıdır!');
+                return;
+            }
+            if (!/[A-ZÇĞİÖŞÜ]/.test(yeniIsim)) {
+                alert('❌ Yeni isminiz en az bir tane BÜYÜK HARF içermelidir!');
+                return;
+            }
+            if (!/[a-zçğıöşü]/.test(yeniIsim)) {
+                alert('❌ Yeni isminiz en az bir tane küçük harf içermelidir!');
+                return;
             }
 
-        } catch (hata) {
-            console.error('2FA hatası:', hata);
-            sonucAlani.innerHTML = `<span style="color:#ef4444;">❌ Doğrulama hatası: ${hata.message}</span>`;
-        }
-    });
+            let kullanicilar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
 
-    // ============================================
-    // ENTER İLE 2FA DOĞRULAMA
-    // ============================================
-    document.getElementById('twofaDogrulaInput').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-            document.getElementById('twofaDogrulaBtn').click();
-        }
-    });
+            if (yeniIsim.toLowerCase() !== aktif.kullaniciAdi.toLowerCase()) {
+                const isimKullaniliyorMu = kullanicilar.some(u => u.kullaniciAdi.toLowerCase() === yeniIsim
+                .toLowerCase());
+                if (isimKullaniliyorMu) {
+                    alert('❌ Bu kullanıcı adı başka bir üye tarafından kapılmış!');
+                    return;
+                }
+            }
 
-    console.log('📧 İtemlerinMarketi - Profil sayfası yüklendi!');
-    console.log('👤 Kullanıcı:', aktif?.kullaniciAdi);
+            // Kullanıcı adını güncelle
+            const uIdx = kullanicilar.findIndex(u => u.kullaniciAdi === aktif.kullaniciAdi);
+            if (uIdx !== -1) {
+                kullanicilar[uIdx].kullaniciAdi = yeniIsim;
+                localStorage.setItem('kullanicilar', JSON.stringify(kullanicilar));
+            }
+
+            // İlanlardaki satıcı adını güncelle
+            let pazardakiIlanlar = JSON.parse(localStorage.getItem('pazardakiIlanlar') || '[]');
+            pazardakiIlanlar.forEach(ilan => {
+                if (ilan.satici === aktif.kullaniciAdi) {
+                    ilan.satici = yeniIsim;
+                }
+            });
+            localStorage.setItem('pazardakiIlanlar', JSON.stringify(pazardakiIlanlar));
+
+            // Profil resmini kaydet
+            if (yeniProfilBase64) {
+                localStorage.setItem(`profil_resim_${yeniIsim}`, yeniProfilBase64);
+            }
+
+            aktif.kullaniciAdi = yeniIsim;
+            localStorage.setItem('aktifKullanici', JSON.stringify(aktif));
+
+            alert('✅ Profil başarıyla güncellendi!');
+            window.location.href = '/';
+        });
+
+        // ============================================
+        // 2FA AÇ/KAPA BUTONU
+        // ============================================
+        document.getElementById('twofaToggleBtn').addEventListener('click', function() {
+            if (twofaAktif) {
+                if (confirm('2FA\'yı kapatmak istediğine emin misin?')) {
+                    localStorage.setItem(`twofa_aktif_${aktif.kullaniciAdi}`, 'false');
+                    twofaDurumuGuncelle();
+                    document.getElementById('twofaSonuc').innerHTML =
+                        '<span class="info"><i class="fas fa-info-circle"></i> 2FA devre dışı bırakıldı.</span>';
+                    document.getElementById('twofaSonuc').className = 'twofa-sonuc info';
+                    document.getElementById('twofaDogrulaInput').value = '';
+                }
+            } else {
+                document.getElementById('twofaSonuc').innerHTML =
+                    '<span class="info"><i class="fas fa-info-circle"></i> Google Authenticator\'dan kodu girip "Onayla"ya bas.</span>';
+                document.getElementById('twofaSonuc').className = 'twofa-sonuc info';
+                document.getElementById('twofaDogrulaInput').focus();
+            }
+        });
+
+        // ============================================
+        // 2FA DOĞRULAMA
+        // ============================================
+        document.getElementById('twofaDogrulaBtn').addEventListener('click', function() {
+            const girilenKod = document.getElementById('twofaDogrulaInput').value.trim();
+            const sonucAlani = document.getElementById('twofaSonuc');
+
+            if (!girilenKod || girilenKod.length !== 6) {
+                sonucAlani.innerHTML = '<span class="error"><i class="fas fa-exclamation-circle"></i> Lütfen 6 haneli kodu girin!</span>';
+                sonucAlani.className = 'twofa-sonuc error';
+                return;
+            }
+
+            const secret = localStorage.getItem(`twofa_secret_${aktif.kullaniciAdi}`);
+            if (!secret) {
+                sonucAlani.innerHTML = '<span class="error"><i class="fas fa-exclamation-circle"></i> Secret bulunamadı! Sayfayı yenileyin.</span>';
+                sonucAlani.className = 'twofa-sonuc error';
+                return;
+            }
+
+            try {
+                if (typeof OTPAuth === 'undefined') {
+                    sonucAlani.innerHTML =
+                        '<span class="error"><i class="fas fa-exclamation-circle"></i> Kütüphane yüklenemedi! Sayfayı yenileyin.</span>';
+                    sonucAlani.className = 'twofa-sonuc error';
+                    return;
+                }
+
+                const secretObj = OTPAuth.Secret.fromBase32(secret);
+                const totp = new OTPAuth.TOTP({
+                    secret: secretObj,
+                    algorithm: 'SHA1',
+                    digits: 6,
+                    period: 30
+                });
+
+                const delta = totp.validate({
+                    token: girilenKod,
+                    window: 1
+                });
+
+                if (delta !== null && delta !== false) {
+                    localStorage.setItem(`twofa_aktif_${aktif.kullaniciAdi}`, 'true');
+                    sonucAlani.innerHTML =
+                        '<span class="success"><i class="fas fa-check-circle"></i> 2FA başarıyla etkinleştirildi! 🎉</span>';
+                    sonucAlani.className = 'twofa-sonuc success';
+                    twofaDurumuGuncelle();
+                    document.getElementById('twofaDogrulaInput').value = '';
+                } else {
+                    sonucAlani.innerHTML =
+                        '<span class="error"><i class="fas fa-exclamation-circle"></i> Geçersiz kod! Lütfen Google Authenticator kodunu kontrol edin.</span>';
+                    sonucAlani.className = 'twofa-sonuc error';
+                }
+
+            } catch (hata) {
+                console.error('2FA hatası:', hata);
+                sonucAlani.innerHTML =
+                    `<span class="error"><i class="fas fa-exclamation-circle"></i> Doğrulama hatası: ${hata.message}</span>`;
+                sonucAlani.className = 'twofa-sonuc error';
+            }
+        });
+
+        // ============================================
+        // ENTER İLE 2FA DOĞRULAMA
+        // ============================================
+        document.getElementById('twofaDogrulaInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('twofaDogrulaBtn').click();
+            }
+        });
+
+        console.log('👤 İtemlerinMarketi - Profil sayfası yüklendi!');
+        console.log('📌 Kullanıcı:', aktif?.kullaniciAdi);
     </script>
+
 </body>
 </html>

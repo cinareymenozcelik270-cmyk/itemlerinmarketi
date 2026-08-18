@@ -6,69 +6,451 @@
     <meta charset="UTF-8">
     <title>Yönetici Paneli - İtemlerinMarketi</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .ceza-btn { background-color: #f59e0b !important; color: #0f172a !important; padding: 5px 10px; font-size: 13px; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; }
-        .ceza-btn:hover { background-color: #d97706 !important; }
-        .ban-btn { background-color: #ef4444 !important; color: white !important; padding: 5px 10px; font-size: 13px; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; }
-        .ban-btn:hover { background-color: #dc2626 !important; }
-        .kaldir-btn { background-color: #10b981 !important; color: white !important; padding: 5px 10px; font-size: 13px; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; }
-        .kaldir-btn:hover { background-color: #059669 !important; }
-        .hesap-sil-btn { background-color: #7f1d1d !important; color: white !important; padding: 5px 10px; font-size: 13px; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; }
-        .hesap-sil-btn:hover { background-color: #991b1b !important; }
-        /* Panel İçi Kimlik Resim Tasarımları */
-        .admin-kimlik-img { width: 140px; height: 90px; object-fit: cover; border-radius: 6px; border: 1px solid #475569; cursor: pointer; transition: transform 0.2s; }
-        .admin-kimlik-img:hover { transform: scale(2.5); z-index: 9999; position: relative; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0a0a1a;
+            color: #e8e8f0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 40px;
+            background: rgba(10, 10, 26, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        header .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        header .logo i {
+            color: #f59e0b;
+        }
+        header nav {
+            display: flex;
+            gap: 12px;
+        }
+        header nav a {
+            color: #8a8aaa;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        header nav a:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: white;
+        }
+        header nav a i {
+            color: #6366f1;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .sayfa-baslik {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sayfa-baslik i {
+            color: #f59e0b;
+        }
+        .sayfa-baslik span {
+            font-weight: 400;
+            color: #5a5a7a;
+            font-size: 16px;
+        }
+
+        .bolum {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 24px;
+            margin-bottom: 32px;
+            backdrop-filter: blur(10px);
+        }
+        .bolum-baslik {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .bolum-baslik i {
+            color: #6366f1;
+        }
+        .bolum-baslik .badge {
+            background: rgba(99, 102, 241, 0.15);
+            color: #a5b4fc;
+            padding: 2px 10px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .bolum-baslik .badge.altin {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+        }
+        .bolum-baslik .badge.kirmizi {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+        }
+        .bolum-baslik .badge.yesil {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+        }
+
+        .bos-mesaj {
+            color: #5a5a7a;
+            text-align: center;
+            padding: 32px 20px;
+            font-size: 15px;
+        }
+        .bos-mesaj i {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 10px;
+            color: #3a3a5a;
+        }
+
+        .admin-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            transition: all 0.3s;
+        }
+        .admin-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+        .admin-item .bilgi {
+            flex: 1;
+            min-width: 200px;
+        }
+        .admin-item .bilgi strong {
+            color: white;
+        }
+        .admin-item .bilgi .etiket {
+            color: #8a8aaa;
+            font-size: 13px;
+        }
+        .admin-item .bilgi .vurgu {
+            color: #34d399;
+            font-weight: 600;
+        }
+        .admin-item .bilgi .vurgu.mavi {
+            color: #38bdf8;
+        }
+        .admin-item .bilgi .vurgu.sari {
+            color: #fbbf24;
+        }
+        .admin-item .bilgi .vurgu.kirmizi {
+            color: #f87171;
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn:hover {
+            transform: scale(1.03);
+        }
+        .btn-yesil {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        .btn-yesil:hover {
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+        }
+        .btn-kirmizi {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        .btn-kirmizi:hover {
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3);
+        }
+        .btn-mor {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+        }
+        .btn-mor:hover {
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+        .btn-sari {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+        .btn-sari:hover {
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+        }
+        .btn-gri {
+            background: rgba(255, 255, 255, 0.06);
+            color: #c4c4d4;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .btn-gri:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .btn-bordo {
+            background: #7f1d1d;
+            color: white;
+        }
+        .btn-bordo:hover {
+            background: #991b1b;
+            box-shadow: 0 4px 20px rgba(127, 29, 29, 0.3);
+        }
+
+        .btn-grup {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .btn-grup .btn {
+            font-size: 12px;
+            padding: 6px 14px;
+        }
+
+        .admin-kimlik-img {
+            width: 100px;
+            height: 65px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .admin-kimlik-img:hover {
+            transform: scale(2);
+            z-index: 9999;
+            position: relative;
+        }
+
+        .kimlik-grup {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 12px 20px;
+            }
+            .container {
+                padding: 20px 16px;
+            }
+            .sayfa-baslik {
+                font-size: 22px;
+            }
+            .bolum {
+                padding: 16px;
+            }
+            .admin-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .admin-item .bilgi {
+                min-width: auto;
+            }
+            .btn-grup {
+                justify-content: flex-start;
+            }
+        }
+        @media (max-width: 480px) {
+            header .logo {
+                font-size: 16px;
+            }
+            .sayfa-baslik {
+                font-size: 18px;
+            }
+            .admin-item {
+                padding: 12px 14px;
+            }
+        }
     </style>
 </head>
 <body>
+
     <header>
-        <div class="logo">İtemlerinMarketi (Yönetici Kontrolü)</div>
-        <nav><a href="/">Ana Sayfa</a></nav>
+        <div class="logo">
+            <i class="fas fa-crown"></i> İtemlerinMarketi
+            <span style="font-size:12px; font-weight:400; color:#8a8aaa; margin-left:4px;">Yönetici</span>
+        </div>
+        <nav>
+            <a href="/"><i class="fas fa-home"></i> Ana Sayfa</a>
+            <a href="/yonetici-paneli" style="color:white; background:rgba(99,102,241,0.1);"><i class="fas fa-user-shield"></i> Panel</a>
+        </nav>
     </header>
+
     <div class="container">
-        
-        <!-- 1. BÖLÜM: %18 Komisyonlu Bakiye Bildirimleri -->
-        <h1>Gelen Bakiye Bildirimleri</h1>
-        <div class="admin-list" id="adminListesi" style="margin-bottom: 50px;"></div>
 
-        <!-- 2. BÖLÜM: Sohbet Şikayetleri Alanı -->
-        <h1>Gelen Sohbet Şikayetleri (🚩)</h1>
-        <div class="admin-list" id="sikayetListesiGövde" style="margin-bottom: 50px;"></div>
+        <div class="sayfa-baslik">
+            <i class="fas fa-user-shield"></i> Yönetici Paneli
+            <span>| Tüm işlemleri buradan yönet</span>
+        </div>
 
-        <!-- 3. BÖLÜM: FOTOĞRAFLI KİMLİK KONTROLÜ VE LIMITSIZ PARA ÇEKME ALANI -->
-        <h1>Gelen Para Çekme Talepleri (📷 Fotoğraflı Onay)</h1>
-        <div class="admin-list" id="paraCekmeListesiGövde" style="margin-bottom: 50px;"></div>
+        <!-- 1. BÖLÜM: BAKİYE BİLDİRİMLERİ -->
+        <div class="bolum">
+            <div class="bolum-baslik">
+                <i class="fas fa-coins"></i> Bakiye Bildirimleri
+                <span class="badge yesil">%18 Komisyon</span>
+            </div>
+            <div id="adminListesi"></div>
+        </div>
 
-        <!-- 4. BÖLÜM: İLAN RAPORLARI (YENİ EKLENDİ ✅) -->
-        <h1 style="margin-top: 40px;">Gelen İlan Raporları (🚨)</h1>
-        <div class="admin-list" id="ilanRaporlariListesiGövde"></div>
+        <!-- 2. BÖLÜM: SOHBET ŞİKAYETLERİ -->
+        <div class="bolum">
+            <div class="bolum-baslik">
+                <i class="fas fa-flag"></i> Sohbet Şikayetleri
+                <span class="badge kirmizi">🚩</span>
+            </div>
+            <div id="sikayetListesiGövde"></div>
+        </div>
+
+        <!-- 3. BÖLÜM: PARA ÇEKME TALEPLERİ -->
+        <div class="bolum">
+            <div class="bolum-baslik">
+                <i class="fas fa-credit-card"></i> Para Çekme Talepleri
+                <span class="badge altin">📷 Fotoğraflı</span>
+            </div>
+            <div id="paraCekmeListesiGövde"></div>
+        </div>
+
+        <!-- 4. BÖLÜM: İLAN RAPORLARI -->
+        <div class="bolum">
+            <div class="bolum-baslik">
+                <i class="fas fa-triangle-exclamation"></i> İlan Raporları
+                <span class="badge kirmizi">🚨 YENİ</span>
+            </div>
+            <div id="ilanRaporlariListesiGövde"></div>
+        </div>
 
     </div>
 
     <script>
+        // ============================================
+        // TAM SCRIPT - ADMIN PANELİ
+        // ============================================
+
         let ilkCezalar = JSON.parse(localStorage.getItem('sistemCezalilari') || '{}');
-        if (ilkCezalar['admin9595']) { delete ilkCezalar['admin9595']; localStorage.setItem('sistemCezalilari', JSON.stringify(ilkCezalar)); }
+        if (ilkCezalar['admin9595']) {
+            delete ilkCezalar['admin9595'];
+            localStorage.setItem('sistemCezalilari', JSON.stringify(ilkCezalar));
+        }
 
         const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
-        if (!aktif || aktif.rol !== 'admin') { alert('Bu sayfaya sadece admin9595 erişebilir!'); window.location.href = '/login'; }
+        if (!aktif || aktif.rol !== 'admin') {
+            alert('Bu sayfaya sadece admin9595 erişebilir!');
+            window.location.href = '/login';
+        }
 
-        // SİSTEM BİLDİRİM EKLEME FONKSİYONU
+        // ============================================
+        // SİSTEM BİLDİRİM EKLE
+        // ============================================
         function sistemBildirimEkle(kime, metin) {
             let tumBildirimler = JSON.parse(localStorage.getItem(`bildirimler_${kime}`) || '[]');
             tumBildirimler.unshift({ id: Date.now(), metin: metin, durum: 'yeni', tarih: new Date().toLocaleTimeString() });
             localStorage.setItem(`bildirimler_${kime}`, JSON.stringify(tumBildirimler));
         }
 
-        // %18 Komisyonlu Bakiye Onaylama Modülü
+        // ============================================
+        // 1. BAKİYE BİLDİRİMLERİ
+        // ============================================
         function bakiyeListesiniYenile() {
-            const listeAlani = document.getElementById('adminListesi'); listeAlani.innerHTML = '';
+            const listeAlani = document.getElementById('adminListesi');
+            listeAlani.innerHTML = '';
             let bildirimler = JSON.parse(localStorage.getItem('tumBakiyeBildirimleri') || '[]');
-            if (bildirimler.length === 0) { listeAlani.innerHTML = '<p>Henüz gelen aktif bir bakiye bildirimi yok.</p>'; return; }
+            if (bildirimler.length === 0) {
+                listeAlani.innerHTML = `<div class="bos-mesaj"><i class="fas fa-inbox"></i>Henüz gelen aktif bir bakiye bildirimi yok.</div>`;
+                return;
+            }
             bildirimler.forEach(b => {
-                const kart = document.createElement('div'); kart.className = 'admin-item'; kart.style.marginBottom = '15px'; kart.style.padding = '15px'; kart.style.background = '#1e293b'; kart.style.borderRadius = '8px'; kart.style.display = 'flex'; kart.style.justifyContent = 'space-between'; kart.style.alignItems = 'center';
-                let butonlarHTML = b.durum === 'Beklemede' ? `<div style="display: flex; gap: 10px;"><button onclick="bakiyeIslem(${b.id}, 'onayla')" class="btn" style="background-color: #10b981; padding: 5px 15px;">✓ Onayla</button><button onclick="bakiyeIslem(${b.id}, 'reddet')" class="btn" style="background-color: #ef4444; padding: 5px 15px;">✕ Reddet</button></div>` : `<span style="font-weight:bold; color:${b.durum === 'Onaylandı' ? '#10b981' : '#ef4444'}">${b.durum}</span>`;
+                const kart = document.createElement('div');
+                kart.className = 'admin-item';
                 const netGelecek = (b.miktar * 0.82).toFixed(2);
-                kart.innerHTML = `<div><strong>Kullanıcı:</strong> ${b.kullaniciAdi} <br><strong>Tutar:</strong> ${b.miktar} TL <br><strong>Net Gelecek (%18 Hariç):</strong> <strong style="color:#38bdf8;">${netGelecek} TL</strong></div>${butonlarHTML}`;
+                let butonlarHTML = b.durum === 'Beklemede' ?
+                    `<div class="btn-grup">
+                        <button onclick="bakiyeIslem(${b.id}, 'onayla')" class="btn btn-yesil"><i class="fas fa-check"></i> Onayla</button>
+                        <button onclick="bakiyeIslem(${b.id}, 'reddet')" class="btn btn-kirmizi"><i class="fas fa-times"></i> Reddet</button>
+                    </div>` :
+                    `<span style="font-weight:600; color:${b.durum === 'Onaylandı' ? '#34d399' : '#f87171'}">${b.durum}</span>`;
+
+                kart.innerHTML = `
+                    <div class="bilgi">
+                        <div><strong>${b.kullaniciAdi}</strong> <span class="etiket">kullanıcısından</span></div>
+                        <div><span class="etiket">Tutar:</span> <strong>${b.miktar} TL</strong></div>
+                        <div><span class="etiket">Net Gelecek (%18 hariç):</span> <span class="vurgu">${netGelecek} TL</span></div>
+                    </div>
+                    ${butonlarHTML}
+                `;
                 listeAlani.appendChild(kart);
             });
         }
@@ -82,137 +464,134 @@
                     bildirimler[bIndex].durum = 'Onaylandı';
                     const netMiktar = parseFloat((bildirimler[bIndex].miktar * 0.82).toFixed(2));
                     const uIndex = kullanıcılar.findIndex(u => u.kullaniciAdi === bildirimler[bIndex].kullaniciAdi);
-                    if (uIndex !== -1) { 
-                        kullanıcılar[uIndex].bakiye = parseFloat(((kullanıcılar[uIndex].bakiye || 0) + netMiktar).toFixed(2)); 
-                        localStorage.setItem('kullanicilar', JSON.stringify(kullanıcılar)); 
-                        if (aktif.kullaniciAdi === bildirimler[bIndex].kullaniciAdi) { 
-                            aktif.bakiye = kullanıcılar[uIndex].bakiye; 
-                            localStorage.setItem('aktifKullanici', JSON.stringify(aktif)); 
+                    if (uIndex !== -1) {
+                        kullanıcılar[uIndex].bakiye = parseFloat(((kullanıcılar[uIndex].bakiye || 0) + netMiktar).toFixed(2));
+                        localStorage.setItem('kullanicilar', JSON.stringify(kullanıcılar));
+                        if (aktif.kullaniciAdi === bildirimler[bIndex].kullaniciAdi) {
+                            aktif.bakiye = kullanıcılar[uIndex].bakiye;
+                            localStorage.setItem('aktifKullanici', JSON.stringify(aktif));
                         }
                     }
-                    sistemBildirimEkle(bildirimler[bIndex].kullaniciAdi, `💰 ${bildirimler[bIndex].miktar} TL bakiye yükleme talebiniz onaylandı! %18 komisyon düşülerek net ${netMiktar} TL cüzdanınıza yatırıldı.`);
-                    alert("✅ Bakiye onaylandı! %18 komisyon düşüldü.");
-                } else { 
+                    sistemBildirimEkle(bildirimler[bIndex].kullaniciAdi,
+                        `💰 ${bildirimler[bIndex].miktar} TL bakiye yükleme talebiniz onaylandı! %18 komisyon düşülerek net ${netMiktar} TL cüzdanınıza yatırıldı.`);
+                    alert('✅ Bakiye onaylandı! %18 komisyon düşüldü.');
+                } else {
                     bildirimler[bIndex].durum = 'Reddedildi';
-                    sistemBildirimEkle(bildirimler[bIndex].kullaniciAdi, `❌ ${bildirimler[bIndex].miktar} TL bakiye yükleme talebiniz reddedildi.`);
-                    alert("❌ Bakiye talebi reddedildi.");
+                    sistemBildirimEkle(bildirimler[bIndex].kullaniciAdi,
+                        `❌ ${bildirimler[bIndex].miktar} TL bakiye yükleme talebiniz reddedildi.`);
+                    alert('❌ Bakiye talebi reddedildi.');
                 }
-                localStorage.setItem('tumBakiyeBildirimleri', JSON.stringify(bildirimler)); 
+                localStorage.setItem('tumBakiyeBildirimleri', JSON.stringify(bildirimler));
                 bakiyeListesiniYenile();
             }
         }
 
-        // Şikayet Modülü (Hesap Silme Butonu Eklendi)
+        // ============================================
+        // 2. SOHBET ŞİKAYETLERİ
+        // ============================================
         function sikayetListesiniYukle() {
-            const govde = document.getElementById('sikayetListesiGövde'); 
+            const govde = document.getElementById('sikayetListesiGövde');
             govde.innerHTML = '';
             let sikayetler = JSON.parse(localStorage.getItem('kullaniciSikayetleri') || '[]');
             let cezalar = JSON.parse(localStorage.getItem('sistemCezalilari') || '{}');
-            
-            if(sikayetler.length === 0) { 
-                govde.innerHTML = '<p style="color:#94a3b8;">Aktif şikayet bulunmuyor.</p>'; 
-                return; 
+
+            if (sikayetler.length === 0) {
+                govde.innerHTML = `<div class="bos-mesaj"><i class="fas fa-check-circle"></i>Aktif şikayet bulunmuyor.</div>`;
+                return;
             }
-            
+
             sikayetler.forEach(s => {
-                const kart = document.createElement('div'); 
-                kart.className = 'admin-item'; 
-                kart.style.marginBottom = '15px'; 
-                kart.style.padding = '15px'; 
-                kart.style.background = '#1e293b'; 
-                kart.style.borderRadius = '8px'; 
-                kart.style.borderLeft = '4px solid #ef4444'; 
-                kart.style.display = 'flex'; 
-                kart.style.justifyContent = 'space-between'; 
-                kart.style.alignItems = 'center';
-                
-                let eylemButonlariHTML = cezalar[s.suclu] ? 
-                    `<button onclick="cezayiKaldir('${s.suclu}')" class="kaldir-btn">🔓 Cezayı Kaldır</button>` : 
-                    `<div style="display:flex; flex-direction:column; gap:6px;">
-                        <button onclick="cezaVer('${s.suclu}', 'chat_mute')" class="ceza-btn">🔇 Sustur</button>
-                        <button onclick="cezaVer('${s.suclu}', 'sureli_ban')" class="ban-btn">⏳ 1 Gün Ban</button>
-                        <button onclick="cezaVer('${s.suclu}', 'hesap_ban')" class="ban-btn" style="background-color:#991b1b !important;">❌ Sınırsız</button>
-                        <button onclick="adminHesabiTamamenSil('${s.suclu}')" class="hesap-sil-btn">🗑️ Hesabı Sistemden Sil</button>
+                const kart = document.createElement('div');
+                kart.className = 'admin-item';
+                kart.style.borderLeft = '4px solid #ef4444';
+
+                let eylemButonlariHTML = cezalar[s.suclu] ?
+                    `<button onclick="cezayiKaldir('${s.suclu}')" class="btn btn-yesil"><i class="fas fa-unlock"></i> Cezayı Kaldır</button>` :
+                    `<div class="btn-grup">
+                        <button onclick="cezaVer('${s.suclu}', 'chat_mute')" class="btn btn-sari"><i class="fas fa-microphone-slash"></i> Sustur</button>
+                        <button onclick="cezaVer('${s.suclu}', 'sureli_ban')" class="btn btn-kirmizi"><i class="fas fa-clock"></i> 1 Gün Ban</button>
+                        <button onclick="cezaVer('${s.suclu}', 'hesap_ban')" class="btn btn-kirmizi" style="background:#991b1b;"><i class="fas fa-ban"></i> Sınırsız</button>
+                        <button onclick="adminHesabiTamamenSil('${s.suclu}')" class="btn btn-bordo"><i class="fas fa-trash"></i> Hesabı Sil</button>
                     </div>`;
-                
+
                 kart.innerHTML = `
-                    <div>
-                        <strong>Suçlu:</strong> ${s.suclu}<br>
-                        <strong>Mesaj:</strong> "${s.mesaj}"<br>
-                        <strong>Neden:</strong> ${s.neden}
+                    <div class="bilgi">
+                        <div><strong style="color:#f87171;">${s.suclu}</strong> <span class="etiket">suçlu</span></div>
+                        <div><span class="etiket">Mesaj:</span> "${s.mesaj}"</div>
+                        <div><span class="etiket">Neden:</span> <span class="vurgu sari">${s.neden}</span></div>
                     </div>
-                    <div style="display:flex; flex-direction:column; gap:6px;">
+                    <div class="btn-grup">
                         ${eylemButonlariHTML}
-                        <button onclick="sikayetSil(${s.id})" class="btn" style="font-size:12px; background-color:#475569;">🗑️ Sil</button>
+                        <button onclick="sikayetSil(${s.id})" class="btn btn-gri"><i class="fas fa-trash"></i> Sil</button>
                     </div>
                 `;
                 govde.appendChild(kart);
             });
         }
 
-        function cezaVer(kullaniciAdi, cezaTuru) { 
+        function cezaVer(kullaniciAdi, cezaTuru) {
             if (kullaniciAdi === 'admin9595') {
                 alert("Admin'e ceza verilemez!");
-                return; 
+                return;
             }
-            let cezaliListesi = JSON.parse(localStorage.getItem('sistemCezalilari') || '{}'); 
-            if (cezaTuru === 'chat_mute') { 
-                cezaliListesi[kullaniciAdi] = { tur: 'mute', bitis: Date.now() + (1*60*60*1000) };
-                sistemBildirimEkle(kullaniciAdi, `🔇 1 saatliğine sohbetten susturuldunuz.`);
+            let cezaliListesi = JSON.parse(localStorage.getItem('sistemCezalilari') || '{}');
+            if (cezaTuru === 'chat_mute') {
+                cezaliListesi[kullaniciAdi] = { tur: 'mute', bitis: Date.now() + (1 * 60 * 60 * 1000) };
+                sistemBildirimEkle(kullaniciAdi, '🔇 1 saatliğine sohbetten susturuldunuz.');
                 alert(`🔇 ${kullaniciAdi} 1 saatliğine susturuldu.`);
-            } else if (cezaTuru === 'sureli_ban') { 
-                cezaliListesi[kullaniciAdi] = { tur: 'ban', bitis: Date.now() + (24*60*60*1000) };
-                sistemBildirimEkle(kullaniciAdi, `⏳ 1 günlüğüne banlandınız.`);
+            } else if (cezaTuru === 'sureli_ban') {
+                cezaliListesi[kullaniciAdi] = { tur: 'ban', bitis: Date.now() + (24 * 60 * 60 * 1000) };
+                sistemBildirimEkle(kullaniciAdi, '⏳ 1 günlüğüne banlandınız.');
                 alert(`⏳ ${kullaniciAdi} 1 günlüğüne banlandı.`);
-            } else if (cezaTuru === 'hesap_ban') { 
+            } else if (cezaTuru === 'hesap_ban') {
                 cezaliListesi[kullaniciAdi] = { tur: 'ban', bitis: 'sinirsiz' };
-                sistemBildirimEkle(kullaniciAdi, `❌ Hesabınız sınırsız olarak banlandı.`);
+                sistemBildirimEkle(kullaniciAdi, '❌ Hesabınız sınırsız olarak banlandı.');
                 alert(`❌ ${kullaniciAdi} sınırsız olarak banlandı.`);
-            } 
-            localStorage.setItem('sistemCezalilari', JSON.stringify(cezaliListesi)); 
-            sikayetListesiniYukle(); 
-        }
-
-        function cezayiKaldir(kullaniciAdi) { 
-            let cezaliListesi = JSON.parse(localStorage.getItem('sistemCezalilari') || '{}'); 
-            if (cezaliListesi[kullaniciAdi]) { 
-                delete cezaliListesi[kullaniciAdi]; 
-                localStorage.setItem('sistemCezalilari', JSON.stringify(cezaliListesi)); 
-                sistemBildirimEkle(kullaniciAdi, `🔓 Cezanız kaldırıldı.`);
-                alert(`🔓 ${kullaniciAdi}'nin cezası kaldırıldı.`);
-                sikayetListesiniYukle(); 
-            } 
-        }
-
-        function sikayetSil(id) { 
-            let sikayetler = JSON.parse(localStorage.getItem('kullaniciSikayetleri') || '[]'); 
-            localStorage.setItem('kullaniciSikayetleri', JSON.stringify(sikayetler.filter(s => s.id !== id))); 
-            alert("Şikayet silindi.");
-            sikayetListesiniYukle(); 
-        }
-
-        // --- HESABI TAMAMEN SİLME FONKSİYONU ---
-        function adminHesabiTamamenSil(silinecekKullanici) {
-            if (silinecekKullanici === 'admin9595') { 
-                alert("Hata: Kendi admin hesabını silemezsin kanka!"); 
-                return; 
             }
-            
-            if (confirm(`DİKKAT ÇINAR: "${silinecekKullanici}" adlı hesabı, tüm ilanlarını ve cüzdanını sistemden TAMAMEN SİLMEK istediğine emin misin?`)) {
-                // 1. Kullanıcıyı veritabanından uçur kanka
+            localStorage.setItem('sistemCezalilari', JSON.stringify(cezaliListesi));
+            sikayetListesiniYukle();
+        }
+
+        function cezayiKaldir(kullaniciAdi) {
+            let cezaliListesi = JSON.parse(localStorage.getItem('sistemCezalilari') || '{}');
+            if (cezaliListesi[kullaniciAdi]) {
+                delete cezaliListesi[kullaniciAdi];
+                localStorage.setItem('sistemCezalilari', JSON.stringify(cezaliListesi));
+                sistemBildirimEkle(kullaniciAdi, '🔓 Cezanız kaldırıldı.');
+                alert(`🔓 ${kullaniciAdi}'nin cezası kaldırıldı.`);
+                sikayetListesiniYukle();
+            }
+        }
+
+        function sikayetSil(id) {
+            let sikayetler = JSON.parse(localStorage.getItem('kullaniciSikayetleri') || '[]');
+            localStorage.setItem('kullaniciSikayetleri', JSON.stringify(sikayetler.filter(s => s.id !== id)));
+            alert('Şikayet silindi.');
+            sikayetListesiniYukle();
+        }
+
+        // ============================================
+        // 3. HESAP SİLME
+        // ============================================
+        function adminHesabiTamamenSil(silinecekKullanici) {
+            if (silinecekKullanici === 'admin9595') {
+                alert("Hata: Kendi admin hesabını silemezsin kanka!");
+                return;
+            }
+
+            if (confirm(
+                    `DİKKAT ÇINAR: "${silinecekKullanici}" adlı hesabı, tüm ilanlarını ve cüzdanını sistemden TAMAMEN SİLMEK istediğine emin misin?`
+                    )) {
                 let kullanicilar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
                 kullanicilar = kullanicilar.filter(u => u.kullaniciAdi !== silinecekKullanici);
                 localStorage.setItem('kullanicilar', JSON.stringify(kullanicilar));
 
-                // 2. Bu adamın pazarda açtığı tüm ilanları da temizle
                 let pazardakiIlanlar = JSON.parse(localStorage.getItem('pazardakiIlanlar') || '[]');
                 pazardakiIlanlar = pazardakiIlanlar.filter(ilan => ilan.satici !== silinecekKullanici);
                 localStorage.setItem('pazardakiIlanlar', JSON.stringify(pazardakiIlanlar));
 
-                // 3. Kullanıcıya ait tüm bildirimleri temizle
                 localStorage.removeItem(`bildirimler_${silinecekKullanici}`);
 
-                // 4. Kullanıcıya ait tüm özel sohbet odalarını temizle
                 let silinecekAnahtarlar = [];
                 for (let i = 0; i < localStorage.length; i++) {
                     const anahtar = localStorage.key(i);
@@ -222,55 +601,51 @@
                 }
                 silinecekAnahtarlar.forEach(anahtar => localStorage.removeItem(anahtar));
 
-                // 5. Eğer adam o an sitede açıksa oturumunu da patlat
                 let aktifOlan = JSON.parse(localStorage.getItem('aktifKullanici'));
                 if (aktifOlan && aktifOlan.kullaniciAdi === silinecekKullanici) {
                     localStorage.removeItem('aktifKullanici');
                 }
 
                 alert(`Başarılı! "${silinecekKullanici}" kullanıcısı ve tüm pazar izleri dünyadan tamamen silindi.`);
-                window.location.reload(); // Paneli tazele kanka
+                window.location.reload();
             }
         }
 
-        // --- FOTOĞRAFLI KİMLİK KONTROLLÜ PARA ÇEKME LİSTESİ ---
+        // ============================================
+        // 4. PARA ÇEKME TALEPLERİ
+        // ============================================
         function paraCekmeListesiniYukle() {
             const govde = document.getElementById('paraCekmeListesiGövde');
             govde.innerHTML = '';
             let talepler = JSON.parse(localStorage.getItem('paraCekmeTalepleri') || '[]');
-            if (talepler.length === 0) { govde.innerHTML = '<p style="color:#94a3b8;">Banka para çekme talebi yok.</p>'; return; }
+            if (talepler.length === 0) {
+                govde.innerHTML = `<div class="bos-mesaj"><i class="fas fa-credit-card"></i>Banka para çekme talebi yok.</div>`;
+                return;
+            }
 
             talepler.forEach(t => {
-                const kart = document.createElement('div'); 
-                kart.className = 'admin-item'; 
-                kart.style.marginBottom = '15px'; 
-                kart.style.padding = '15px'; 
-                kart.style.background = '#1e293b'; 
-                kart.style.borderRadius = '8px'; 
-                kart.style.borderLeft = '4px solid #10b981'; 
-                kart.style.display = 'flex'; 
-                kart.style.justifyContent = 'space-between'; 
-                kart.style.alignItems = 'center';
-                
-                let eylemButonlari = t.durum === 'Beklemede' ? 
-                    `<div style="display: flex; gap: 10px;">
-                        <button onclick="paraCekmeKarar(${t.id}, 'onayla')" class="btn" style="background-color: #10b981; padding: 5px 15px;">✓ Fotoğraflar Doğru, Gönderdim</button>
-                        <button onclick="paraCekmeKarar(${t.id}, 'reddet')" class="btn" style="background-color: #ef4444; padding: 5px 15px;">✕ Sahte Fotoğraf / Reddet</button>
-                    </div>` : 
-                    `<span style="font-weight:bold; color:${t.durum === 'Ödendi' ? '#10b981' : '#ef4444'}">${t.durum}</span>`;
-                
+                const kart = document.createElement('div');
+                kart.className = 'admin-item';
+                kart.style.borderLeft = '4px solid #10b981';
+
                 const netOdenecek = t.miktar - 10 > 0 ? t.miktar - 10 : 0;
+                let eylemButonlari = t.durum === 'Beklemede' ?
+                    `<div class="btn-grup">
+                        <button onclick="paraCekmeKarar(${t.id}, 'onayla')" class="btn btn-yesil"><i class="fas fa-check"></i> Onayla</button>
+                        <button onclick="paraCekmeKarar(${t.id}, 'reddet')" class="btn btn-kirmizi"><i class="fas fa-times"></i> Reddet</button>
+                    </div>` :
+                    `<span style="font-weight:600; color:${t.durum === 'Ödendi' ? '#34d399' : '#f87171'}">${t.durum}</span>`;
 
                 kart.innerHTML = `
-                    <div>
-                        <span style="color:#10b981; font-weight:bold;">🔒 KİMLİK ONAYLI TALEP</span><br>
-                        <strong>Kullanıcı:</strong> ${t.kullanici}<br>
-                        <strong>Ad Soyad:</strong> ${t.isim}<br>
-                        <strong>T.C. Kimlik No:</strong> <span style="color:#f59e0b; font-family:monospace;">${t.tc || 'Belirtilmedi'}</span><br>
-                        <strong>Telefon:</strong> ${t.telefon || 'Belirtilmedi'}<br>
-                        <strong>Ödenecek Net (10 TL Komisyon Hariç):</strong> <strong style="color:#10b981; font-size:15px;">${netOdenecek} TL</strong><br>
-                        <strong>IBAN:</strong> <span style="font-family:monospace;">${t.iban}</span> <br>
-                        <div style="display:flex; gap:10px; margin-top:8px;">
+                    <div class="bilgi">
+                        <div><span style="color:#10b981; font-weight:bold;">🔒 KİMLİK ONAYLI TALEP</span></div>
+                        <div><span class="etiket">Kullanıcı:</span> <strong>${t.kullanici}</strong></div>
+                        <div><span class="etiket">Ad Soyad:</span> <span class="vurgu mavi">${t.isim}</span></div>
+                        <div><span class="etiket">TC:</span> <span style="color:#fbbf24; font-family:monospace;">${t.tc || 'Belirtilmedi'}</span></div>
+                        <div><span class="etiket">Telefon:</span> ${t.telefon || 'Belirtilmedi'}</div>
+                        <div><span class="etiket">Ödenecek Net (10 TL komisyon hariç):</span> <span class="vurgu">${netOdenecek} TL</span></div>
+                        <div><span class="etiket">IBAN:</span> <span style="font-family:monospace; color:#94a3b8;">${t.iban}</span></div>
+                        <div class="kimlik-grup">
                             <img src="${t.kimlikOn}" class="admin-kimlik-img">
                             <img src="${t.kimlikArka}" class="admin-kimlik-img">
                         </div>
@@ -287,97 +662,96 @@
             if (tIdx !== -1 && talepler[tIdx].durum === 'Beklemede') {
                 const hKul = talepler[tIdx].kullanici;
                 const nOdenecek = talepler[tIdx].miktar - 10 > 0 ? talepler[tIdx].miktar - 10 : 0;
-                
+
                 if (aksiyon === 'onayla') {
                     talepler[tIdx].durum = 'Ödendi';
-                    sistemBildirimEkle(hKul, `💰 Para çekme talebiniz onaylandı! 10 TL işlem ücreti düşülerek net ${nOdenecek} TL banka hesabınıza transfer edildi.`);
-                    alert("✅ Para çekme talebi onaylandı! Kullanıcıya bildirim gönderildi.");
+                    sistemBildirimEkle(hKul,
+                        `💰 Para çekme talebiniz onaylandı! 10 TL işlem ücreti düşülerek net ${nOdenecek} TL banka hesabınıza transfer edildi.`
+                        );
+                    alert('✅ Para çekme talebi onaylandı! Kullanıcıya bildirim gönderildi.');
                 } else {
                     talepler[tIdx].durum = 'Reddedildi';
-                    
-                    // Kullanıcının bakiyesini iade et
                     let kullanıcılar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
                     const uIdx = kullanıcılar.findIndex(u => u.kullaniciAdi === hKul);
-                    if (uIdx !== -1) { 
-                        kullanıcılar[uIdx].bakiye = parseFloat(((kullanıcılar[uIdx].bakiye || 0) + talepler[tIdx].miktar).toFixed(2)); 
-                        localStorage.setItem('kullanicilar', JSON.stringify(kullanıcılar)); 
+                    if (uIdx !== -1) {
+                        kullanıcılar[uIdx].bakiye = parseFloat(((kullanıcılar[uIdx].bakiye || 0) + talepler[tIdx].miktar)
+                            .toFixed(2));
+                        localStorage.setItem('kullanicilar', JSON.stringify(kullanıcılar));
                     }
-                    
-                    sistemBildirimEkle(hKul, `❌ Para çekme talebiniz kurucu tarafından iptal edildi. ${talepler[tIdx].miktar} TL cüzdan bakiyenize iade edildi.`);
-                    alert("❌ Para çekme talebi reddedildi ve kullanıcının bakiyesi iade edildi.");
+                    sistemBildirimEkle(hKul,
+                        `❌ Para çekme talebiniz kurucu tarafından iptal edildi. ${talepler[tIdx].miktar} TL cüzdan bakiyenize iade edildi.`
+                        );
+                    alert('❌ Para çekme talebi reddedildi ve kullanıcının bakiyesi iade edildi.');
                 }
-                
                 localStorage.setItem('paraCekmeTalepleri', JSON.stringify(talepler));
                 paraCekmeListesiniYukle();
             }
         }
 
         // ============================================
-        // YENİ EKLENEN MODÜL: İLAN RAPORLARI (ŞİKAYETLERİ)
+        // 5. İLAN RAPORLARI (YENİ)
         // ============================================
         function ilanRaporlariListesiniYukle() {
             const govde = document.getElementById('ilanRaporlariListesiGövde');
             govde.innerHTML = '';
             let adminBildirimler = JSON.parse(localStorage.getItem('bildirimler_admin9595') || '[]');
-            
-            // Sadece "YENİ RAPOR!" ile başlayan bildirimleri filtrele
+
             const raporlar = adminBildirimler.filter(b => b.metin && b.metin.includes('🚨 YENİ RAPOR!'));
 
             if (raporlar.length === 0) {
-                govde.innerHTML = '<p style="color:#94a3b8;">Henüz hiç ilan raporu (şikayet) yok.</p>';
+                govde.innerHTML = `<div class="bos-mesaj"><i class="fas fa-shield"></i>Henüz hiç ilan raporu yok.</div>`;
                 return;
             }
 
-            // En yeni rapor en üstte olacak şekilde listele (Ters çevir)
             raporlar.reverse().forEach((rapor) => {
                 const kart = document.createElement('div');
                 kart.className = 'admin-item';
-                kart.style.marginBottom = '15px';
-                kart.style.padding = '15px';
-                kart.style.background = '#1e293b';
-                kart.style.borderRadius = '8px';
                 kart.style.borderLeft = '4px solid #f59e0b';
-                kart.style.display = 'flex';
-                kart.style.justifyContent = 'space-between';
-                kart.style.alignItems = 'center';
 
-                // Rapor metnini ayrıştır
                 const satirlar = rapor.metin.split('\n');
                 const raporEden = satirlar[1] ? satirlar[1].replace('Rapor eden: ', '') : 'Bilinmiyor';
                 const ilanID = satirlar[2] ? satirlar[2].replace('İlan ID: ', '') : 'Bilinmiyor';
                 const sebep = satirlar[3] ? satirlar[3].replace('Sebep: ', '') : 'Belirtilmemiş';
 
                 kart.innerHTML = `
-                    <div>
-                        <strong style="color:#f87171;">🚨 Rapor Eden:</strong> ${raporEden}<br>
-                        <strong style="color:#38bdf8;">📌 İlan ID:</strong> ${ilanID}<br>
-                        <strong style="color:#fbbf24;">📝 Sebep:</strong> "${sebep}"<br>
-                        <span style="color:#94a3b8; font-size:12px;">⏱️ ${rapor.tarih || 'Bilinmiyor'}</span>
+                    <div class="bilgi">
+                        <div><span style="color:#f87171; font-weight:bold;">🚨 Rapor Eden:</span> <strong>${raporEden}</strong></div>
+                        <div><span class="etiket">📌 İlan ID:</span> <span class="vurgu mavi">${ilanID}</span></div>
+                        <div><span class="etiket">📝 Sebep:</span> <span class="vurgu sari">"${sebep}"</span></div>
+                        <div style="color:#5a5a7a; font-size:12px;">⏱️ ${rapor.tarih || 'Bilinmiyor'}</div>
                     </div>
-                    <div>
-                        <button onclick="ilanRaporuCozenSil(${rapor.id})" class="btn" style="background-color: #10b981; padding: 5px 15px; color:white;">✅ Raporu Çözdüm (Sil)</button>
-                    </div>
+                    <button onclick="ilanRaporuCozenSil(${rapor.id})" class="btn btn-yesil"><i class="fas fa-check"></i> Raporu Çözdüm (Sil)</button>
                 `;
                 govde.appendChild(kart);
             });
         }
 
-        // İlan raporunu sildiğimizde, aynı zamanda admin bildirim listesinden de kaldıran fonksiyon
         function ilanRaporuCozenSil(id) {
-            if (confirm("Bu raporu çözdüyseniz listeden silelim mi?")) {
+            if (confirm('Bu raporu çözdüyseniz listeden silelim mi?')) {
                 let adminBildirimler = JSON.parse(localStorage.getItem('bildirimler_admin9595') || '[]');
                 adminBildirimler = adminBildirimler.filter(b => b.id !== id);
                 localStorage.setItem('bildirimler_admin9595', JSON.stringify(adminBildirimler));
-                alert("✅ Rapor listeden kaldırıldı.");
-                ilanRaporlariListesiniYukle(); // Listeyi yenile
+                alert('✅ Rapor listeden kaldırıldı.');
+                ilanRaporlariListesiniYukle();
             }
         }
 
-        // SAYFA AÇILDIĞINDA TÜM LİSTELERİ SIFIRDAN TETİKLEYEN SİHİRLİ SATIRLAR
+        // ============================================
+        // SAYFA YÜKLENDİĞİNDE
+        // ============================================
         bakiyeListesiniYenile();
         sikayetListesiniYukle();
         paraCekmeListesiniYukle();
-        ilanRaporlariListesiniYukle(); // Bu satırı da ekledik!
+        ilanRaporlariListesiniYukle();
+
+        // Her 5 saniyede bir yenile (canlı takip)
+        setInterval(() => {
+            bakiyeListesiniYenile();
+            sikayetListesiniYukle();
+            paraCekmeListesiniYukle();
+            ilanRaporlariListesiniYukle();
+        }, 5000);
     </script>
+
 </body>
 </html>

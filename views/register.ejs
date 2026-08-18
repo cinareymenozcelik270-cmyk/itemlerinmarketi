@@ -5,45 +5,480 @@
     <meta name="google-site-verification" content="rXTtLPJavFhXvJ7TGofxQ3XXGZXb_B8dzSBNAPZwLFk" />
     <link rel="icon" type="image/png" href="/resim.png">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kayıt Ol - İtemlerinMarketi</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0a0a1a;
+            color: #e8e8f0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 40px;
+            background: rgba(10, 10, 26, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        header .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        header .logo i {
+            color: #6366f1;
+        }
+        header nav a {
+            color: #8a8aaa;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        header nav a:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: white;
+        }
+
+        .register-container {
+            max-width: 420px;
+            width: 100%;
+            margin-top: 60px;
+            background: rgba(20, 20, 42, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+        .register-container h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+        .register-container .alt-baslik {
+            text-align: center;
+            color: #8a8aaa;
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+        .register-container .alt-baslik a {
+            color: #a5b4fc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .register-container .alt-baslik a:hover {
+            color: white;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .alert.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            color: #f87171;
+        }
+        .alert.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            color: #34d399;
+        }
+        .alert i {
+            font-size: 16px;
+        }
+
+        .form-box label {
+            display: block;
+            color: #c4c4d4;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .form-box input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 16px;
+        }
+        .form-box input:focus {
+            border-color: #6366f1;
+            outline: none;
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        .form-box input::placeholder {
+            color: #5a5a7a;
+        }
+        .form-box .input-hint {
+            font-size: 12px;
+            color: #5a5a7a;
+            margin-top: -10px;
+            margin-bottom: 12px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.35);
+        }
+
+        .google-btn {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            color: #c4c4d4;
+        }
+        .google-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            transform: translateY(-2px);
+        }
+        .google-btn img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .ayirici {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 20px 0;
+            color: #5a5a7a;
+            font-size: 13px;
+        }
+        .ayirici::before,
+        .ayirici::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .giris-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #8a8aaa;
+            font-size: 14px;
+        }
+        .giris-link a {
+            color: #a5b4fc;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .giris-link a:hover {
+            color: white;
+        }
+
+        .sartlar {
+            font-size: 12px;
+            color: #5a5a7a;
+            text-align: center;
+            margin-top: 16px;
+            line-height: 1.6;
+        }
+        .sartlar a {
+            color: #a5b4fc;
+            text-decoration: none;
+        }
+        .sartlar a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 12px 20px;
+            }
+            header .logo {
+                font-size: 16px;
+            }
+            .register-container {
+                padding: 24px;
+                margin-top: 80px;
+            }
+            .register-container h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
 </head>
 <body>
+
     <header>
-        <div class="logo">İtemlerinMarketi</div>
-        <nav><a href="/">Ana Sayfa</a></nav>
+        <div class="logo">
+            <i class="fas fa-store"></i> İtemlerinMarketi
+        </div>
+        <nav>
+            <a href="/"><i class="fas fa-home"></i> Ana Sayfa</a>
+        </nav>
     </header>
-    <div class="container">
-        <h1>Kayıt Ol</h1>
+
+    <div class="register-container">
+
+        <h1><i class="fas fa-user-plus" style="color:#6366f1;"></i> Kayıt Ol</h1>
+        <p class="alt-baslik">Hemen üye ol, güvenli ticarete başla!</p>
+
+        <!-- Hata / Başarı Mesajı -->
+        <div id="alertBox" class="alert" style="display:none;"></div>
+
+        <!-- GOOGLE İLE KAYIT -->
+        <button class="google-btn" onclick="googleKayit()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20" height="20">
+                <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" />
+                <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" />
+                <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z" />
+                <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z" />
+            </svg>
+            Google ile Kayıt Ol
+        </button>
+
+        <div class="ayirici">veya</div>
+
+        <!-- FORM -->
         <form id="regForm" class="form-box">
-            <input type="text" id="regKAdi" placeholder="Kullanıcı Adı Seç" required>
-            <input type="password" id="regSifre" placeholder="Şifre Belirle" required>
-            <button type="submit" class="btn">Kayıt Ol</label>
+            <label for="regKAdi"><i class="fas fa-user"></i> Kullanıcı Adı</label>
+            <input type="text" id="regKAdi" placeholder="Kullanıcı adı seç" required autocomplete="username">
+            <div class="input-hint">En az 3 harf, 1 büyük ve 1 küçük harf içermeli</div>
+
+            <label for="regSifre"><i class="fas fa-lock"></i> Şifre</label>
+            <input type="password" id="regSifre" placeholder="Şifre belirle (en az 6 karakter)" required autocomplete="new-password">
+
+            <button type="submit" class="btn-primary"><i class="fas fa-user-plus"></i> Kayıt Ol</button>
         </form>
-        <p style="margin-top:15px; color:#94a3b8;">Zaten hesabın var mı? <a href="/login" style="color:#38bdf8;">Giriş Yap</a></p>
+
+        <div class="giris-link">
+            Zaten hesabın var mı? <a href="/login">Giriş Yap</a>
+        </div>
+
+        <div class="sartlar">
+            <i class="fas fa-shield-alt" style="color:#6366f1;"></i>
+            Kayıt olarak <a href="/kvkk">KVKK Aydınlatma Metni</a>'ni ve
+            <a href="/kullanim-kosullari">Kullanım Koşulları</a>'nı kabul etmiş sayılırsın.
+        </div>
+
     </div>
+
     <script>
+        // ============================================
+        // KAYIT OL - TAM SCRIPT
+        // ============================================
+
+        // ============================================
+        // GOOGLE İLE KAYIT
+        // ============================================
+        function googleKayit() {
+            const devam = confirm(
+                '🔐 Google ile kayıt olmak istiyorsan devam et.\n\n' +
+                '(Demo modunda: Google hesabı yerine "google_kullanici" olarak kayıt yapılacaktır.)'
+            );
+
+            if (devam) {
+                const googleKullanici = {
+                    kullaniciAdi: 'google_kullanici',
+                    email: 'googleuser@gmail.com',
+                    sifre: 'google_oauth',
+                    bakiye: 100,
+                    googleConnected: true
+                };
+
+                let kullanicilar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
+
+                // Kullanıcı zaten var mı kontrol et
+                const mevcut = kullanicilar.find(u => u.kullaniciAdi === googleKullanici.kullaniciAdi);
+
+                if (!mevcut) {
+                    kullanicilar.push(googleKullanici);
+                    localStorage.setItem('kullanicilar', JSON.stringify(kullanicilar));
+                    showAlert('✅ Google hesabınla başarıyla kayıt oldun! Giriş sayfasına yönlendiriliyorsun.', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 1500);
+                } else {
+                    showAlert('ℹ️ Bu Google hesabı zaten kayıtlı! Giriş sayfasına yönlendiriliyorsun.', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 1500);
+                }
+            }
+        }
+
+        // ============================================
+        // ALERT GÖSTER
+        // ============================================
+        function showAlert(mesaj, tip) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.className = 'alert ' + tip;
+            alertBox.innerHTML = `<i class="fas ${tip === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${mesaj}`;
+            alertBox.style.display = 'flex';
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 5000);
+        }
+
+        // ============================================
+        // NORMAL KAYIT
+        // ============================================
         document.getElementById('regForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const kAdi = document.getElementById('regKAdi').value;
-            const sifre = document.getElementById('regSifre').value;
 
-            if(kAdi === 'admin9595') {
-                alert('Bu kullanıcı adı kullanılamaz!');
+            const kAdi = document.getElementById('regKAdi').value.trim();
+            const sifre = document.getElementById('regSifre').value.trim();
+
+            // Validasyon
+            if (kAdi.length < 3) {
+                showAlert('❌ Kullanıcı adı en az 3 karakter olmalı!', 'error');
+                return;
+            }
+            if (!/[A-ZÇĞİÖŞÜ]/.test(kAdi)) {
+                showAlert('❌ Kullanıcı adı en az 1 büyük harf içermeli!', 'error');
+                return;
+            }
+            if (!/[a-zçğıöşü]/.test(kAdi)) {
+                showAlert('❌ Kullanıcı adı en az 1 küçük harf içermeli!', 'error');
+                return;
+            }
+            if (sifre.length < 6) {
+                showAlert('❌ Şifre en az 6 karakter olmalı!', 'error');
+                return;
+            }
+
+            // Admin kontrolü
+            if (kAdi.toLowerCase() === 'admin9595') {
+                showAlert('❌ Bu kullanıcı adı kullanılamaz!', 'error');
                 return;
             }
 
             let kayitliKullanicilar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
-            if(kayitliKullanicilar.find(u => u.kullaniciAdi === kAdi)) {
-                alert('Bu kullanıcı adı zaten alınmış!');
+
+            // Kullanıcı adı kontrolü
+            if (kayitliKullanicilar.find(u => u.kullaniciAdi.toLowerCase() === kAdi.toLowerCase())) {
+                showAlert('❌ Bu kullanıcı adı zaten alınmış!', 'error');
                 return;
             }
 
-            kayitliKullanicilar.push({ kullaniciAdi: kAdi, sifre: sifre, bakiye: 0 });
+            // Kaydet
+            kayitliKullanicilar.push({
+                kullaniciAdi: kAdi,
+                sifre: sifre,
+                bakiye: 0,
+                rol: 'uye'
+            });
             localStorage.setItem('kullanicilar', JSON.stringify(kayitliKullanicilar));
-            alert('Kayıt başarılı! Giriş sayfasına yönlendiriliyorsun.');
-            window.location.href = '/login';
+
+            showAlert('✅ Kayıt başarılı! Giriş sayfasına yönlendiriliyorsun.', 'success');
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 1500);
         });
+
+        // ============================================
+        // ENTER İLE GÖNDER
+        // ============================================
+        document.getElementById('regSifre').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('regForm').dispatchEvent(new Event('submit'));
+            }
+        });
+
+        document.getElementById('regKAdi').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('regSifre').focus();
+            }
+        });
+
+        console.log('📝 İtemlerinMarketi - Kayıt sayfası yüklendi!');
     </script>
+
 </body>
 </html>

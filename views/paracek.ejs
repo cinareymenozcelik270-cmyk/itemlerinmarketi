@@ -5,311 +5,720 @@
     <meta name="google-site-verification" content="rXTtLPJavFhXvJ7TGofxQ3XXGZXb_B8dzSBNAPZwLFk" />
     <link rel="icon" type="image/png" href="/resim.png">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para Çek - İtemlerinMarketi</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .dosya-sec-etiket {
-            display: block;
-            background: #1e293b;
-            border: 1px dashed #38bdf8;
-            padding: 15px;
-            border-radius: 6px;
-            color: #cbd5e1;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 12px;
-            text-align: center;
-            transition: background 0.2s;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .dosya-sec-etiket:hover { background: #334155; }
-        .onizleme-img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            display: none;
-            border: 1px solid #475569;
+        body {
+            background: #0a0a1a;
+            color: #e8e8f0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
         }
-
-        /* NEDEN KİMLİK BUTONU */
-        .neden-kimlik-btn {
-            background: transparent;
-            color: #38bdf8;
-            border: 1px solid #38bdf8;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-left: 10px;
-        }
-        .neden-kimlik-btn:hover {
-            background: #38bdf8;
-            color: #0f172a;
-        }
-
-        /* MODAL STİLLERİ */
-        .modal-overlay {
-            display: none;
+        body::before {
+            content: '';
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.8);
-            z-index: 9999;
-            justify-content: center;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        header {
+            display: flex;
             align-items: center;
+            justify-content: space-between;
+            padding: 16px 40px;
+            background: rgba(10, 10, 26, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 12px;
         }
-        .modal-overlay.active { display: flex; }
-        .modal-icerik {
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 16px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            padding: 30px;
-            color: #cbd5e1;
-            position: relative;
-        }
-        .modal-icerik h2 {
-            color: #38bdf8;
-            margin-top: 0;
+        header .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        .modal-icerik h2 .emoji { font-size: 28px; }
-        .modal-icerik h3 { color: #a855f7; margin-top: 20px; }
-        .modal-icerik p { line-height: 1.7; font-size: 14px; color: #94a3b8; }
-        .modal-icerik ul { padding-left: 20px; color: #94a3b8; }
-        .modal-icerik ul li { margin-bottom: 8px; }
-        .modal-icerik .highlight { color: #fbbf24; font-weight: 600; }
-        .modal-kapat-btn {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            float: right;
-            transition: background 0.2s;
+        header .logo i {
+            color: #6366f1;
         }
-        .modal-kapat-btn:hover { background: #dc2626; }
-        .modal-icerik .kvkk-metni {
-            background: #0f172a;
-            padding: 15px;
+        header nav a {
+            color: #8a8aaa;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
             border-radius: 8px;
-            border-left: 3px solid #a855f7;
-            margin: 15px 0;
-            font-size: 13px;
-            color: #94a3b8;
-            line-height: 1.6;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        .modal-icerik .kvkk-metni strong {
-            color: #e2e8f0;
+        header nav a:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: white;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .paracek-container {
+            background: rgba(20, 20, 42, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 36px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            display: none;
+        }
+
+        .sayfa-baslik {
+            font-size: 26px;
+            font-weight: 800;
+            color: white;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .sayfa-baslik i {
+            color: #10b981;
+        }
+
+        .sayfa-alt {
+            color: #8a8aaa;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+        .sayfa-alt strong {
+            color: #38bdf8;
+        }
+
+        .bakiye-goster {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            padding: 16px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .bakiye-goster .label {
+            color: #8a8aaa;
+            font-size: 14px;
+        }
+        .bakiye-goster .bakiye {
+            color: #34d399;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .neden-kimlik-btn {
+            background: transparent;
+            color: #a5b4fc;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        .neden-kimlik-btn:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: #6366f1;
+        }
+
+        .form-box label {
+            display: block;
+            color: #c4c4d4;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .form-box input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 14px;
+        }
+        .form-box input:focus {
+            border-color: #6366f1;
+            outline: none;
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        .form-box input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .form-box input::placeholder {
+            color: #5a5a7a;
+        }
+
+        .dosya-sec-etiket {
+            display: block;
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px dashed rgba(56, 189, 248, 0.15);
+            padding: 14px;
+            border-radius: 10px;
+            color: #8a8aaa;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 10px;
+            text-align: center;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        .dosya-sec-etiket:hover {
+            border-color: #38bdf8;
+            background: rgba(56, 189, 248, 0.04);
+        }
+        .dosya-sec-etiket i {
+            margin-right: 6px;
+        }
+        .dosya-sec-etiket.arka {
+            border-color: rgba(168, 85, 247, 0.15);
+        }
+        .dosya-sec-etiket.arka:hover {
+            border-color: #a855f7;
+            background: rgba(168, 85, 247, 0.04);
+        }
+
+        .onizleme-img {
+            max-width: 100%;
+            max-height: 160px;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+        .onizleme-img.show {
+            display: block;
+        }
+
+        .btn-para-cek {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .btn-para-cek:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.3);
+        }
+        .btn-para-cek:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(12px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-icerik {
+            background: rgba(20, 20, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            max-width: 600px;
+            width: 92%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 32px;
+            color: #e8e8f0;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+        .modal-icerik::-webkit-scrollbar {
+            width: 4px;
+        }
+        .modal-icerik::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .modal-icerik::-webkit-scrollbar-thumb {
+            background: #3a3a5a;
+            border-radius: 4px;
+        }
+
+        .modal-icerik h2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+        .modal-icerik h2 i {
+            color: #a855f7;
+        }
+
+        .modal-kapat-btn {
+            background: none;
+            border: none;
+            color: #5a5a7a;
+            font-size: 22px;
+            cursor: pointer;
+            float: right;
+            padding: 4px 8px;
+            transition: color 0.3s;
+        }
+        .modal-kapat-btn:hover {
+            color: white;
+        }
+
+        .modal-icerik p {
+            color: #c4c4d4;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+        .modal-icerik .highlight {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+        .modal-icerik ul {
+            padding-left: 20px;
+            color: #c4c4d4;
+            margin: 12px 0;
+        }
+        .modal-icerik ul li {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .modal-icerik ul li strong {
+            color: white;
+        }
+
+        .kvkk-metni {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 16px;
+            border-radius: 10px;
+            border-left: 3px solid #a855f7;
+            margin: 14px 0;
+            font-size: 13px;
+            color: #8a8aaa;
+            line-height: 1.7;
+        }
+        .kvkk-metni strong {
+            color: #c4c4d4;
+        }
+        .kvkk-metni a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+        .kvkk-metni a:hover {
+            text-decoration: underline;
+        }
+
+        .modal-footer {
+            font-size: 13px;
+            color: #5a5a7a;
+            margin-top: 12px;
+        }
+        .modal-footer .highlight {
+            color: #34d399;
+        }
+
+        @media (max-width: 640px) {
+            header {
+                padding: 12px 20px;
+            }
+            .container {
+                padding: 20px 16px;
+            }
+            .paracek-container {
+                padding: 24px;
+            }
+            .sayfa-baslik {
+                font-size: 20px;
+            }
+            .bakiye-goster .bakiye {
+                font-size: 20px;
+            }
+            .modal-icerik {
+                padding: 24px;
+            }
+            .modal-icerik h2 {
+                font-size: 20px;
+            }
+        }
+        @media (max-width: 480px) {
+            .paracek-container {
+                padding: 16px;
+            }
+            .sayfa-baslik {
+                font-size: 18px;
+            }
+            .dosya-sec-etiket {
+                font-size: 12px;
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
+
     <header>
-        <div class="header-sol-bölüm">
-            <a href="/"><img src="/gif.png" alt="İtemlerinMarketi" class="logo-img" onerror="this.onerror=null; this.outerHTML='İtemlerinMarketi';"></a>
+        <div class="logo">
+            <i class="fas fa-store"></i> İtemlerinMarketi
         </div>
-        <nav><a href="/">🏠 Ana Sayfaya Dön</a></nav>
+        <nav>
+            <a href="/"><i class="fas fa-home"></i> Ana Sayfa</a>
+            <a href="/para-cek" style="color:white; background:rgba(16,185,129,0.1);"><i class="fas fa-arrow-down"></i> Para Çek</a>
+        </nav>
     </header>
 
-    <div class="container" id="icerik" style="display: none;">
-        <h1 style="display:flex; align-items:center; flex-wrap:wrap; gap:10px;">
-            💰 Bankaya Para Çekme Talebi
-            <button class="neden-kimlik-btn" onclick="aciklamaModalAc()">❓ Neden kimlik lazım?</button>
-        </h1>
-        <p>Dolandırıcılığa karşı yasal koruma amacıyla <strong style="color:#38bdf8;">Kimlik Kartınızın Ön ve Arka Fotoğrafını</strong> yükleyiniz (Minimum Çekim: 10 TL):</p>
+    <div class="container">
+        <div class="paracek-container" id="icerik">
 
-        <form id="paraCekForm" class="form-box" style="max-width: 450px; margin-top:20px;">
-            <label style="color:#94a3b8; font-size:14px;">Mevcut Bakiyeniz:</label>
-            <input type="text" id="mevcutBakiyeGosterge" readonly style="color:#10b981; font-weight:bold; margin-bottom: 15px;">
-            
-            <label style="color:#38bdf8; font-size:12px; font-weight:bold; display:block; text-align:left; margin-bottom:10px;">📋 Kimlik Kartı Yükleme:</label>
-            
-            <!-- KİMLİK ÖN YÜZ BUTONU -->
-            <label class="dosya-sec-etiket" for="kimlikOnInput">📷 Kimlik Kartı <span style="color:#38bdf8;">ÖN</span> Yüzü Seç</label>
-            <input type="file" id="kimlikOnInput" accept="image/*" required style="display: none;">
-            <img id="onOnizleme" class="onizleme-img" alt="Ön Yüz">
+            <div class="sayfa-baslik">
+                <i class="fas fa-arrow-down"></i> Bankaya Para Çekme
+                <button class="neden-kimlik-btn" onclick="aciklamaModalAc()">
+                    <i class="fas fa-question-circle"></i> Neden kimlik?
+                </button>
+            </div>
+            <p class="sayfa-alt">
+                Dolandırıcılığa karşı koruma amacıyla <strong>kimlik kartınızın ön ve arka fotoğrafını</strong> yükleyin.
+                <br><span style="color:#5a5a7a; font-size:13px;">Minimum çekim: 10 TL</span>
+            </p>
 
-            <!-- KİMLİK ARKA YÜZ BUTONU -->
-            <label class="dosya-sec-etiket" for="kimlikArkaInput" style="border-color: #a855f7; color: #d8b4fe;">📷 Kimlik Kartı <span style="color:#a855f7;">ARKA</span> Yüzü Seç</label>
-            <input type="file" id="kimlikArkaInput" accept="image/*" required style="display: none;">
-            <img id="arkaOnizleme" class="onizleme-img" alt="Arka Yüz">
+            <!-- BAKİYE GÖSTER -->
+            <div class="bakiye-goster">
+                <span class="label"><i class="fas fa-wallet"></i> Mevcut Bakiyeniz</span>
+                <span class="bakiye" id="mevcutBakiyeGosterge">0.00 ₺</span>
+            </div>
 
-            <!-- BANKA ALANLARI -->
-            <label style="color:#38bdf8; font-size:12px; font-weight:bold; display:block; text-align:left; margin-top:15px; margin-bottom:5px;">🏦 Hesap ve Tutar Bilgileri:</label>
-            <input type="text" id="cekilecekIsim" placeholder="Hesap Sahibi Ad Soyad" required>
-            <input type="text" id="cekilecekIban" placeholder="Paranın Yatacağı IBAN (TR...)" required>
-            <input type="number" id="cekilecekMiktar" placeholder="Çekmek İstediğiniz Tutar (En Az 10 TL)" required>
-            
-            <button type="submit" class="btn" style="width: 100%;">✅ Fotoğrafları Onayla ve Para Çek</button>
-        </form>
+            <!-- FORM -->
+            <form id="paraCekForm" class="form-box">
+
+                <!-- KİMLİK ÖN -->
+                <label style="color:#38bdf8; font-size:12px; font-weight:600; display:block; margin-bottom:6px;">
+                    <i class="fas fa-id-card"></i> Kimlik Kartı Ön Yüz
+                </label>
+                <label class="dosya-sec-etiket" for="kimlikOnInput">
+                    <i class="fas fa-cloud-upload-alt"></i> Kimlik Ön Yüzü Seç
+                </label>
+                <input type="file" id="kimlikOnInput" accept="image/*" required style="display:none;">
+                <img id="onOnizleme" class="onizleme-img" alt="Ön Yüz">
+
+                <!-- KİMLİK ARKA -->
+                <label style="color:#a855f7; font-size:12px; font-weight:600; display:block; margin-bottom:6px; margin-top:10px;">
+                    <i class="fas fa-id-card"></i> Kimlik Kartı Arka Yüz
+                </label>
+                <label class="dosya-sec-etiket arka" for="kimlikArkaInput">
+                    <i class="fas fa-cloud-upload-alt"></i> Kimlik Arka Yüzü Seç
+                </label>
+                <input type="file" id="kimlikArkaInput" accept="image/*" required style="display:none;">
+                <img id="arkaOnizleme" class="onizleme-img" alt="Arka Yüz">
+
+                <!-- BANKA BİLGİLERİ -->
+                <label style="color:#c4c4d4; font-size:13px; font-weight:500; display:block; margin-bottom:4px; margin-top:8px;">
+                    <i class="fas fa-user"></i> Hesap Sahibi Ad Soyad
+                </label>
+                <input type="text" id="cekilecekIsim" placeholder="Adınız ve soyadınız" required>
+
+                <label style="color:#c4c4d4; font-size:13px; font-weight:500; display:block; margin-bottom:4px;">
+                    <i class="fas fa-university"></i> IBAN Numarası (TR ile başlayan)
+                </label>
+                <input type="text" id="cekilecekIban" placeholder="TR00 0000 0000 0000 0000 0000 00" required>
+
+                <label style="color:#c4c4d4; font-size:13px; font-weight:500; display:block; margin-bottom:4px;">
+                    <i class="fas fa-coins"></i> Çekmek İstediğiniz Tutar (TL)
+                </label>
+                <input type="number" id="cekilecekMiktar" placeholder="En az 10 TL" min="10" required>
+
+                <button type="submit" class="btn-para-cek" id="gonderBtn">
+                    <i class="fas fa-check-circle"></i> Fotoğrafları Onayla ve Para Çek
+                </button>
+            </form>
+
+        </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- AÇIKLAMA MODAL (Neden Kimlik?) -->
-    <!-- ============================================ -->
+    <!-- ===== AÇIKLAMA MODAL ===== -->
     <div class="modal-overlay" id="aciklamaModal">
         <div class="modal-icerik">
-            <button class="modal-kapat-btn" onclick="aciklamaModalKapat()">✕ Kapat</button>
-            
-            <h2>
-                <span class="emoji">🛡️</span> Neden Kimlik İstiyoruz?
-            </h2>
-            
+            <button class="modal-kapat-btn" onclick="aciklamaModalKapat()"><i class="fas fa-times"></i></button>
+
+            <h2><i class="fas fa-shield-alt"></i> Neden Kimlik İstiyoruz?</h2>
+
             <p>İtemlerinMarketi olarak <span class="highlight">güvenli ticaret</span> prensibiyle çalışıyoruz. Para çekme işlemlerinde kimlik doğrulaması istememizin sebepleri:</p>
 
             <ul>
-                <li>🔒 <strong>Dolandırıcılığa Karşı Koruma</strong> - Hesabınızın başkası tarafından kullanılmasını engeller.</li>
-                <li>📋 <strong>Yasal Zorunluluk</strong> - 6698 sayılı Kişisel Verileri Koruma Kanunu (KVKK) ve MASAK mevzuatı gereği.</li>
-                <li>💰 <strong>Kara Para Aklamayı Önleme</strong> - Yasa dışı para transferlerinin önüne geçer.</li>
-                <li>👤 <strong>Hesap Güvenliği</strong> - Paranızın sadece size ait olduğunu teyit eder.</li>
-                <li>⚖️ <strong>Hukuki Koruma</strong> - Olası anlaşmazlıklarda tarafınızı korur.</li>
+                <li><strong>🔒 Dolandırıcılığa Karşı Koruma</strong> - Hesabınızın başkası tarafından kullanılmasını engeller.</li>
+                <li><strong>📋 Yasal Zorunluluk</strong> - 6698 sayılı KVKK ve MASAK mevzuatı gereği.</li>
+                <li><strong>💰 Kara Para Aklamayı Önleme</strong> - Yasa dışı para transferlerinin önüne geçer.</li>
+                <li><strong>👤 Hesap Güvenliği</strong> - Paranızın sadece size ait olduğunu teyit eder.</li>
+                <li><strong>⚖️ Hukuki Koruma</strong> - Olası anlaşmazlıklarda tarafınızı korur.</li>
             </ul>
 
             <div class="kvkk-metni">
-                <strong>📜 KVKK Aydınlatma Metni</strong><br><br>
-                6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında, kimlik ve iletişim bilgileriniz yalnızca <strong>para çekme işlemleri</strong> ve <strong>yasal zorunluluklar</strong> için kullanılır. 
-                Verileriniz <strong>3. şahıslarla paylaşılmaz</strong>, yalnızca resmi kurum talepleri durumunda ilgili mercilere iletilir. 
+                <strong><i class="fas fa-file-contract"></i> KVKK Aydınlatma Metni</strong><br><br>
+                6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında, kimlik ve iletişim bilgileriniz yalnızca <strong>para çekme işlemleri</strong> ve <strong>yasal zorunluluklar</strong> için kullanılır.
+                Verileriniz <strong>3. şahıslarla paylaşılmaz</strong>, yalnızca resmi kurum talepleri durumunda ilgili mercilere iletilir.
                 İstediğiniz zaman verilerinizi silebilir veya güncelleyebilirsiniz.
                 <br><br>
-                <span style="color:#94a3b8; font-size:12px;">Detaylı bilgi için <a href="/kvkk" style="color:#38bdf8;">KVKK Politikamızı</a> inceleyebilirsiniz.</span>
+                <span style="color:#5a5a7a; font-size:12px;">Detaylı bilgi için <a href="/kvkk">KVKK Politikamızı</a> inceleyebilirsiniz.</span>
             </div>
 
-            <p style="font-size:13px; color:#64748b; margin-top:10px;">
-                ✅ Kimlik bilgileriniz <span class="highlight">güvenli bir şekilde</span> saklanır ve sadece bu işlem için kullanılır.
+            <p class="modal-footer">
+                <i class="fas fa-check-circle" style="color:#34d399;"></i>
+                Kimlik bilgileriniz <span class="highlight">güvenli bir şekilde</span> saklanır ve sadece bu işlem için kullanılır.
             </p>
         </div>
     </div>
 
     <script>
-    // ============================================
-    // PARA ÇEK - TAM SCRIPT
-    // ============================================
-    
-    const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
-    if (!aktif) { 
-        window.location.href = '/login'; 
-    } else {
-        document.getElementById('icerik').style.display = 'block';
-        document.getElementById('mevcutBakiyeGosterge').value = (aktif.bakiye || 0) + " ₺";
-    }
+        // ============================================
+        // PARA ÇEK - TAM SCRIPT
+        // ============================================
 
-    let kimlikOnBase64 = "";
-    let kimlikArkaBase64 = "";
+        const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
 
-    // ============================================
-    // RESİM OKUMA
-    // ============================================
-    function resimOku(inputElement, onizlemeId, callback) {
-        inputElement.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById(onizlemeId).src = e.target.result;
-                    document.getElementById(onizlemeId).style.display = 'block';
-                    callback(e.target.result);
+        if (!aktif) {
+            alert('⚠️ Lütfen önce giriş yapın!');
+            window.location.href = '/login';
+        } else {
+            document.getElementById('icerik').style.display = 'block';
+            document.getElementById('mevcutBakiyeGosterge').innerText = (aktif.bakiye || 0).toFixed(2) + ' ₺';
+        }
+
+        let kimlikOnBase64 = "";
+        let kimlikArkaBase64 = "";
+
+        // ============================================
+        // RESİM OKUMA
+        // ============================================
+        function resimOku(inputElement, onizlemeId, callback) {
+            inputElement.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    // Dosya boyutu kontrolü (max 5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert('❌ Dosya boyutu 5MB\'dan büyük! Lütfen daha küçük bir dosya seç.');
+                        this.value = '';
+                        return;
+                    }
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.getElementById(onizlemeId);
+                        img.src = e.target.result;
+                        img.classList.add('show');
+                        callback(e.target.result);
+                    };
+                    reader.readAsDataURL(file);
                 }
-                reader.readAsDataURL(file);
+            });
+        }
+
+        resimOku(document.getElementById('kimlikOnInput'), 'onOnizleme', function(base64) {
+            kimlikOnBase64 = base64;
+        });
+        resimOku(document.getElementById('kimlikArkaInput'), 'arkaOnizleme', function(base64) {
+            kimlikArkaBase64 = base64;
+        });
+
+        // ============================================
+        // FORM GÖNDERME
+        // ============================================
+        document.getElementById('paraCekForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const btn = document.getElementById('gonderBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> İşleniyor...';
+
+            const miktar = parseFloat(document.getElementById('cekilecekMiktar').value);
+            const iban = document.getElementById('cekilecekIban').value.trim();
+            const isim = document.getElementById('cekilecekIsim').value.trim();
+
+            // KONTROLLER
+            if (miktar < 10) {
+                alert('❌ Hata: Para çekebilmek için miktar en az 10 TL olmalıdır!');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Fotoğrafları Onayla ve Para Çek';
+                return;
+            }
+            if (miktar > (aktif.bakiye || 0)) {
+                alert(`❌ Hata: Cüzdanınızdaki mevcut paradan daha fazlasını çekemezsiniz! (${aktif.bakiye} TL)`);
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Fotoğrafları Onayla ve Para Çek';
+                return;
+            }
+            if (!kimlikOnBase64 || !kimlikArkaBase64) {
+                alert('❌ Hata: Lütfen kimlik fotoğraflarını yükleyin!');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Fotoğrafları Onayla ve Para Çek';
+                return;
+            }
+            if (!iban || iban.length < 10) {
+                alert('❌ Hata: Lütfen geçerli bir IBAN girin!');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Fotoğrafları Onayla ve Para Çek';
+                return;
+            }
+            if (!isim || isim.length < 3) {
+                alert('❌ Hata: Lütfen hesap sahibi adını girin!');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Fotoğrafları Onayla ve Para Çek';
+                return;
+            }
+
+            // BAKİYE DÜŞ
+            let kullanicilar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
+            const idx = kullanicilar.findIndex(u => u.kullaniciAdi === aktif.kullaniciAdi);
+            if (idx !== -1) {
+                kullanicilar[idx].bakiye = parseFloat((kullanicilar[idx].bakiye - miktar).toFixed(2));
+                localStorage.setItem('kullanicilar', JSON.stringify(kullanicilar));
+                aktif.bakiye = kullanicilar[idx].bakiye;
+                localStorage.setItem('aktifKullanici', JSON.stringify(aktif));
+                document.getElementById('mevcutBakiyeGosterge').innerText = aktif.bakiye.toFixed(2) + ' ₺';
+            }
+
+            // TALEP KAYDET
+            let talepler = JSON.parse(localStorage.getItem('paraCekmeTalepleri') || '[]');
+            talepler.push({
+                id: Date.now(),
+                kullanici: aktif.kullaniciAdi,
+                miktar: miktar,
+                iban: iban,
+                isim: isim,
+                kimlikOn: kimlikOnBase64,
+                kimlikArka: kimlikArkaBase64,
+                durum: 'Beklemede',
+                tarih: new Date().toLocaleString('tr-TR')
+            });
+            localStorage.setItem('paraCekmeTalepleri', JSON.stringify(talepler));
+
+            // Admin'e bildirim
+            let adminBildirimler = JSON.parse(localStorage.getItem('bildirimler_admin9595') || '[]');
+            adminBildirimler.unshift({
+                id: Date.now(),
+                metin: `💰 Yeni para çekme talebi! ${aktif.kullaniciAdi} - ${miktar} TL`,
+                durum: 'yeni',
+                tarih: new Date().toLocaleTimeString()
+            });
+            localStorage.setItem('bildirimler_admin9595', JSON.stringify(adminBildirimler));
+
+            alert(
+                `✅ Kimlik fotoğraflarınız başarıyla alındı! ${miktar} TL çekim talebiniz yöneticiye iletildi. En kısa sürede işleme alınacaktır.`
+                );
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-check-circle"></i> Fotoğrafları Onayla ve Para Çek';
+
+            window.location.href = '/';
+        });
+
+        // ============================================
+        // MODAL FONKSİYONLARI
+        // ============================================
+        function aciklamaModalAc() {
+            document.getElementById('aciklamaModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function aciklamaModalKapat() {
+            document.getElementById('aciklamaModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Modal dışına tıklayınca kapat
+        document.getElementById('aciklamaModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                aciklamaModalKapat();
             }
         });
-    }
 
-    resimOku(document.getElementById('kimlikOnInput'), 'onOnizleme', function(base64) { kimlikOnBase64 = base64; });
-    resimOku(document.getElementById('kimlikArkaInput'), 'arkaOnizleme', function(base64) { kimlikArkaBase64 = base64; });
-
-    // ============================================
-    // FORM GÖNDERME
-    // ============================================
-    document.getElementById('paraCekForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const miktar = parseFloat(document.getElementById('cekilecekMiktar').value);
-        const iban = document.getElementById('cekilecekIban').value;
-        const isim = document.getElementById('cekilecekIsim').value;
-
-        // KONTROLLER
-        if (miktar < 10) { 
-            alert("❌ Hata: Para çekebilmek için miktar en az 10 TL olmalıdır!"); 
-            return; 
-        }
-        if (miktar > aktif.bakiye) { 
-            alert("❌ Hata: Cüzdanınızdaki mevcut paradan daha fazlasını çekemezsiniz!"); 
-            return; 
-        }
-        if (!kimlikOnBase64 || !kimlikArkaBase64) { 
-            alert("❌ Hata: Lütfen kimlik fotoğraflarını yükleyin!"); 
-            return; 
-        }
-        if (!iban || iban.length < 10) {
-            alert("❌ Hata: Lütfen geçerli bir IBAN girin!");
-            return;
-        }
-        if (!isim || isim.length < 3) {
-            alert("❌ Hata: Lütfen hesap sahibi adını girin!");
-            return;
-        }
-
-        // BAKİYE DÜŞ
-        let kullanicilar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
-        const idx = kullanicilar.findIndex(u => u.kullaniciAdi === aktif.kullaniciAdi);
-        if (idx !== -1) {
-            kullanicilar[idx].bakiye = parseFloat((kullanicilar[idx].bakiye - miktar).toFixed(2));
-            localStorage.setItem('kullanicilar', JSON.stringify(kullanicilar));
-            aktif.bakiye = kullanicilar[idx].bakiye;
-            localStorage.setItem('aktifKullanici', JSON.stringify(aktif));
-        }
-
-        // TALEP KAYDET
-        let talepler = JSON.parse(localStorage.getItem('paraCekmeTalepleri') || '[]');
-        talepler.push({
-            id: Date.now(),
-            kullanici: aktif.kullaniciAdi,
-            miktar: miktar,
-            iban: iban,
-            isim: isim,
-            kimlikOn: kimlikOnBase64,
-            kimlikArka: kimlikArkaBase64,
-            durum: 'Beklemede',
-            tarih: new Date().toLocaleString('tr-TR')
+        // ESC tuşu ile kapat
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                aciklamaModalKapat();
+            }
         });
-        localStorage.setItem('paraCekmeTalepleri', JSON.stringify(talepler));
 
-        alert(`✅ Kimlik fotoğraflarınız başarıyla alındı! ${miktar} TL çekim talebiniz yöneticiye iletildi. En kısa sürede işleme alınacaktır.`);
-        window.location.href = '/';
-    });
+        // ============================================
+        // ENTER İLE GÖNDER (input'larda enter tuşu)
+        // ============================================
+        document.getElementById('cekilecekMiktar').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('paraCekForm').dispatchEvent(new Event('submit'));
+            }
+        });
 
-    // ============================================
-    // MODAL FONKSİYONLARI
-    // ============================================
-    function aciklamaModalAc() {
-        document.getElementById('aciklamaModal').classList.add('active');
-    }
-
-    function aciklamaModalKapat() {
-        document.getElementById('aciklamaModal').classList.remove('active');
-    }
-
-    // Modal dışına tıklayınca kapat
-    document.getElementById('aciklamaModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            aciklamaModalKapat();
-        }
-    });
-
-    // ESC tuşu ile kapat
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            aciklamaModalKapat();
-        }
-    });
+        console.log('💰 İtemlerinMarketi - Para Çek sayfası yüklendi!');
+        console.log('👤 Kullanıcı:', aktif?.kullaniciAdi);
+        console.log('💳 Bakiye:', aktif?.bakiye);
     </script>
+
 </body>
 </html>

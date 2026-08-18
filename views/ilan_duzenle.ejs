@@ -7,191 +7,353 @@
     <meta charset="UTF-8">
     <title>İlanı Düzenle - İtemlerinMarketi</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .duzenle-container {
-            max-width: 700px;
-            margin: 40px auto;
-            background: #1e293b;
-            border-radius: 16px;
-            padding: 40px;
-            border: 1px solid #334155;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.5);
-        }
-        .duzenle-container h1 {
-            color: #38bdf8;
-            margin-top: 0;
-        }
-        .duzenle-container .alt-bilgi {
-            color: #94a3b8;
-            font-size: 13px;
-            margin-bottom: 20px;
-        }
-        .form-box label {
-            display: block;
-            color: #94a3b8;
-            font-size: 13px;
-            margin-bottom: 4px;
-        }
-        .form-box input, .form-box textarea, .form-box select {
-            width: 100%;
-            padding: 10px;
-            background: #0f172a;
-            border: 1px solid #475569;
-            color: white;
-            border-radius: 6px;
+        * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
-            margin-bottom: 15px;
         }
-        .form-box textarea {
-            resize: vertical;
-            font-family: inherit;
+        body {
+            background: #0a0a1a;
+            color: #e8e8f0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
         }
-        .form-box .btn {
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s;
-            width: 100%;
-            margin-bottom: 10px;
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
         }
-        .form-box .btn:hover {
-            transform: scale(1.02);
-        }
-        .btn-kaydet {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-        }
-        .btn-listedişi {
-            background: #f59e0b;
-            color: #0f172a;
-            font-weight: bold;
-        }
-        .btn-listedişi:hover {
-            background: #d97706;
-        }
-        .btn-sil {
-            background: #ef4444;
-            color: white;
-        }
-        .btn-sil:hover {
-            background: #dc2626;
-        }
-        .btn-geri {
-            background: #334155;
-            color: #94a3b8;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-        .btn-geri:hover {
-            background: #475569;
-            color: white;
-        }
-        .dosya-sec-etiket {
-            display: block;
-            background: #1e293b;
-            border: 1px dashed #38bdf8;
-            padding: 12px;
-            border-radius: 6px;
-            color: #cbd5e1;
-            font-size: 13px;
-            cursor: pointer;
-            margin-bottom: 12px;
-            text-align: center;
-            transition: background 0.2s;
-        }
-        .dosya-sec-etiket:hover {
-            background: #334155;
-        }
-        .onizleme-img {
-            max-width: 100%;
-            max-height: 150px;
-            object-fit: contain;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            border: 1px solid #475569;
-            background: #0f172a;
-        }
-        .admin-badge {
-            display: inline-block;
-            background: #f59e0b;
-            color: #0f172a;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: bold;
-            margin-left: 10px;
-        }
-        .satici-bilgi {
-            background: #0f172a;
-            padding: 10px 15px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            border: 1px solid #334155;
-        }
-        .satici-bilgi span {
-            color: #10b981;
-            font-weight: 600;
-        }
-        .header-sol-bölüm {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        .logo-img {
-            height: 60px;
-            width: auto;
-            max-width: 200px;
-            object-fit: contain;
-            cursor: pointer;
-        }
+
         header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 10px 20px;
-            background: #1e293b;
-            border-bottom: 1px solid #334155;
+            padding: 16px 40px;
+            background: rgba(10, 10, 26, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
             flex-wrap: wrap;
+            gap: 12px;
+        }
+        header .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        header .logo i {
+            color: #6366f1;
+        }
+        header nav a {
+            color: #8a8aaa;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        header nav a:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: white;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .duzenle-container {
+            background: rgba(20, 20, 42, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 36px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            display: none;
+        }
+        .duzenle-container .sayfa-baslik {
+            font-size: 26px;
+            font-weight: 800;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .duzenle-container .sayfa-baslik i {
+            color: #f59e0b;
+        }
+        .duzenle-container .alt-bilgi {
+            color: #8a8aaa;
+            font-size: 14px;
+            margin: 4px 0 24px 0;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #0f172a;
+            padding: 2px 14px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .satici-bilgi {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .satici-bilgi .satici {
+            color: #c4c4d4;
+            font-size: 14px;
+        }
+        .satici-bilgi .satici strong {
+            color: #38bdf8;
+        }
+        .satici-bilgi .durum {
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 50px;
+        }
+        .satici-bilgi .durum.aktif {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+        }
+        .satici-bilgi .durum.pasif {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+        }
+
+        .form-box label {
+            display: block;
+            color: #c4c4d4;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .form-box input,
+        .form-box textarea,
+        .form-box select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 16px;
+        }
+        .form-box input:focus,
+        .form-box textarea:focus,
+        .form-box select:focus {
+            border-color: #6366f1;
+            outline: none;
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        .form-box textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .form-box select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235a5a7a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            cursor: pointer;
+        }
+        .form-box select option {
+            background: #14142a;
+            color: white;
+        }
+
+        .dosya-sec-etiket {
+            display: block;
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px dashed rgba(56, 189, 248, 0.2);
+            padding: 14px;
+            border-radius: 10px;
+            color: #8a8aaa;
+            font-size: 13px;
+            cursor: pointer;
+            margin-bottom: 12px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .dosya-sec-etiket:hover {
+            border-color: #38bdf8;
+            background: rgba(56, 189, 248, 0.04);
+        }
+        .dosya-sec-etiket i {
+            margin-right: 6px;
+        }
+
+        .onizleme-img {
+            max-width: 100%;
+            max-height: 180px;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-grup {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 4px;
+        }
+        .btn {
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        .btn-kaydet {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2);
+        }
+        .btn-kaydet:hover {
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.3);
+        }
+        .btn-listedisi {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #0f172a;
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.15);
+        }
+        .btn-listedisi:hover {
+            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.25);
+        }
+        .btn-listedisi.aktif {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        .btn-sil {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.15);
+        }
+        .btn-sil:hover {
+            box-shadow: 0 8px 30px rgba(239, 68, 68, 0.25);
+        }
+
+        @media (max-width: 640px) {
+            header {
+                padding: 12px 20px;
+            }
+            .container {
+                padding: 20px 16px;
+            }
+            .duzenle-container {
+                padding: 24px;
+            }
+            .duzenle-container .sayfa-baslik {
+                font-size: 20px;
+            }
+            .satici-bilgi {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+        @media (max-width: 480px) {
+            .duzenle-container {
+                padding: 16px;
+            }
+            .btn {
+                font-size: 14px;
+                padding: 12px;
+            }
         }
     </style>
 </head>
 <body>
+
     <header>
-        <div class="header-sol-bölüm">
-            <a href="/"><img src="/gif.png" alt="İtemlerinMarketi" class="logo-img" onerror="this.onerror=null; this.outerHTML='İtemlerinMarketi';"></a>
+        <div class="logo">
+            <i class="fas fa-store"></i> İtemlerinMarketi
         </div>
-        <nav><a href="/">🏠 Ana Sayfaya Dön</a></nav>
+        <nav>
+            <a href="/"><i class="fas fa-home"></i> Ana Sayfa</a>
+            <a href="/ilan-duzenle?id=" style="color:white; background:rgba(99,102,241,0.1);"><i class="fas fa-edit"></i> İlan Düzenle</a>
+        </nav>
     </header>
 
     <div class="container">
-        <div class="duzenle-container" id="icerik" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-                <h1>⚙️ İlan Düzenle</h1>
-                <span id="adminBadge" class="admin-badge" style="display:none;">👑 Admin Düzenliyor</span>
+        <div class="duzenle-container" id="icerik">
+
+            <div class="sayfa-baslik">
+                <span><i class="fas fa-edit"></i> İlan Düzenle</span>
+                <span id="adminBadge" class="admin-badge" style="display:none;"><i class="fas fa-crown"></i> Admin</span>
             </div>
-            <p class="alt-bilgi">İlan bilgilerini güncelleyebilir, yayından kaldırabilir veya tamamen silebilirsiniz.</p>
+            <p class="alt-bilgi">İlan bilgilerini güncelle, yayından kaldır veya tamamen sil.</p>
 
             <!-- SATICI BİLGİSİ -->
             <div class="satici-bilgi">
-                <strong>👤 Satıcı:</strong> <span id="saticiAdi">-</span>
-                <span id="ilanDurum" style="margin-left: 15px; font-size:13px;"></span>
+                <span class="satici"><i class="fas fa-user"></i> Satıcı: <strong id="saticiAdi">-</strong></span>
+                <span class="durum" id="ilanDurum">✅ Aktif</span>
             </div>
 
+            <!-- FORM -->
             <form id="duzenleIlanFormu" class="form-box">
-                <label>📌 Ürün Başlığı:</label>
+                <label><i class="fas fa-heading"></i> Ürün Başlığı</label>
                 <input type="text" id="ilanBaslik" required autocomplete="off">
 
-                <label>📝 Ürün Açıklaması:</label>
+                <label><i class="fas fa-align-left"></i> Ürün Açıklaması</label>
                 <textarea id="ilanDetay" rows="4"></textarea>
 
-                <label>⏱️ Teslimat Süresi:</label>
+                <label><i class="fas fa-clock"></i> Teslimat Süresi</label>
                 <select id="teslimatSuresi">
                     <option value="15 Dakika">Anında (15 Dakika)</option>
                     <option value="30 Dakika">30 Dakika</option>
@@ -200,237 +362,251 @@
                     <option value="24 Saat">24 Saat İçinde</option>
                 </select>
 
-                <label>📷 Ürün Görseli:</label>
-                <label class="dosya-sec-etiket" for="ilanResimInput">📤 Yeni Resim Seç (Değiştirmek İçin)</label>
+                <label><i class="fas fa-image"></i> Ürün Görseli</label>
+                <label class="dosya-sec-etiket" for="ilanResimInput">
+                    <i class="fas fa-cloud-upload-alt"></i> Yeni Resim Seç (Değiştirmek İçin)
+                </label>
                 <input type="file" id="ilanResimInput" accept="image/*" style="display: none;">
                 <img id="ilanResimOnizleme" class="onizleme-img" style="display: none;">
 
-                <label>💰 Fiyat (TL):</label>
-                <input type="number" id="ilanFiyat" required step="0.01">
+                <label><i class="fas fa-tag"></i> Fiyat (TL)</label>
+                <input type="number" id="ilanFiyat" required step="0.01" min="0">
 
                 <!-- BUTONLAR -->
-                <button type="submit" class="btn btn-kaydet">✅ Değişiklikleri Kaydet</button>
-                <button type="button" id="listeDisiBtn" class="btn btn-listedişi">👁️ İlanı Liste Dışı Yap</button>
-                <button type="button" onclick="ilanSil()" class="btn btn-sil">🗑️ İlanı Tamamen Sil</button>
+                <div class="btn-grup">
+                    <button type="submit" class="btn btn-kaydet"><i class="fas fa-save"></i> Değişiklikleri Kaydet</button>
+                    <button type="button" id="listeDisiBtn" class="btn btn-listedisi"><i class="fas fa-eye-slash"></i> İlanı Liste Dışı Yap</button>
+                    <button type="button" onclick="ilanSil()" class="btn btn-sil"><i class="fas fa-trash"></i> İlanı Tamamen Sil</button>
+                </div>
             </form>
+
         </div>
     </div>
 
     <script>
-    // ============================================
-    // İLAN DÜZENLE - TAM SCRIPT (MongoDB + admin9595)
-    // ============================================
-    
-    const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
-    const urlParams = new URLSearchParams(window.location.search);
-    const ilanId = urlParams.get('id');
+        // ============================================
+        // İLAN DÜZENLE - TAM SCRIPT
+        // ============================================
 
-    let mevcutIlan = null;
-    let yeniResimBase64 = "";
+        const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
+        const urlParams = new URLSearchParams(window.location.search);
+        const ilanId = urlParams.get('id');
 
-    // ============================================
-    // İLANI YÜKLE
-    // ============================================
-    async function ilanYukle() {
-        try {
-            const response = await fetch(`/api/ilan/${ilanId}`);
-            const data = await response.json();
+        let mevcutIlan = null;
+        let yeniResimBase64 = "";
 
-            if (data.success && data.ilan) {
-                mevcutIlan = data.ilan;
-                
-                // Yetki kontrolü: admin9595 veya ilan sahibi
-                const yetkili = aktif && (aktif.kullaniciAdi === 'admin9595' || aktif.kullaniciAdi === mevcutIlan.satici);
-                
-                if (!yetkili) {
-                    alert('❌ Bu ilanı düzenleme yetkiniz yok!');
-                    window.location.href = '/';
-                    return;
-                }
+        // ============================================
+        // İLANI YÜKLE
+        // ============================================
+        async function ilanYukle() {
+            try {
+                const response = await fetch(`/api/ilan/${ilanId}`);
+                const data = await response.json();
 
-                // Sayfayı göster
-                document.getElementById('icerik').style.display = 'block';
-                
-                // Admin badge
-                if (aktif.kullaniciAdi === 'admin9595') {
-                    document.getElementById('adminBadge').style.display = 'inline-block';
-                }
+                if (data.success && data.ilan) {
+                    mevcutIlan = data.ilan;
 
-                // Bilgileri doldur
-                document.getElementById('saticiAdi').textContent = mevcutIlan.satici;
-                document.getElementById('ilanDurum').textContent = mevcutIlan.aktiflikDurumu === 'pasif' ? '⛔ Liste Dışı' : '✅ Aktif';
-                document.getElementById('ilanDurum').style.color = mevcutIlan.aktiflikDurumu === 'pasif' ? '#fca5a5' : '#6ee7b7';
+                    // Yetki kontrolü
+                    const yetkili = aktif && (aktif.kullaniciAdi === 'admin9595' || aktif.kullaniciAdi === mevcutIlan
+                        .satici);
 
-                document.getElementById('ilanBaslik').value = mevcutIlan.baslik || '';
-                document.getElementById('ilanDetay').value = mevcutIlan.detay || '';
-                document.getElementById('teslimatSuresi').value = mevcutIlan.sure || '24 Saat';
-                document.getElementById('ilanFiyat').value = mevcutIlan.fiyat || 0;
+                    if (!yetkili) {
+                        alert('❌ Bu ilanı düzenleme yetkiniz yok!');
+                        window.location.href = '/';
+                        return;
+                    }
 
-                // Resim göster
-                if (mevcutIlan.resim && mevcutIlan.resim.length > 0) {
-                    const onizleme = document.getElementById('ilanResimOnizleme');
-                    onizleme.src = mevcutIlan.resim;
-                    onizleme.style.display = 'block';
-                    yeniResimBase64 = mevcutIlan.resim;
-                }
+                    // Sayfayı göster
+                    document.getElementById('icerik').style.display = 'block';
 
-                // Liste dışı butonunu güncelle
-                const listeDisiBtn = document.getElementById('listeDisiBtn');
-                if (mevcutIlan.aktiflikDurumu === 'pasif') {
-                    listeDisiBtn.textContent = '✅ İlanı Listeye Ekle (Pazara Koy)';
-                    listeDisiBtn.style.background = '#10b981';
-                    listeDisiBtn.style.color = 'white';
+                    // Admin badge
+                    if (aktif.kullaniciAdi === 'admin9595') {
+                        document.getElementById('adminBadge').style.display = 'inline-block';
+                    }
+
+                    // Bilgileri doldur
+                    document.getElementById('saticiAdi').textContent = mevcutIlan.satici;
+
+                    const durumEl = document.getElementById('ilanDurum');
+                    if (mevcutIlan.aktiflikDurumu === 'pasif') {
+                        durumEl.textContent = '⛔ Liste Dışı';
+                        durumEl.className = 'durum pasif';
+                    } else {
+                        durumEl.textContent = '✅ Aktif';
+                        durumEl.className = 'durum aktif';
+                    }
+
+                    document.getElementById('ilanBaslik').value = mevcutIlan.baslik || '';
+                    document.getElementById('ilanDetay').value = mevcutIlan.detay || '';
+                    document.getElementById('teslimatSuresi').value = mevcutIlan.sure || '24 Saat';
+                    document.getElementById('ilanFiyat').value = mevcutIlan.fiyat || 0;
+
+                    // Resim
+                    if (mevcutIlan.resim && mevcutIlan.resim.length > 0) {
+                        const onizleme = document.getElementById('ilanResimOnizleme');
+                        onizleme.src = mevcutIlan.resim;
+                        onizleme.style.display = 'block';
+                        yeniResimBase64 = mevcutIlan.resim;
+                    }
+
+                    // Liste dışı butonu
+                    const listeDisiBtn = document.getElementById('listeDisiBtn');
+                    if (mevcutIlan.aktiflikDurumu === 'pasif') {
+                        listeDisiBtn.innerHTML = '<i class="fas fa-eye"></i> İlanı Listeye Ekle (Pazara Koy)';
+                        listeDisiBtn.className = 'btn btn-listedisi aktif';
+                    } else {
+                        listeDisiBtn.innerHTML = '<i class="fas fa-eye-slash"></i> İlanı Liste Dışı Yap (Gizle)';
+                        listeDisiBtn.className = 'btn btn-listedisi';
+                    }
+
                 } else {
-                    listeDisiBtn.textContent = '👁️ İlanı Liste Dışı Yap (Gizle)';
-                    listeDisiBtn.style.background = '#f59e0b';
-                    listeDisiBtn.style.color = '#0f172a';
+                    alert('❌ İlan bulunamadı!');
+                    window.location.href = '/';
                 }
-
-            } else {
-                alert('❌ İlan bulunamadı!');
+            } catch (hata) {
+                console.error('İlan yükleme hatası:', hata);
+                alert('❌ İlan yüklenirken hata oluştu!');
                 window.location.href = '/';
             }
-        } catch (hata) {
-            console.error('İlan yükleme hatası:', hata);
-            alert('❌ İlan yüklenirken hata oluştu!');
-            window.location.href = '/';
         }
-    }
 
-    // ============================================
-    // RESİM YÜKLEME
-    // ============================================
-    document.getElementById('ilanResimInput').addEventListener('change', function() {
-        const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                yeniResimBase64 = e.target.result;
-                const onizleme = document.getElementById('ilanResimOnizleme');
-                onizleme.src = yeniResimBase64;
-                onizleme.style.display = 'block';
+        // ============================================
+        // RESİM YÜKLEME
+        // ============================================
+        document.getElementById('ilanResimInput').addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    yeniResimBase64 = e.target.result;
+                    const onizleme = document.getElementById('ilanResimOnizleme');
+                    onizleme.src = yeniResimBase64;
+                    onizleme.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // ============================================
+        // İLAN GÜNCELLE
+        // ============================================
+        document.getElementById('duzenleIlanFormu').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const baslik = document.getElementById('ilanBaslik').value.trim();
+            const fiyat = parseFloat(document.getElementById('ilanFiyat').value);
+            const detay = document.getElementById('ilanDetay').value.trim();
+            const sure = document.getElementById('teslimatSuresi').value;
+
+            if (!baslik || !fiyat) {
+                alert('❌ Başlık ve fiyat alanları zorunludur!');
+                return;
+            }
+
+            const guncelIlan = {
+                id: ilanId,
+                baslik: baslik,
+                fiyat: fiyat,
+                detay: detay,
+                sure: sure,
+                resim: yeniResimBase64 || mevcutIlan?.resim || ''
             };
-            reader.readAsDataURL(file);
-        }
-    });
 
-    // ============================================
-    // İLAN GÜNCELLE
-    // ============================================
-    document.getElementById('duzenleIlanFormu').addEventListener('submit', async function(e) {
-        e.preventDefault();
+            try {
+                const response = await fetch('/api/ilan-duzenle', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(guncelIlan)
+                });
 
-        const baslik = document.getElementById('ilanBaslik').value.trim();
-        const fiyat = parseFloat(document.getElementById('ilanFiyat').value);
-        const detay = document.getElementById('ilanDetay').value.trim();
-        const sure = document.getElementById('teslimatSuresi').value;
+                const data = await response.json();
 
-        if (!baslik || !fiyat) {
-            alert('❌ Başlık ve fiyat alanları zorunludur!');
+                if (data.success) {
+                    alert('✅ İlan başarıyla güncellendi!');
+                    window.location.href = '/';
+                } else {
+                    alert('❌ Güncelleme hatası: ' + (data.error || data.message));
+                }
+            } catch (hata) {
+                console.error('Güncelleme hatası:', hata);
+                alert('❌ Bağlantı hatası! Lütfen tekrar deneyin.');
+            }
+        });
+
+        // ============================================
+        // İLANI LİSTE DIŞI YAP / LİSTEYE EKLE
+        // ============================================
+        document.getElementById('listeDisiBtn').addEventListener('click', async function() {
+            const yeniDurum = mevcutIlan.aktiflikDurumu === 'pasif' ? 'aktif' : 'pasif';
+            const mesaj = yeniDurum === 'pasif' ? 'İlan liste dışı yapılsın mı?' :
+            'İlan listeye eklensin mi?';
+
+            if (!confirm(mesaj)) return;
+
+            try {
+                const response = await fetch('/api/ilan-durum-degis', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: ilanId,
+                        durum: yeniDurum
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('✅ İlan durumu güncellendi!');
+                    window.location.reload();
+                } else {
+                    alert('❌ Hata: ' + (data.error || data.message));
+                }
+            } catch (hata) {
+                console.error('Durum değiştirme hatası:', hata);
+                alert('❌ Bağlantı hatası!');
+            }
+        });
+
+        // ============================================
+        // İLANI TAMAMEN SİL
+        // ============================================
+        async function ilanSil() {
+            if (!confirm('🗑️ Bu ilanı tamamen silmek istediğine emin misin? Bu işlem geri alınamaz!'))
             return;
-        }
+            if (!confirm('Son kez: İlanı silmek istediğine emin misin?')) return;
 
-        const guncelIlan = {
-            id: ilanId,
-            baslik: baslik,
-            fiyat: fiyat,
-            detay: detay,
-            sure: sure,
-            resim: yeniResimBase64 || mevcutIlan?.resim || ''
-        };
+            try {
+                const response = await fetch(`/api/ilan-sil/${ilanId}`, {
+                    method: 'DELETE'
+                });
 
-        try {
-            const response = await fetch('/api/ilan-duzenle', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(guncelIlan)
-            });
+                const data = await response.json();
 
-            const data = await response.json();
-
-            if (data.success) {
-                alert('✅ İlan başarıyla güncellendi!');
-                window.location.href = '/';
-            } else {
-                alert('❌ Güncelleme hatası: ' + (data.error || data.message));
+                if (data.success) {
+                    alert('✅ İlan başarıyla silindi!');
+                    window.location.href = '/';
+                } else {
+                    alert('❌ Silme hatası: ' + (data.error || data.message));
+                }
+            } catch (hata) {
+                console.error('Silme hatası:', hata);
+                alert('❌ Bağlantı hatası!');
             }
-        } catch (hata) {
-            console.error('Güncelleme hatası:', hata);
-            alert('❌ Bağlantı hatası! Lütfen tekrar deneyin.');
         }
-    });
 
-    // ============================================
-    // İLANI LİSTE DIŞI YAP / LİSTEYE EKLE
-    // ============================================
-    document.getElementById('listeDisiBtn').addEventListener('click', async function() {
-        const yeniDurum = mevcutIlan.aktiflikDurumu === 'pasif' ? 'aktif' : 'pasif';
-        const mesaj = yeniDurum === 'pasif' ? 'İlan liste dışı yapılsın mı?' : 'İlan listeye eklensin mi?';
-
-        if (!confirm(mesaj)) return;
-
-        try {
-            const response = await fetch('/api/ilan-durum-degis', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    id: ilanId,
-                    durum: yeniDurum
-                })
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                alert('✅ İlan durumu güncellendi!');
-                window.location.reload();
-            } else {
-                alert('❌ Hata: ' + (data.error || data.message));
-            }
-        } catch (hata) {
-            console.error('Durum değiştirme hatası:', hata);
-            alert('❌ Bağlantı hatası!');
+        // ============================================
+        // SAYFA YÜKLENDİĞİNDE
+        // ============================================
+        if (!aktif) {
+            alert('⚠️ Lütfen önce giriş yapın!');
+            window.location.href = '/login';
+        } else if (!ilanId) {
+            alert('❌ İlan ID bulunamadı!');
+            window.location.href = '/';
+        } else {
+            ilanYukle();
         }
-    });
-
-    // ============================================
-    // İLANI TAMAMEN SİL
-    // ============================================
-    async function ilanSil() {
-        if (!confirm('🗑️ Bu ilanı tamamen silmek istediğine emin misin? Bu işlem geri alınamaz!')) return;
-        if (!confirm('Son kez: İlanı silmek istediğine emin misin?')) return;
-
-        try {
-            const response = await fetch(`/api/ilan-sil/${ilanId}`, {
-                method: 'DELETE'
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                alert('✅ İlan başarıyla silindi!');
-                window.location.href = '/';
-            } else {
-                alert('❌ Silme hatası: ' + (data.error || data.message));
-            }
-        } catch (hata) {
-            console.error('Silme hatası:', hata);
-            alert('❌ Bağlantı hatası!');
-        }
-    }
-
-    // ============================================
-    // SAYFA YÜKLENDİĞİNDE
-    // ============================================
-    if (!aktif) {
-        alert('⚠️ Lütfen önce giriş yapın!');
-        window.location.href = '/login';
-    } else if (!ilanId) {
-        alert('❌ İlan ID bulunamadı!');
-        window.location.href = '/';
-    } else {
-        ilanYukle();
-    }
     </script>
+
 </body>
 </html>

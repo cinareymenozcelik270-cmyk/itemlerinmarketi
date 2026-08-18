@@ -13,6 +13,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Destek Talebi - İtemlerinMarketi</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -21,24 +23,39 @@
         }
 
         body {
-            background: #0f172a;
-            color: #e2e8f0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a1a;
+            color: #e8e8f0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
 
         .destek-container {
-            background: #1e293b;
+            background: rgba(20, 20, 42, 0.85);
+            backdrop-filter: blur(20px);
             border-radius: 20px;
             padding: 40px;
             max-width: 700px;
             width: 100%;
-            border: 1px solid #334155;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
             position: relative;
             overflow: hidden;
         }
@@ -49,10 +66,10 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #6366f1, #a855f7, #6366f1);
-            background-size: 200% 100%;
-            animation: gradient 3s ease infinite;
+            height: 3px;
+            background: linear-gradient(90deg, #6366f1, #a855f7, #10b981, #6366f1);
+            background-size: 300% 100%;
+            animation: gradient 4s ease infinite;
         }
 
         @keyframes gradient {
@@ -65,72 +82,82 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 12px;
         }
 
         .destek-header h1 {
             color: #38bdf8;
-            font-size: 28px;
+            font-size: 26px;
+            font-weight: 800;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
-
-        .destek-header h1 span {
-            font-size: 32px;
+        .destek-header h1 i {
+            color: #a855f7;
         }
 
         .geri-btn {
-            color: #94a3b8;
+            color: #8a8aaa;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13px;
+            font-weight: 500;
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: color 0.3s;
+            transition: all 0.3s;
             padding: 8px 16px;
-            background: #0f172a;
+            background: rgba(255, 255, 255, 0.04);
             border-radius: 8px;
-            border: 1px solid #334155;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .geri-btn:hover {
+            color: white;
+            border-color: #6366f1;
         }
 
-        .geri-btn:hover {
-            color: #38bdf8;
-            border-color: #38bdf8;
+        .admin-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #0f172a;
+            padding: 2px 12px;
+            border-radius: 50px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-left: 8px;
+            letter-spacing: 0.5px;
         }
 
         .destek-aciklama {
-            color: #94a3b8;
-            margin-bottom: 30px;
-            line-height: 1.6;
-            font-size: 15px;
-            padding: 15px 20px;
-            background: #0f172a;
+            color: #8a8aaa;
+            margin-bottom: 24px;
+            line-height: 1.7;
+            font-size: 14px;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.02);
             border-radius: 12px;
             border-left: 3px solid #6366f1;
         }
-
         .destek-aciklama strong {
-            color: #38bdf8;
+            color: #a5b4fc;
         }
 
+        /* ===== FORM ===== */
         .destek-form .form-grup {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
-
         .destek-form label {
             display: block;
-            color: #cbd5e1;
+            color: #c4c4d4;
             font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 14px;
+            margin-bottom: 6px;
+            font-size: 13px;
         }
-
         .destek-form label .required {
-            color: #ef4444;
-            margin-left: 4px;
+            color: #f87171;
+            margin-left: 2px;
         }
 
         .destek-form input,
@@ -138,421 +165,342 @@
         .destek-form textarea {
             width: 100%;
             padding: 12px 16px;
-            background: #0f172a;
-            border: 2px solid #334155;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 10px;
             color: white;
             font-size: 14px;
             outline: none;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            transition: all 0.3s;
             box-sizing: border-box;
-            font-family: inherit;
+            font-family: 'Inter', sans-serif;
         }
-
         .destek-form input:focus,
         .destek-form select:focus,
         .destek-form textarea:focus {
             border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
-
         .destek-form input::placeholder,
         .destek-form textarea::placeholder {
-            color: #64748b;
+            color: #5a5a7a;
         }
 
         .destek-form select {
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235a5a7a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 16px center;
             cursor: pointer;
         }
-
         .destek-form select option {
-            background: #1e293b;
+            background: #14142a;
             color: white;
         }
 
         .destek-form textarea {
-            min-height: 130px;
+            min-height: 120px;
             resize: vertical;
         }
 
-        .destek-form .dosya-ekle {
-            border: 2px dashed #334155;
-            padding: 25px;
+        .karakter-sayac {
+            text-align: right;
+            font-size: 11px;
+            color: #5a5a7a;
+            margin-top: 4px;
+        }
+        .karakter-sayac.danger {
+            color: #f87171;
+        }
+
+        /* ===== DOSYA YÜKLEME ===== */
+        .dosya-ekle {
+            border: 2px dashed rgba(255, 255, 255, 0.06);
+            padding: 20px;
             border-radius: 12px;
             text-align: center;
             cursor: pointer;
-            transition: border-color 0.3s, background 0.3s;
-            position: relative;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.02);
         }
-
-        .destek-form .dosya-ekle:hover {
+        .dosya-ekle:hover {
             border-color: #6366f1;
-            background: rgba(99, 102, 241, 0.05);
+            background: rgba(99, 102, 241, 0.04);
         }
-
-        .destek-form .dosya-ekle input[type="file"] {
+        .dosya-ekle input[type="file"] {
             display: none;
         }
-
-        .destek-form .dosya-ekle .dosya-label {
-            color: #94a3b8;
+        .dosya-ekle .dosya-label {
+            color: #8a8aaa;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
-
-        .destek-form .dosya-ekle .dosya-label .icon {
-            font-size: 32px;
+        .dosya-ekle .dosya-label .icon {
+            font-size: 28px;
         }
-
-        .destek-form .dosya-ekle .dosya-label:hover {
-            color: #38bdf8;
+        .dosya-ekle .dosya-label:hover {
+            color: #c4c4d4;
         }
-
-        .destek-form .dosya-ad {
-            color: #10b981;
+        .dosya-ad {
+            color: #34d399;
             font-size: 13px;
-            margin-top: 8px;
+            margin-top: 6px;
             display: none;
         }
-
-        .destek-form .dosya-ad.show {
+        .dosya-ad.show {
             display: block;
         }
 
-        .destek-form .gonder-btn {
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+        /* ===== BUTON ===== */
+        .gonder-btn {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
             color: white;
             border: none;
-            padding: 16px 30px;
+            padding: 14px 30px;
             border-radius: 12px;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 15px;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.2);
         }
-
-        .destek-form .gonder-btn:hover {
+        .gonder-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.3);
         }
-
-        .destek-form .gonder-btn:disabled {
-            opacity: 0.6;
+        .gonder-btn:disabled {
+            opacity: 0.5;
             cursor: not-allowed;
             transform: none !important;
         }
-
-        .destek-form .gonder-btn .loader {
+        .gonder-btn .loader {
             display: none;
             width: 20px;
             height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
+            border: 2px solid rgba(255,255,255,0.2);
             border-radius: 50%;
             border-top-color: white;
             animation: spin 0.8s linear infinite;
         }
-
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
+        /* ===== MESAJLAR ===== */
         .basarili-mesaj {
-            background: #065f46;
-            color: #6ee7b7;
-            padding: 16px 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 18px;
             display: none;
-            border: 1px solid #10b981;
-            align-items: center;
-            gap: 12px;
-            font-weight: 500;
-        }
-
-        .basarili-mesaj.show {
-            display: flex;
-        }
-
-        .basarili-mesaj .icon {
-            font-size: 24px;
-        }
-
-        .hata-mesaj {
-            background: #7f1d1d;
-            color: #fca5a5;
-            padding: 16px 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: none;
-            border: 1px solid #ef4444;
-            align-items: center;
-            gap: 12px;
-            font-weight: 500;
-        }
-
-        .hata-mesaj.show {
-            display: flex;
-        }
-
-        .hata-mesaj .icon {
-            font-size: 24px;
-        }
-
-        .karakter-sayac {
-            text-align: right;
-            font-size: 12px;
-            color: #64748b;
-            margin-top: 4px;
-        }
-
-        .karakter-sayac.danger {
-            color: #ef4444;
-        }
-
-        /* --- ADMIN PANELİ --- */
-        .admin-panel {
-            margin-top: 40px;
-            border-top: 1px solid #334155;
-            padding-top: 30px;
-        }
-
-        .admin-panel h2 {
-            color: #f59e0b;
-            font-size: 20px;
-            display: flex;
+            border: 1px solid rgba(16, 185, 129, 0.15);
             align-items: center;
             gap: 10px;
-            margin-bottom: 20px;
+            font-weight: 500;
+            font-size: 14px;
         }
+        .basarili-mesaj.show { display: flex; }
 
-        .admin-panel .talepler-listesi {
+        .hata-mesaj {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            display: none;
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .hata-mesaj.show { display: flex; }
+
+        /* ===== ADMIN PANELİ ===== */
+        .admin-panel {
+            margin-top: 32px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding-top: 24px;
+        }
+        .admin-panel h2 {
+            color: #fbbf24;
+            font-size: 18px;
+            font-weight: 700;
             display: flex;
-            flex-direction: column;
-            gap: 12px;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .admin-panel h2 i {
+            color: #f59e0b;
         }
 
-        .admin-panel .talep-kart {
-            background: #0f172a;
+        .talep-kart {
+            background: rgba(255, 255, 255, 0.02);
             border-radius: 12px;
-            padding: 18px 20px;
-            border: 1px solid #334155;
-            transition: border-color 0.3s;
+            padding: 16px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            margin-bottom: 10px;
+            transition: all 0.3s;
         }
-
-        .admin-panel .talep-kart:hover {
-            border-color: #6366f1;
+        .talep-kart:hover {
+            border-color: rgba(99, 102, 241, 0.2);
         }
-
-        .admin-panel .talep-kart .talep-header {
+        .talep-kart .talep-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 8px;
+            gap: 8px;
+            margin-bottom: 6px;
         }
-
-        .admin-panel .talep-kart .talep-header .kullanici {
+        .talep-kart .talep-header .kullanici {
             color: #38bdf8;
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
         }
-
-        .admin-panel .talep-kart .talep-header .tarih {
-            color: #64748b;
-            font-size: 12px;
-        }
-
-        .admin-panel .talep-kart .talep-header .durum {
-            padding: 4px 12px;
-            border-radius: 20px;
+        .talep-kart .talep-header .tarih {
+            color: #5a5a7a;
             font-size: 11px;
+        }
+        .talep-kart .talep-header .durum {
+            padding: 2px 12px;
+            border-radius: 50px;
+            font-size: 10px;
             font-weight: 600;
         }
+        .durum.beklemede { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+        .durum.islemde { background: rgba(99, 102, 241, 0.15); color: #a5b4fc; }
+        .durum.cozuldu { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+        .durum.reddedildi { background: rgba(239, 68, 68, 0.15); color: #f87171; }
 
-        .admin-panel .talep-kart .talep-header .durum.beklemede {
-            background: #92400e;
-            color: #fbbf24;
-        }
-
-        .admin-panel .talep-kart .talep-header .durum.islemde {
-            background: #1e3a5f;
-            color: #60a5fa;
-        }
-
-        .admin-panel .talep-kart .talep-header .durum.cozuldu {
-            background: #065f46;
-            color: #6ee7b7;
-        }
-
-        .admin-panel .talep-kart .talep-header .durum.reddedildi {
-            background: #7f1d1d;
-            color: #fca5a5;
-        }
-
-        .admin-panel .talep-kart .talep-konu {
-            color: #e2e8f0;
+        .talep-kart .talep-konu {
+            color: white;
             font-weight: 500;
-            font-size: 15px;
-            margin-bottom: 4px;
-        }
-
-        .admin-panel .talep-kart .talep-mesaj {
-            color: #94a3b8;
             font-size: 14px;
+            margin-bottom: 2px;
+        }
+        .talep-kart .talep-mesaj {
+            color: #8a8aaa;
+            font-size: 13px;
             line-height: 1.5;
         }
-
-        .admin-panel .talep-kart .talep-dosya {
-            margin-top: 8px;
+        .talep-kart .talep-dosya {
+            margin-top: 6px;
         }
-
-        .admin-panel .talep-kart .talep-dosya a {
+        .talep-kart .talep-dosya a {
             color: #38bdf8;
             text-decoration: none;
-            font-size: 13px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            font-size: 12px;
         }
+        .talep-kart .talep-dosya a:hover { text-decoration: underline; }
 
-        .admin-panel .talep-kart .talep-dosya a:hover {
-            text-decoration: underline;
-        }
-
-        .admin-panel .talep-kart .talep-actions {
+        .talep-kart .talep-actions {
             display: flex;
-            gap: 8px;
-            margin-top: 12px;
+            gap: 6px;
+            margin-top: 10px;
             flex-wrap: wrap;
         }
-
-        .admin-panel .talep-kart .talep-actions button {
-            padding: 6px 16px;
+        .talep-kart .talep-actions button {
+            padding: 4px 14px;
             border: none;
             border-radius: 6px;
             font-weight: 600;
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
         }
-
-        .admin-panel .talep-kart .talep-actions button:hover {
-            transform: scale(1.05);
-        }
-
-        .admin-panel .talep-kart .talep-actions .btn-islemde {
-            background: #1e3a5f;
-            color: #60a5fa;
-        }
-
-        .admin-panel .talep-kart .talep-actions .btn-coz {
-            background: #065f46;
-            color: #6ee7b7;
-        }
-
-        .admin-panel .talep-kart .talep-actions .btn-red {
-            background: #7f1d1d;
-            color: #fca5a5;
-        }
-
-        .admin-panel .talep-kart .talep-actions .btn-sil {
-            background: #374151;
-            color: #94a3b8;
-        }
+        .talep-kart .talep-actions button:hover { transform: scale(1.04); }
+        .talep-kart .talep-actions .btn-islemde { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; }
+        .talep-kart .talep-actions .btn-coz { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .talep-kart .talep-actions .btn-red { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        .talep-kart .talep-actions .btn-sil { background: rgba(255, 255, 255, 0.04); color: #5a5a7a; }
 
         .bos-talepler {
-            color: #64748b;
+            color: #5a5a7a;
             text-align: center;
-            padding: 40px 20px;
-            font-size: 15px;
+            padding: 32px 20px;
         }
-
         .bos-talepler .icon {
-            font-size: 48px;
+            font-size: 40px;
             display: block;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
+            color: #3a3a5a;
         }
 
-        .bos-talepler .alt-yazi {
-            font-size: 13px;
-            color: #475569;
-            margin-top: 6px;
-        }
-
-        .admin-badge {
-            display: inline-block;
-            background: #f59e0b;
-            color: #0f172a;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 10px;
-            font-weight: 700;
-            margin-left: 8px;
-        }
-
-        @media (max-width: 600px) {
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 640px) {
             .destek-container {
-                padding: 20px;
+                padding: 24px;
             }
-
-            .destek-header h1 {
-                font-size: 22px;
-            }
-
             .destek-header {
                 flex-direction: column;
                 align-items: flex-start;
             }
-
-            .admin-panel .talep-kart .talep-header {
+            .destek-header h1 {
+                font-size: 22px;
+            }
+            .talep-kart .talep-header {
                 flex-direction: column;
                 align-items: flex-start;
+            }
+        }
+        @media (max-width: 480px) {
+            .destek-container {
+                padding: 16px;
+            }
+            .destek-header h1 {
+                font-size: 18px;
+            }
+            .gonder-btn {
+                font-size: 14px;
+                padding: 12px;
             }
         }
     </style>
 </head>
 <body>
     <div class="destek-container">
+
         <!-- HEADER -->
         <div class="destek-header">
             <h1>
-                <span>🎫</span> Destek Talebi
+                <i class="fas fa-ticket-alt"></i> Destek Talebi
                 <% if (aktif && aktif.rol === 'admin') { %>
-                    <span class="admin-badge">ADMIN PANELİ</span>
+                    <span class="admin-badge"><i class="fas fa-crown"></i> ADMIN</span>
                 <% } %>
             </h1>
-            <a href="/" class="geri-btn">← Ana Sayfaya Dön</a>
+            <a href="/" class="geri-btn"><i class="fas fa-arrow-left"></i> Ana Sayfaya Dön</a>
         </div>
 
         <!-- AÇIKLAMA -->
         <div class="destek-aciklama">
-            <strong>📌 Nasıl çalışır?</strong><br>
+            <i class="fas fa-info-circle" style="color:#6366f1;"></i>
+            <strong>Nasıl çalışır?</strong><br>
             Karşılaştığın herhangi bir sorunu, şikayeti veya önerini buradan bize iletebilirsin.
             Talebin <strong>admin9595</strong> tarafından incelenecek ve en kısa sürede çözüme kavuşturulacaktır.
         </div>
 
         <!-- BAŞARILI MESAJ -->
         <div class="basarili-mesaj" id="basariliMesaj">
-            <span class="icon">✅</span>
+            <i class="fas fa-check-circle"></i>
             <span id="basariliMetin">Talebiniz başarıyla gönderildi! En kısa sürede incelenecektir.</span>
         </div>
 
         <!-- HATA MESAJI -->
         <div class="hata-mesaj" id="hataMesaj">
-            <span class="icon">❌</span>
+            <i class="fas fa-exclamation-circle"></i>
             <span id="hataMetin">Lütfen tüm alanları doldurun.</span>
         </div>
 
@@ -568,13 +516,13 @@
                 <label>Kategori <span class="required">*</span></label>
                 <select id="kategori" required>
                     <option value="">Kategori seçin...</option>
-                    <option value="satin-alma">🛒 Satın Alma Sorunu</option>
-                    <option value="hesap">👤 Hesap Problemi</option>
-                    <option value="ilan">📦 İlan Sorunu</option>
-                    <option value="odeme">💳 Ödeme / Para Çekme</option>
-                    <option value="sikayet">🚩 Şikayet</option>
-                    <option value="oner">💡 Öneri</option>
-                    <option value="diger">📌 Diğer</option>
+                    <option value="satin-alma"><i class="fas fa-shopping-cart"></i> Satın Alma Sorunu</option>
+                    <option value="hesap"><i class="fas fa-user"></i> Hesap Problemi</option>
+                    <option value="ilan"><i class="fas fa-box"></i> İlan Sorunu</option>
+                    <option value="odeme"><i class="fas fa-credit-card"></i> Ödeme / Para Çekme</option>
+                    <option value="sikayet"><i class="fas fa-flag"></i> Şikayet</option>
+                    <option value="oner"><i class="fas fa-lightbulb"></i> Öneri</option>
+                    <option value="diger"><i class="fas fa-ellipsis-h"></i> Diğer</option>
                 </select>
             </div>
 
@@ -585,37 +533,39 @@
             </div>
 
             <div class="form-grup">
-                <label>Dosya Ekle (Opsiyonel)</label>
+                <label>Dosya Ekle <span style="color:#5a5a7a; font-weight:400;">(Opsiyonel)</span></label>
                 <div class="dosya-ekle" onclick="document.getElementById('dosyaInput').click()">
                     <input type="file" id="dosyaInput" accept="image/*,.pdf,.doc,.docx">
                     <div class="dosya-label">
-                        <span class="icon">📎</span>
+                        <span class="icon"><i class="fas fa-cloud-upload-alt"></i></span>
                         <span>Dosya eklemek için tıkla veya sürükle</span>
-                        <span style="font-size:12px; color:#64748b;">PNG, JPG, PDF, DOC (max 5MB)</span>
+                        <span style="font-size:11px; color:#5a5a7a;">PNG, JPG, PDF, DOC (max 5MB)</span>
                     </div>
-                    <span class="dosya-ad" id="dosyaAd">📄 <span id="dosyaAdi"></span></span>
+                    <span class="dosya-ad" id="dosyaAd"><i class="fas fa-file"></i> <span id="dosyaAdi"></span></span>
                 </div>
             </div>
 
             <button type="submit" class="gonder-btn" id="gonderBtn">
                 <span class="loader" id="loader"></span>
-                <span id="btnText">🚀 Talebi Gönder</span>
+                <span id="btnText"><i class="fas fa-paper-plane"></i> Talebi Gönder</span>
             </button>
         </form>
 
-        <!-- ADMIN PANELİ (SADECE ADMIN9595 GÖRÜR) -->
+        <!-- ADMIN PANELİ -->
         <% if (aktif && aktif.rol === 'admin') { %>
             <div class="admin-panel" id="adminPanel">
-                <h2>📋 Gelen Destek Talepleri</h2>
-                <div class="talepler-listesi" id="taleplerListesi">
-                    <!-- Talepler dinamik olarak doldurulacak -->
-                </div>
+                <h2><i class="fas fa-inbox"></i> Gelen Destek Talepleri</h2>
+                <div class="talepler-listesi" id="taleplerListesi"></div>
             </div>
         <% } %>
+
     </div>
 
     <script>
-        // --- KULLANICI KONTROLÜ ---
+        // ============================================
+        // DESTEK TALEBİ SAYFASI - FULL SCRIPT
+        // ============================================
+
         const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
 
         // Admin değilse admin panelini gizle
@@ -624,7 +574,9 @@
             if (adminPanel) adminPanel.style.display = 'none';
         }
 
-        // --- KARAKTER SAYACI ---
+        // ============================================
+        // KARAKTER SAYACI
+        // ============================================
         document.getElementById('konu').addEventListener('input', function() {
             const sayac = document.getElementById('konuSayac');
             const uzunluk = this.value.length;
@@ -639,12 +591,13 @@
             sayac.classList.toggle('danger', uzunluk > 900);
         });
 
-        // --- DOSYA YÜKLEME ---
+        // ============================================
+        // DOSYA YÜKLEME
+        // ============================================
         document.getElementById('dosyaInput').addEventListener('change', function(e) {
             const dosya = this.files[0];
             const dosyaAd = document.getElementById('dosyaAd');
             const dosyaAdi = document.getElementById('dosyaAdi');
-            
             if (dosya) {
                 dosyaAdi.textContent = dosya.name + ' (' + (dosya.size / 1024).toFixed(1) + ' KB)';
                 dosyaAd.classList.add('show');
@@ -653,24 +606,22 @@
             }
         });
 
-        // --- DRAG & DROP ---
+        // Drag & Drop
         const dosyaEkle = document.querySelector('.dosya-ekle');
         dosyaEkle.addEventListener('dragover', function(e) {
             e.preventDefault();
             this.style.borderColor = '#6366f1';
             this.style.background = 'rgba(99, 102, 241, 0.05)';
         });
-
         dosyaEkle.addEventListener('dragleave', function(e) {
             e.preventDefault();
-            this.style.borderColor = '#334155';
-            this.style.background = 'transparent';
+            this.style.borderColor = 'rgba(255, 255, 255, 0.06)';
+            this.style.background = 'rgba(255, 255, 255, 0.02)';
         });
-
         dosyaEkle.addEventListener('drop', function(e) {
             e.preventDefault();
-            this.style.borderColor = '#334155';
-            this.style.background = 'transparent';
+            this.style.borderColor = 'rgba(255, 255, 255, 0.06)';
+            this.style.background = 'rgba(255, 255, 255, 0.02)';
             const files = e.dataTransfer.files;
             if (files.length > 0) {
                 document.getElementById('dosyaInput').files = files;
@@ -679,7 +630,9 @@
             }
         });
 
-        // --- FORUM GÖNDERME ---
+        // ============================================
+        // FORM GÖNDERME
+        // ============================================
         document.getElementById('destekFormu').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -719,7 +672,6 @@
             loader.style.display = 'block';
             btnText.textContent = 'Gönderiliyor...';
 
-            // Dosyayı base64'e çevir (varsa)
             let dosyaData = null;
             if (dosya) {
                 const reader = new FileReader();
@@ -738,7 +690,6 @@
             }
 
             function talebiKaydet(dosyaData) {
-                // Talebi localStorage'a kaydet
                 let talepler = JSON.parse(localStorage.getItem('destekTalepleri') || '[]');
                 const yeniTalep = {
                     id: Date.now(),
@@ -747,30 +698,26 @@
                     kategori: kategori,
                     mesaj: mesaj,
                     dosya: dosyaData,
-                    durum: 'beklemede', // beklemede, islemde, cozuldu, reddedildi
+                    durum: 'beklemede',
                     tarih: new Date().toLocaleString('tr-TR'),
                     timestamp: Date.now()
                 };
                 talepler.unshift(yeniTalep);
                 localStorage.setItem('destekTalepleri', JSON.stringify(talepler));
 
-                // Admin'e bildirim gitmesi için
-                const adminBildirim = {
+                let adminBildirimler = JSON.parse(localStorage.getItem('bildirimler_admin9595') || '[]');
+                adminBildirimler.unshift({
                     id: Date.now(),
                     metin: `🎫 Yeni destek talebi: "${konu}" - ${aktif.kullaniciAdi} tarafından gönderildi.`,
                     durum: 'yeni',
                     tarih: new Date().toLocaleTimeString()
-                };
-                let adminBildirimler = JSON.parse(localStorage.getItem('bildirimler_admin9595') || '[]');
-                adminBildirimler.unshift(adminBildirim);
+                });
                 localStorage.setItem('bildirimler_admin9595', JSON.stringify(adminBildirimler));
 
-                // BAŞARILI MESAJ
                 const basarili = document.getElementById('basariliMesaj');
                 document.getElementById('basariliMetin').textContent = '✅ Talebiniz başarıyla gönderildi! En kısa sürede incelenecektir.';
                 basarili.classList.add('show');
 
-                // FORM TEMİZLE
                 document.getElementById('konu').value = '';
                 document.getElementById('kategori').value = '';
                 document.getElementById('mesaj').value = '';
@@ -779,12 +726,10 @@
                 document.getElementById('konuSayac').textContent = '0/100';
                 document.getElementById('mesajSayac').textContent = '0/1000';
 
-                // BUTONU GERİ AL
                 btn.disabled = false;
                 loader.style.display = 'none';
-                btnText.textContent = '🚀 Talebi Gönder';
+                btnText.innerHTML = '<i class="fas fa-paper-plane"></i> Talebi Gönder';
 
-                // Admin ise listeyi yenile
                 if (aktif && aktif.rol === 'admin') {
                     talepleriListele();
                 }
@@ -793,7 +738,9 @@
             }
         });
 
-        // --- ADMIN TALEP LİSTELEME ---
+        // ============================================
+        // ADMIN TALEP LİSTELEME
+        // ============================================
         function talepleriListele() {
             if (!aktif || aktif.rol !== 'admin') return;
 
@@ -803,9 +750,9 @@
             if (talepler.length === 0) {
                 liste.innerHTML = `
                     <div class="bos-talepler">
-                        <span class="icon">📭</span>
+                        <span class="icon"><i class="fas fa-inbox"></i></span>
                         <div>Henüz hiç destek talebi yok.</div>
-                        <div class="alt-yazi">Kullanıcılar taleplerini buradan gönderecek.</div>
+                        <div class="alt-yazi" style="color:#3a3a5a; font-size:12px;">Kullanıcılar taleplerini buradan gönderecek.</div>
                     </div>
                 `;
                 return;
@@ -813,57 +760,52 @@
 
             liste.innerHTML = '';
             talepler.forEach(talep => {
-                const durumRenk = {
-                    'beklemede': 'beklemede',
-                    'islemde': 'islemde',
-                    'cozuldu': 'cozuldu',
-                    'reddedildi': 'reddedildi'
+                const durumMap = {
+                    'beklemede': { class: 'beklemede', label: '⏳ Beklemede' },
+                    'islemde': { class: 'islemde', label: '🔄 İşlemde' },
+                    'cozuldu': { class: 'cozuldu', label: '✅ Çözüldü' },
+                    'reddedildi': { class: 'reddedildi', label: '❌ Reddedildi' }
                 };
-
-                const durumEtiket = {
-                    'beklemede': '⏳ Beklemede',
-                    'islemde': '🔄 İşlemde',
-                    'cozuldu': '✅ Çözüldü',
-                    'reddedildi': '❌ Reddedildi'
-                };
+                const d = durumMap[talep.durum] || durumMap['beklemede'];
 
                 const kart = document.createElement('div');
                 kart.className = 'talep-kart';
                 kart.innerHTML = `
                     <div class="talep-header">
-                        <span class="kullanici">👤 ${talep.kullanici}</span>
-                        <span class="tarih">📅 ${talep.tarih}</span>
-                        <span class="durum ${durumRenk[talep.durum] || 'beklemede'}">${durumEtiket[talep.durum] || '⏳ Beklemede'}</span>
+                        <span class="kullanici"><i class="fas fa-user"></i> ${talep.kullanici}</span>
+                        <span class="tarih"><i class="far fa-calendar-alt"></i> ${talep.tarih}</span>
+                        <span class="durum ${d.class}">${d.label}</span>
                     </div>
                     <div class="talep-konu">📌 ${talep.konu}</div>
                     <div class="talep-mesaj">${talep.mesaj}</div>
-                    ${talep.dosya ? `<div class="talep-dosya"><a href="${talep.dosya.data}" target="_blank">📎 ${talep.dosya.name}</a></div>` : ''}
+                    ${talep.dosya ? `<div class="talep-dosya"><a href="${talep.dosya.data}" target="_blank"><i class="fas fa-paperclip"></i> ${talep.dosya.name}</a></div>` : ''}
                     <div class="talep-actions">
-                        ${talep.durum === 'beklemede' ? `<button class="btn-islemde" onclick="talepDurumGuncelle(${talep.id}, 'islemde')">🔄 İşleme Al</button>` : ''}
-                        ${talep.durum === 'islemde' ? `<button class="btn-coz" onclick="talepDurumGuncelle(${talep.id}, 'cozuldu')">✅ Çözüldü</button>` : ''}
-                        ${talep.durum === 'beklemede' || talep.durum === 'islemde' ? `<button class="btn-red" onclick="talepDurumGuncelle(${talep.id}, 'reddedildi')">❌ Reddet</button>` : ''}
-                        <button class="btn-sil" onclick="talepSil(${talep.id})">🗑️ Sil</button>
+                        ${talep.durum === 'beklemede' ? `<button class="btn-islemde" onclick="talepDurumGuncelle(${talep.id}, 'islemde')"><i class="fas fa-play"></i> İşleme Al</button>` : ''}
+                        ${talep.durum === 'islemde' ? `<button class="btn-coz" onclick="talepDurumGuncelle(${talep.id}, 'cozuldu')"><i class="fas fa-check"></i> Çözüldü</button>` : ''}
+                        ${talep.durum === 'beklemede' || talep.durum === 'islemde' ? `<button class="btn-red" onclick="talepDurumGuncelle(${talep.id}, 'reddedildi')"><i class="fas fa-times"></i> Reddet</button>` : ''}
+                        <button class="btn-sil" onclick="talepSil(${talep.id})"><i class="fas fa-trash"></i> Sil</button>
                     </div>
                 `;
                 liste.appendChild(kart);
             });
         }
 
-        // --- TALEP DURUM GÜNCELLE ---
+        // ============================================
+        // TALEP DURUM GÜNCELLE
+        // ============================================
         function talepDurumGuncelle(id, yeniDurum) {
             let talepler = JSON.parse(localStorage.getItem('destekTalepleri') || '[]');
             const index = talepler.findIndex(t => t.id === id);
             if (index !== -1) {
                 talepler[index].durum = yeniDurum;
                 localStorage.setItem('destekTalepleri', JSON.stringify(talepler));
-                
-                // Kullanıcıya bildirim gitmesi için
+
                 const durumMesaj = {
                     'islemde': '🔄 Talebiniz işleme alındı! En kısa sürede çözülecektir.',
                     'cozuldu': '✅ Talebiniz başarıyla çözüldü!',
                     'reddedildi': '❌ Talebiniz reddedildi. Daha fazla bilgi için destek ile iletişime geçin.'
                 };
-                
+
                 let kullaniciBildirimler = JSON.parse(localStorage.getItem(`bildirimler_${talepler[index].kullanici}`) || '[]');
                 kullaniciBildirimler.unshift({
                     id: Date.now(),
@@ -872,29 +814,31 @@
                     tarih: new Date().toLocaleTimeString()
                 });
                 localStorage.setItem(`bildirimler_${talepler[index].kullanici}`, JSON.stringify(kullaniciBildirimler));
-                
+
                 talepleriListele();
             }
         }
 
-        // --- TALEP SİL ---
+        // ============================================
+        // TALEP SİL
+        // ============================================
         function talepSil(id) {
             if (!confirm('Bu talebi silmek istediğine emin misin kanka?')) return;
-            
             let talepler = JSON.parse(localStorage.getItem('destekTalepleri') || '[]');
             talepler = talepler.filter(t => t.id !== id);
             localStorage.setItem('destekTalepleri', JSON.stringify(talepler));
             talepleriListele();
         }
 
-        // --- SAYFA YÜKLENDİĞİNDE ---
+        // ============================================
+        // SAYFA YÜKLENDİĞİNDE
+        // ============================================
         document.addEventListener('DOMContentLoaded', function() {
             if (aktif && aktif.rol === 'admin') {
                 talepleriListele();
             }
         });
 
-        // --- CANLI GÜNCELLEME (Admin için) ---
         if (aktif && aktif.rol === 'admin') {
             setInterval(() => {
                 talepleriListele();

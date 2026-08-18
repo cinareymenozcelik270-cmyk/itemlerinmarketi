@@ -5,88 +5,423 @@
     <meta name="google-site-verification" content="rXTtLPJavFhXvJ7TGofxQ3XXGZXb_B8dzSBNAPZwLFk" />
     <link rel="icon" type="image/png" href="/resim.png">
     <meta charset="UTF-8">
-    <title>Bakiye Bildir - İtemlerinMarketi</title>
+    <title>Bakiye Yükle - İtemlerinMarketi</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0a0a1a;
+            color: #e8e8f0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 40px;
+            background: rgba(10, 10, 26, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        header .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        header .logo i {
+            color: #6366f1;
+        }
+        header nav {
+            display: flex;
+            gap: 12px;
+        }
+        header nav a {
+            color: #8a8aaa;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        header nav a:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: white;
+        }
+        header nav a i {
+            color: #6366f1;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .sayfa-baslik {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sayfa-baslik i {
+            color: #34d399;
+        }
+        .sayfa-alt-yazi {
+            color: #8a8aaa;
+            font-size: 15px;
+            margin-bottom: 32px;
+        }
+
         .bakiye-wrapper {
             display: flex;
             gap: 40px;
-            margin-top: 20px;
             flex-wrap: wrap;
         }
-        .banka-karti {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 2px dashed #38bdf8;
-            padding: 30px;
-            border-radius: 12px;
+
+        /* ===== FORM ===== */
+        .form-box {
             flex: 1;
             min-width: 300px;
-            max-width: 450px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 28px;
+            backdrop-filter: blur(10px);
         }
-        .banka-karti h3 {
-            color: #38bdf8;
-            margin-bottom: 15px;
-            font-size: 20px;
+        .form-box h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 6px;
         }
-        .banka-detay {
-            margin-bottom: 12px;
-            background: #1e293b;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #334155;
+        .form-box .form-alt-yazi {
+            color: #5a5a7a;
+            font-size: 13px;
+            margin-bottom: 20px;
         }
-        .banka-detay small {
-            color: #94a3b8;
+        .form-box label {
             display: block;
+            color: #c4c4d4;
+            font-size: 13px;
+            font-weight: 500;
             margin-bottom: 4px;
         }
+        .form-box input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            margin-bottom: 16px;
+            font-family: 'Inter', sans-serif;
+        }
+        .form-box input:focus {
+            border-color: #6366f1;
+            outline: none;
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .form-box input:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .form-box input::placeholder {
+            color: #5a5a7a;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.25);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.35);
+        }
+
+        /* ===== BANKA KARTI ===== */
+        .banka-karti {
+            flex: 1;
+            min-width: 300px;
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
+            border-radius: 16px;
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            padding: 28px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        .banka-karti::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse, rgba(56, 189, 248, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .banka-karti .kart-baslik {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .banka-karti .kart-baslik i {
+            color: #38bdf8;
+        }
+        .banka-karti .kart-alt-yazi {
+            color: #5a5a7a;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .banka-detay {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            margin-bottom: 12px;
+        }
+        .banka-detay small {
+            color: #8a8aaa;
+            display: block;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
         .banka-detay strong {
-            color: #fff;
+            color: white;
             font-size: 16px;
             word-break: break-all;
+            font-weight: 600;
+        }
+        .banka-detay .ibana {
+            color: #34d399;
+            font-family: monospace;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+
+        .banka-karti .uyari {
+            font-size: 12px;
+            color: #5a5a7a;
+            margin-top: 16px;
+            padding: 12px 16px;
+            background: rgba(245, 158, 11, 0.06);
+            border-radius: 8px;
+            border-left: 3px solid #f59e0b;
+        }
+        .banka-karti .uyari i {
+            color: #fbbf24;
+            margin-right: 6px;
+        }
+
+        /* ===== ALERT ===== */
+        .alert {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            display: none;
+        }
+        .alert.success {
+            display: block;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: #34d399;
+        }
+        .alert.error {
+            display: block;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+        .alert i {
+            margin-right: 8px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            header {
+                padding: 12px 20px;
+            }
+            .container {
+                padding: 20px 16px;
+            }
+            .sayfa-baslik {
+                font-size: 22px;
+            }
+            .bakiye-wrapper {
+                flex-direction: column;
+            }
+            .form-box,
+            .banka-karti {
+                min-width: auto;
+            }
+        }
+        @media (max-width: 480px) {
+            header .logo {
+                font-size: 16px;
+            }
+            .sayfa-baslik {
+                font-size: 18px;
+            }
+            .banka-detay strong {
+                font-size: 14px;
+            }
+            .banka-detay .ibana {
+                font-size: 15px;
+            }
         }
     </style>
 </head>
 <body>
+
     <header>
-        <div class="logo">İtemlerinMarketi</div>
+        <div class="logo">
+            <i class="fas fa-store"></i> İtemlerinMarketi
+        </div>
         <nav>
-            <a href="/">Ana Sayfa</a>
+            <a href="/"><i class="fas fa-home"></i> Ana Sayfa</a>
+            <a href="/bakiye" style="color:white; background:rgba(99,102,241,0.1);"><i class="fas fa-coins"></i> Bakiye</a>
         </nav>
     </header>
+
     <div class="container" id="icerik" style="display: none;">
-        <h1>Bakiye Bildirim Formu</h1>
-        <p>Aşağıdaki banka hesabına Havale/EFT yaptıktan sonra bildirim formunu doldur:</p>
+
+        <div class="sayfa-baslik">
+            <i class="fas fa-coins"></i> Bakiye Yükle
+        </div>
+        <p class="sayfa-alt-yazi">
+            Aşağıdaki banka hesabına Havale/EFT yaptıktan sonra bildirim formunu doldur.
+            <br><span style="color:#5a5a7a; font-size:13px;">⏱️ Onay süresi: 1-24 saat</span>
+        </p>
+
+        <!-- Alert -->
+        <div id="alertBox" class="alert"></div>
 
         <div class="bakiye-wrapper">
-            <!-- Sol Taraf: Form -->
-            <form id="bakiyeForm" class="form-box" style="flex: 1; min-width: 300px;">
-                <input type="text" id="kullaniciAdiInput" readonly required>
-                <input type="number" id="miktarInput" placeholder="Yatırdığın Tutar (TL)" required>
-                <button type="submit" class="btn">Bildirim Gönder</button>
-            </form>
 
-            <!-- Sağ Taraf: IBAN Alanı -->
+            <!-- Sol: Form -->
+            <div class="form-box">
+                <h2><i class="fas fa-pen" style="color:#6366f1;"></i> Bildirim Gönder</h2>
+                <p class="form-alt-yazi">Havale/EFT yaptıktan sonra formu doldur.</p>
+
+                <form id="bakiyeForm">
+                    <label for="kullaniciAdiInput">👤 Kullanıcı Adı</label>
+                    <input type="text" id="kullaniciAdiInput" readonly>
+
+                    <label for="miktarInput">💰 Yatırdığın Tutar (TL)</label>
+                    <input type="number" id="miktarInput" placeholder="Örn: 100" min="1" required>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Bildirim Gönder
+                    </button>
+                </form>
+            </div>
+
+            <!-- Sağ: Banka Kartı -->
             <div class="banka-karti">
-                <h3>Banka Hesap Bilgilerimiz</h3>
+                <div class="kart-baslik">
+                    <i class="fas fa-university"></i> Banka Hesap Bilgilerimiz
+                </div>
+                <p class="kart-alt-yazi">Havale/EFT yaparken bu bilgileri kullan.</p>
+
                 <div class="banka-detay">
-                    <small>Alıcı Ad Soyad:</small>
+                    <small>🏦 Banka</small>
+                    <strong>Ziraat Bankası</strong>
+                </div>
+
+                <div class="banka-detay">
+                    <small>👤 Alıcı Ad Soyad</small>
                     <strong>İlknur Eser Özçelik</strong>
                 </div>
+
                 <div class="banka-detay">
-                    <small>IBAN Numarası:</small>
-                    <strong style="color: #10b981; font-family: monospace;">TR54 0082 9000 0949 1357 6973 16</strong>
+                    <small>🔢 IBAN Numarası</small>
+                    <strong class="ibana">TR54 0082 9000 0949 1357 6973 16</strong>
                 </div>
-                <p style="font-size: 12px; color: #94a3b8; margin-top: 15px;">
-                    * Lütfen transfer yaparken açıklama kısmına sitedeki kullanıcı adını yazmayı unutma.
-                </p>
+
+                <div class="uyari">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Transfer yaparken açıklama kısmına <strong style="color:white;">sitedeki kullanıcı adını</strong> yazmayı unutma!
+                </div>
             </div>
+
         </div>
+
     </div>
-    
+
     <script>
+        // ============================================
+        // BAKİYE BİLDİRİM SAYFASI
+        // ============================================
+
         const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
-        
+
         if (!aktif) {
             alert('Bakiye bildirmek için önce giriş yapmalısın!');
             window.location.href = '/login';
@@ -95,26 +430,60 @@
             document.getElementById('kullaniciAdiInput').value = aktif.kullaniciAdi;
         }
 
-        // Form gönderildiğinde verileri tarayıcı havuzuna (localStorage) ekleme
         document.getElementById('bakiyeForm').addEventListener('submit', function(e) {
             e.preventDefault();
+
             const miktar = parseFloat(document.getElementById('miktarInput').value);
-            
-            // Tüm bildirimleri ortak listede toplayalım
+
+            if (!miktar || miktar <= 0) {
+                showAlert('Lütfen geçerli bir tutar girin!', 'error');
+                return;
+            }
+
+            // Tüm bildirimleri al
             let tumBildirimler = JSON.parse(localStorage.getItem('tumBakiyeBildirimleri') || '[]');
-            
+
+            // Yeni bildirim ekle
             tumBildirimler.push({
-                id: tumBildirimler.length + 1,
+                id: Date.now(),
                 kullaniciAdi: aktif.kullaniciAdi,
                 miktar: miktar,
                 durum: 'Beklemede',
-                tarih: new Date().toLocaleTimeString()
+                tarih: new Date().toLocaleString('tr-TR')
             });
-            
+
             localStorage.setItem('tumBakiyeBildirimleri', JSON.stringify(tumBildirimler));
-            alert('Bildirim başarıyla gönderildi! Yönetici paneline gidip onaylayabilirsin.');
+
+            // Başarılı mesaj
+            showAlert('✅ Bildirim başarıyla gönderildi! Yönetici onayından sonra bakiyene yansıyacak.', 'success');
             document.getElementById('miktarInput').value = '';
+
+            // Input'a odaklan
+            document.getElementById('miktarInput').focus();
         });
+
+        // Alert fonksiyonu
+        function showAlert(mesaj, tip) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.className = 'alert ' + tip;
+            alertBox.innerHTML = `<i class="fas ${tip === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${mesaj}`;
+            alertBox.style.display = 'block';
+
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 5000);
+        }
+
+        // Enter ile form gönderme
+        document.getElementById('miktarInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('bakiyeForm').dispatchEvent(new Event('submit'));
+            }
+        });
+
+        console.log('📧 İtemlerinMarketi - Bakiye sayfası yüklendi!');
+        console.log('👤 Kullanıcı:', aktif?.kullaniciAdi);
     </script>
+
 </body>
 </html>
