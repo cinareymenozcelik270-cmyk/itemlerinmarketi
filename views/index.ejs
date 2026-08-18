@@ -22,280 +22,558 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="/style.css">
     
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
     <style>
-        /* HEADER VE SOL ÜST GRUP ESNEK TASARIMI */
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ===== ARKA PLAN ANİMASYONU ===== */
+        .bg-animation {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .bg-animation .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: orbFloat 20s infinite ease-in-out;
+        }
+        .bg-animation .orb:nth-child(1) {
+            width: 500px; height: 500px;
+            background: #6366f1;
+            top: -10%; left: -10%;
+            animation-delay: 0s;
+        }
+        .bg-animation .orb:nth-child(2) {
+            width: 400px; height: 400px;
+            background: #a855f7;
+            bottom: -10%; right: -10%;
+            animation-delay: -7s;
+        }
+        .bg-animation .orb:nth-child(3) {
+            width: 300px; height: 300px;
+            background: #10b981;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -14s;
+        }
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(100px, -80px) scale(1.1); }
+            50% { transform: translate(-50px, 100px) scale(0.9); }
+            75% { transform: translate(80px, 50px) scale(1.05); }
+        }
+
+        /* ===== HEADER ===== */
         header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 10px 20px;
-            background: #1e293b;
-            border-bottom: 1px solid #334155;
+            padding: 12px 24px;
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+            position: sticky;
+            top: 0;
+            z-index: 100;
             flex-wrap: wrap;
         }
         .header-sol-bölüm {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
             flex-wrap: wrap;
         }
-        .logo-img { height: 60px; width: auto; max-width: 200px; object-fit: contain; cursor: pointer; }
-        
-        .pazar-wrapper { display: flex; gap: 30px; flex-wrap: wrap; margin-top: 20px; }
-        .ilan-listesi-kutu { flex: 1; min-width: 300px; }
+        .logo-img {
+            height: 55px;
+            width: auto;
+            object-fit: contain;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .logo-img:hover { transform: scale(1.05) rotate(-2deg); }
 
-        .oval-ilan-ekle-btn {
+        /* ===== GLOW BUTTONS ===== */
+        .btn-glow {
             background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
             color: white;
             border: none;
-            padding: 10px 25px;
+            padding: 10px 24px;
             font-size: 14px;
-            font-weight: bold;
-            border-radius: 30px;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .btn-glow:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.5);
+        }
+        .btn-glow:hover::before { opacity: 1; }
+        .btn-glow:active { transform: scale(0.95); }
+
+        .btn-glow-gold {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+        }
+        .btn-glow-gold:hover { box-shadow: 0 6px 30px rgba(245, 158, 11, 0.5); }
+
+        /* ===== HEADER RIGHT ===== */
+        .header-sag-grup {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* ===== CÜZDAN ===== */
+        .cuzdan-dropdown { position: relative; display: inline-block; }
+        .cuzdan-buton {
+            background: rgba(21, 128, 61, 0.9);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
-            text-decoration: none;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-            transition: transform 0.2s, box-shadow 0.2s;
-            white-space: nowrap;
+            font-size: 13px;
+            user-select: none;
+            border: 1px solid rgba(22, 101, 52, 0.6);
+            transition: all 0.3s;
         }
-        .oval-ilan-ekle-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.5);
-        }
-        .kurallar-btn {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-        }
-        .kurallar-btn:hover {
-            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.5);
-        }
-
-        .card {
-            position: relative;
-            background: #1e293b;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid #334155;
-        }
-        .card a {
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-        .card a:hover .pazar-ilan-img {
-            opacity: 0.9;
-        }
-        .pazar-ilan-img {
-            width: 100%;
-            height: 140px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #334155;
-            background: #0f172a;
-        }
-        .teslimat-rozet {
-            display: inline-block;
-            background: #1e1b4b;
-            color: #a855f7;
-            padding: 2px 8px;
-            font-size: 11px;
-            font-weight: bold;
-            border-radius: 4px;
-            border: 1px solid #a855f7;
-            margin-bottom: 8px;
-        }
-        .price { color: #10b981; font-size: 20px; font-weight: bold; }
-
-        .ilan-ust-eylem-btn {
+        .cuzdan-buton:hover { background: rgba(21, 128, 61, 1); transform: scale(1.05); }
+        .cuzdan-buton svg { width: 16px; height: 16px; fill: white; }
+        .dropdown-menu {
+            display: none;
             position: absolute;
-            top: 12px;
-            right: 12px;
-            padding: 4px 10px;
-            font-size: 11px;
-            font-weight: bold;
-            border-radius: 20px;
-            border: none;
-            cursor: pointer;
-            z-index: 10;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-            transition: transform 0.2s;
+            right: 0; top: 40px;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            min-width: 170px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+            border-radius: 12px;
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            z-index: 1002;
+            overflow: hidden;
+            animation: slideDown 0.3s ease;
         }
-        .ilan-ust-eylem-btn:hover { transform: scale(1.1); }
-        .btn-duzenle { background: #38bdf8; color: #0f172a; }
-        .btn-raporla { background: #ef4444; color: white; }
-
-        .header-sag-grup { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
-        .cuzdan-dropdown { position: relative; display: inline-block; }
-        .cuzdan-buton { background: #15803d; color: white; padding: 6px 14px; border-radius: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; user-select: none; border: 1px solid #166534; }
-        .cuzdan-buton svg { width: 14px; height: 14px; fill: white; }
-        .dropdown-menu { display: none; position: absolute; right: 0; top: 35px; background-color: #1e293b; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5); border-radius: 8px; border: 1px solid #334155; z-index: 1002; overflow: hidden; }
-        .dropdown-menu a { color: #cbd5e1; padding: 10px 14px; text-decoration: none; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500; border-bottom: 1px solid #334155; }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .dropdown-menu a {
+            color: #cbd5e1;
+            padding: 10px 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+            transition: all 0.2s;
+        }
         .dropdown-menu a:last-child { border-bottom: none; }
-        .dropdown-menu a:hover { background-color: #334155; color: #38bdf8; }
+        .dropdown-menu a:hover { background: rgba(51, 65, 85, 0.5); color: #38bdf8; padding-left: 20px; }
         .cuzdan-dropdown:hover .dropdown-menu { display: block; }
-        
+
+        /* ===== BİLDİRİM ===== */
         .bildirim-dropdown { position: relative; display: inline-block; }
-        .bildirim-buton { font-size: 20px; cursor: pointer; user-select: none; position: relative; background: none; border: none; padding: 5px; }
-        .bildirim-sayac { position: absolute; top: -2px; right: -5px; background: #ef4444; color: white; font-size: 9px; padding: 1px 5px; border-radius: 10px; font-weight: bold; }
-        .bildirim-menu { display: none; position: absolute; right: 0; top: 40px; background-color: #1e293b; width: 280px; max-height: 300px; overflow-y: auto; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5); border-radius: 8px; border: 1px solid #334155; z-index: 1002; }
-        .bildirim-item { padding: 12px; border-bottom: 1px solid #334155; font-size: 13px; color: #cbd5e1; text-align: left; line-height: 1.4; }
+        .bildirim-buton {
+            font-size: 20px;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            background: none;
+            border: none;
+            padding: 6px 10px;
+            transition: transform 0.3s;
+        }
+        .bildirim-buton:hover { transform: scale(1.1); }
+        .bildirim-sayac {
+            position: absolute;
+            top: -4px; right: -2px;
+            background: #ef4444;
+            color: white;
+            font-size: 9px;
+            padding: 1px 6px;
+            border-radius: 50px;
+            font-weight: 700;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .bildirim-menu {
+            display: none;
+            position: absolute;
+            right: 0; top: 40px;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            width: 300px;
+            max-height: 350px;
+            overflow-y: auto;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+            border-radius: 12px;
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            z-index: 1002;
+            animation: slideDown 0.3s ease;
+        }
+        .bildirim-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+            font-size: 13px;
+            color: #cbd5e1;
+            text-align: left;
+            line-height: 1.4;
+            transition: background 0.2s;
+        }
+        .bildirim-item:hover { background: rgba(51, 65, 85, 0.3); }
         .bildirim-item:last-child { border-bottom: none; }
         .bildirim-item small { display: block; color: #94a3b8; margin-top: 4px; font-size: 11px; }
 
+        /* ===== PROFİL ===== */
         .profil-dropdown { position: relative; display: inline-block; }
-        .profil-avatar-btn { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 2px solid #10b981; }
-        .profil-menu { display: none; position: absolute; right: 0; top: 45px; background: #1e293b; min-width: 140px; border-radius: 8px; border: 1px solid #334155; z-index: 1005; overflow: hidden; }
-        .profil-menu a { color: #cbd5e1; padding: 10px 15px; text-decoration: none; display: block; font-size: 13px; border-bottom: 1px solid #334155; }
-        .profil-menu a:hover { background: #334155; color: #38bdf8; }
+        .profil-avatar-btn {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid #10b981;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+        }
+        .profil-avatar-btn:hover { transform: scale(1.1); border-color: #38bdf8; box-shadow: 0 0 30px rgba(56, 189, 248, 0.3); }
+        .profil-menu {
+            display: none;
+            position: absolute;
+            right: 0; top: 45px;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            min-width: 160px;
+            border-radius: 12px;
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+            z-index: 1005;
+            overflow: hidden;
+            animation: slideDown 0.3s ease;
+        }
+        .profil-menu a {
+            color: #cbd5e1;
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 13px;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+            transition: all 0.2s;
+        }
         .profil-menu a:last-child { border-bottom: none; }
+        .profil-menu a:hover { background: rgba(51, 65, 85, 0.5); color: #38bdf8; padding-left: 20px; }
 
-        /* SOHBET BUTONU */
+        /* ===== PAZAR ===== */
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .pazar-wrapper { display: flex; gap: 30px; flex-wrap: wrap; margin-top: 10px; }
+        .ilan-listesi-kutu { flex: 1; min-width: 300px; }
+        .ilan-listesi-kutu h3 {
+            color: #38bdf8;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* ===== İLAN KARTLARI ===== */
+        .ilan-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            position: relative;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(51, 65, 85, 0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.6s;
+        }
+        .card:hover {
+            transform: translateY(-8px) scale(1.01);
+            border-color: rgba(99, 102, 241, 0.6);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
+        }
+        .card:hover::before { opacity: 1; }
+        .card a { text-decoration: none; color: inherit; display: block; }
+        .card a:hover .pazar-ilan-img { transform: scale(1.03); }
+        .pazar-ilan-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(51, 65, 85, 0.3);
+            background: #0f172a;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .teslimat-rozet {
+            display: inline-block;
+            background: rgba(30, 27, 75, 0.8);
+            backdrop-filter: blur(10px);
+            color: #a855f7;
+            padding: 3px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 50px;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            margin-bottom: 8px;
+        }
+        .ilan-baslik {
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 4px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .ilan-satici {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+        .ilan-satici strong { color: #38bdf8; }
+        .price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #10b981;
+            margin-bottom: 10px;
+        }
+
+        /* ===== KART BUTONLARI ===== */
+        .kart-buton-grup {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .btn-kart {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .btn-kart-satin {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+        .btn-kart-satin:hover { transform: scale(1.05); box-shadow: 0 6px 25px rgba(16, 185, 129, 0.4); }
+        .btn-kart-mesaj {
+            background: rgba(30, 41, 59, 0.8);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+        .btn-kart-mesaj:hover { background: rgba(56, 189, 248, 0.1); transform: scale(1.05); }
+
+        /* ===== DÜZENLE BUTONU (kart üstü) ===== */
+        .ilan-ust-eylem-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 4px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        .ilan-ust-eylem-btn:hover { transform: scale(1.1); }
+        .btn-duzenle { background: rgba(56, 189, 248, 0.9); color: #0f172a; }
+        .btn-raporla { background: rgba(239, 68, 68, 0.9); color: white; }
+
+        /* ===== SOHBET & DESTEK BUTONLARI ===== */
         .sohbet-butonu {
             position: fixed;
-            bottom: 25px;
-            left: 25px;
+            bottom: 24px;
+            left: 24px;
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
             border-radius: 50%;
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 4px 30px rgba(99, 102, 241, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             z-index: 1001;
-            transition: transform 0.2s;
             border: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .sohbet-butonu:hover { transform: scale(1.1); }
+        .sohbet-butonu:hover { transform: scale(1.15) rotate(-10deg); box-shadow: 0 8px 40px rgba(99, 102, 241, 0.6); }
         .sohbet-butonu svg { width: 30px; height: 30px; fill: white; }
+        .sohbet-butonu::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            animation: ringPulse 2s infinite;
+        }
+        @keyframes ringPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.15); opacity: 0.5; }
+        }
 
-        /* DESTEK BUTONU */
         .destek-butonu {
             position: fixed;
-            bottom: 25px;
-            right: 25px;
+            bottom: 24px;
+            right: 24px;
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: linear-gradient(135deg, #10b981, #059669);
             border-radius: 50%;
-            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 4px 30px rgba(16, 185, 129, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             z-index: 1001;
-            transition: transform 0.2s;
             border: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .destek-butonu:hover { transform: scale(1.1); }
+        .destek-butonu:hover { transform: scale(1.15) rotate(10deg); box-shadow: 0 8px 40px rgba(16, 185, 129, 0.6); }
         .destek-butonu img {
             width: 30px;
             height: 30px;
             object-fit: contain;
             filter: brightness(0) invert(1);
         }
+        .destek-butonu::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            animation: ringPulse 2s infinite 0.5s;
+        }
 
-        /* SOHBET KUTUSU */
-        .sohbet-kapsayici {
+        /* ===== SOHBET KUTULARI ===== */
+        .sohbet-kapsayici, .destek-kapsayici {
             position: fixed;
             bottom: 100px;
-            left: 25px;
-            width: 350px;
-            max-height: 450px;
-            height: 450px;
-            background: #1e293b;
-            border: 2px solid #6366f1;
+            left: 24px;
+            width: 360px;
+            max-height: 480px;
+            height: 480px;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
             border-radius: 16px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
             z-index: 1000;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: inherit;
             display: none;
             flex-direction: column;
             overflow: hidden;
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .sohbet-kapsayici.acik { display: flex; }
-
-        /* DESTEK KUTUSU */
-        .destek-kapsayici {
-            position: fixed;
-            bottom: 100px;
-            right: 25px;
-            width: 350px;
-            max-height: 450px;
-            height: 450px;
-            background: #1e293b;
-            border: 2px solid #10b981;
-            border-radius: 16px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.6);
-            z-index: 1000;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
+        .destek-kapsayici { left: auto; right: 24px; border-color: rgba(16, 185, 129, 0.3); }
+        .sohbet-kapsayici.acik, .destek-kapsayici.acik { display: flex; }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        .destek-kapsayici.acik { display: flex; }
 
         .chat-baslik {
             padding: 14px 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 15px;
             flex-shrink: 0;
             color: white;
         }
-        .chat-baslik.sohbet-baslik {
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-        }
-        .chat-baslik.destek-baslik {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        }
-        .chat-baslik .baslik-sol {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .chat-baslik.sohbet-baslik { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+        .chat-baslik.destek-baslik { background: linear-gradient(135deg, #10b981, #059669); }
+        .chat-baslik .baslik-sol { display: flex; align-items: center; gap: 10px; }
         .chat-baslik .online-nokta {
-            width: 10px;
-            height: 10px;
+            width: 10px; height: 10px;
             background: #10b981;
             border-radius: 50%;
             display: inline-block;
-            animation: yanipSon 1.5s infinite;
-        }
-        @keyframes yanipSon {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+            animation: pulse 1.5s infinite;
         }
         .chat-baslik .kapat-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 22px;
-            cursor: pointer;
-            padding: 0 5px;
-            opacity: 0.7;
+            background: none; border: none;
+            color: white; font-size: 22px;
+            cursor: pointer; opacity: 0.7;
             transition: opacity 0.2s;
         }
         .chat-baslik .kapat-btn:hover { opacity: 1; }
-        .chat-baslik .sonlandir-btn {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .chat-baslik .sonlandir-btn:hover { background: #dc2626; }
 
         .chat-mesajlar {
             flex: 1;
@@ -303,19 +581,12 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            background: #0f172a;
+            gap: 8px;
+            background: rgba(15, 23, 42, 0.5);
         }
-        .chat-mesajlar::-webkit-scrollbar {
-            width: 4px;
-        }
-        .chat-mesajlar::-webkit-scrollbar-track {
-            background: #1e293b;
-        }
-        .chat-mesajlar::-webkit-scrollbar-thumb {
-            background: #6366f1;
-            border-radius: 4px;
-        }
+        .chat-mesajlar::-webkit-scrollbar { width: 4px; }
+        .chat-mesajlar::-webkit-scrollbar-track { background: #1e293b; }
+        .chat-mesajlar::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 4px; }
 
         .chat-mesaj {
             max-width: 80%;
@@ -324,19 +595,24 @@
             font-size: 14px;
             line-height: 1.5;
             word-break: break-word;
+            animation: messageIn 0.3s ease;
+        }
+        @keyframes messageIn {
+            from { opacity: 0; transform: scale(0.9) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
         .chat-mesaj.giden {
             align-self: flex-end;
-            background: #6366f1;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
             color: white;
-            border-radius: 12px 12px 4px 12px;
+            border-radius: 16px 16px 4px 16px;
         }
         .chat-mesaj.gelen {
             align-self: flex-start;
-            background: #1e293b;
+            background: rgba(30, 41, 59, 0.8);
             color: #e2e8f0;
-            border-radius: 12px 12px 12px 4px;
-            border: 1px solid #334155;
+            border-radius: 16px 16px 16px 4px;
+            border: 1px solid rgba(51, 65, 85, 0.3);
         }
         .chat-mesaj .mesaj-zaman {
             font-size: 10px;
@@ -353,153 +629,162 @@
         }
         .chat-mesaj.sistem {
             align-self: center;
-            background: #1e1b4b;
+            background: rgba(30, 27, 75, 0.8);
             color: #a855f7;
-            border: 1px solid #a855f7;
+            border: 1px solid rgba(168, 85, 247, 0.3);
             font-size: 12px;
-            padding: 6px 14px;
-            border-radius: 20px;
+            padding: 6px 16px;
+            border-radius: 50px;
             max-width: 90%;
             text-align: center;
         }
         .chat-mesaj.sonlandirildi {
             align-self: center;
-            background: #7f1d1d;
+            background: rgba(127, 29, 29, 0.8);
             color: #fca5a5;
-            border: 1px solid #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
             font-size: 12px;
-            padding: 6px 14px;
-            border-radius: 20px;
+            padding: 6px 16px;
+            border-radius: 50px;
             max-width: 90%;
             text-align: center;
         }
 
         .chat-form {
             display: flex;
-            padding: 12px 15px;
-            background: #1e293b;
+            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.8);
             gap: 10px;
-            border-top: 1px solid #334155;
+            border-top: 1px solid rgba(51, 65, 85, 0.3);
             flex-shrink: 0;
         }
         .chat-form input {
             flex: 1;
-            padding: 10px 14px;
-            background: #0f172a;
-            border: 1px solid #334155;
+            padding: 10px 16px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(51, 65, 85, 0.4);
             color: white;
-            border-radius: 25px;
+            border-radius: 50px;
             font-size: 14px;
             outline: none;
             transition: border-color 0.3s;
         }
-        .chat-form input:focus {
-            border-color: #6366f1;
-        }
-        .chat-form input::placeholder {
-            color: #64748b;
-        }
-        .chat-form input:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        .chat-form input:focus { border-color: #6366f1; }
+        .chat-form input::placeholder { color: #64748b; }
         .chat-form button {
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-            color: white;
-            border: none;
             padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s;
             font-size: 14px;
             white-space: nowrap;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
         }
-        .chat-form button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-        }
-        .chat-form button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-        .chat-form button.destek-gonder {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        }
-        .chat-form button.destek-gonder:hover {
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
-        }
+        .chat-form button:hover { transform: scale(1.05); box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4); }
+        .chat-form button.destek-gonder { background: linear-gradient(135deg, #10b981, #059669); }
+        .chat-form button.destek-gonder:hover { box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4); }
 
+        /* ===== KİŞİ LİSTESİ ===== */
         .kisiler-listesi {
             flex: 1;
             padding: 10px;
             overflow-y: auto;
-            background: #0f172a;
+            background: rgba(15, 23, 42, 0.5);
         }
         .kisi-kart {
             display: flex;
             align-items: center;
             gap: 12px;
             padding: 12px;
-            background: #1e293b;
-            margin-bottom: 5px;
-            border-radius: 8px;
+            background: rgba(30, 41, 59, 0.6);
+            margin-bottom: 6px;
+            border-radius: 10px;
             cursor: pointer;
-            border: 1px solid #334155;
-            transition: background 0.2s;
+            border: 1px solid rgba(51, 65, 85, 0.3);
+            transition: all 0.3s;
         }
-        .kisi-kart:hover {
-            background: #334155;
-            border-color: #6366f1;
-        }
+        .kisi-kart:hover { background: rgba(51, 65, 85, 0.5); border-color: #6366f1; transform: translateX(4px); }
         .kisi-avatar {
-            width: 35px;
-            height: 35px;
+            width: 36px; height: 36px;
             background: #475569;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-weight: bold;
+            font-weight: 700;
             color: #38bdf8;
             font-size: 14px;
+            flex-shrink: 0;
         }
 
+        /* ===== MODAL ===== */
         .modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
             z-index: 9999;
             justify-content: center;
             align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         .modal-overlay.active { display: flex; }
         .modal-icerik {
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            max-width: 700px;
-            width: 90%;
-            max-height: 80vh;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            border-radius: 16px;
+            max-width: 600px;
+            width: 92%;
+            max-height: 85vh;
             overflow-y: auto;
-            padding: 25px;
+            padding: 30px;
             color: #cbd5e1;
+            animation: modalIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
-        .modal-icerik h2 { color: #38bdf8; margin-top: 0; }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-icerik h2 { color: #38bdf8; margin-top: 0; font-size: 26px; }
         .modal-icerik h3 { color: #a855f7; }
         .modal-kapat-btn {
-            background: #ef4444;
+            background: rgba(239, 68, 68, 0.8);
             color: white;
             border: none;
             padding: 8px 20px;
-            border-radius: 6px;
+            border-radius: 50px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 700;
             float: right;
+            transition: all 0.3s;
         }
-        .modal-kapat-btn:hover { background: #dc2626; }
+        .modal-kapat-btn:hover { background: #dc2626; transform: scale(1.05); }
+
+        /* ===== MODAL FORM ===== */
+        .ilan-form input, .ilan-form textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(51, 65, 85, 0.4);
+            color: white;
+            border-radius: 10px;
+            box-sizing: border-box;
+            margin-bottom: 12px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+        .ilan-form input:focus, .ilan-form textarea:focus { border-color: #6366f1; outline: none; }
+        .ilan-form textarea { min-height: 100px; resize: vertical; }
 
         .kurallar-checkbox {
             display: flex;
@@ -510,8 +795,7 @@
             font-size: 14px;
         }
         .kurallar-checkbox input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+            width: 18px; height: 18px;
             accent-color: #6366f1;
             cursor: pointer;
         }
@@ -522,100 +806,7 @@
         }
         .kurallar-link:hover { color: #a855f7; }
 
-        @media (max-width: 480px) {
-            .sohbet-kapsayici, .destek-kapsayici {
-                width: 100%;
-                height: 100%;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                border-radius: 0;
-                border: none;
-            }
-            .sohbet-butonu, .destek-butonu {
-                width: 50px;
-                height: 50px;
-            }
-            .sohbet-butonu { left: 15px; }
-            .destek-butonu { right: 15px; }
-        }
-
-        .onay-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.8);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
-        }
-        .onay-modal.active { display: flex; }
-        .onay-icerik {
-            background: #1e293b;
-            border: 1px solid #ef4444;
-            border-radius: 16px;
-            max-width: 450px;
-            width: 90%;
-            padding: 30px;
-            color: #cbd5e1;
-            text-align: center;
-        }
-        .onay-icerik h3 { color: #ef4444; margin-top: 0; }
-        .onay-icerik .onay-butonlar {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            justify-content: center;
-        }
-        .onay-icerik .onay-butonlar button {
-            padding: 10px 30px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .onay-icerik .onay-butonlar button:hover { transform: scale(1.05); }
-        .onay-icerik .onay-butonlar .evet-btn {
-            background: #ef4444;
-            color: white;
-        }
-        .onay-icerik .onay-butonlar .evet-btn:hover { background: #dc2626; }
-        .onay-icerik .onay-butonlar .hayir-btn {
-            background: #475569;
-            color: white;
-        }
-        .onay-icerik .onay-butonlar .hayir-btn:hover { background: #334155; }
-        .onay-icerik .kullanici-listesi {
-            background: #0f172a;
-            border-radius: 8px;
-            padding: 10px;
-            margin: 15px 0;
-            max-height: 150px;
-            overflow-y: auto;
-            text-align: left;
-        }
-        .onay-icerik .kullanici-listesi .kullanici-item {
-            padding: 8px 12px;
-            border-bottom: 1px solid #334155;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: background 0.2s;
-        }
-        .onay-icerik .kullanici-listesi .kullanici-item:hover {
-            background: #1e293b;
-        }
-        .onay-icerik .kullanici-listesi .kullanici-item.selected {
-            background: #334155;
-            border-left: 3px solid #ef4444;
-        }
-        .onay-icerik .kullanici-listesi .kullanici-item:last-child {
-            border-bottom: none;
-        }
-
-        .resim-ekle-alani {
-            margin-bottom: 12px;
-        }
+        .resim-ekle-alani { margin-bottom: 12px; }
         .resim-ekle-alani label {
             color: #94a3b8;
             font-size: 13px;
@@ -625,24 +816,11 @@
         .resim-ekle-alani input[type="file"] {
             width: 100%;
             padding: 10px;
-            background: #0f172a;
-            border: 1px solid #475569;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(51, 65, 85, 0.4);
             color: white;
-            border-radius: 6px;
-            box-sizing: border-box;
+            border-radius: 10px;
             cursor: pointer;
-        }
-        .resim-ekle-alani input[type="file"]::-webkit-file-upload-button {
-            background: #334155;
-            color: white;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .resim-ekle-alani input[type="file"]::-webkit-file-upload-button:hover {
-            background: #475569;
         }
         .resim-onizleme {
             margin-top: 8px;
@@ -652,109 +830,225 @@
         .resim-onizleme img {
             max-width: 100%;
             max-height: 150px;
-            border-radius: 6px;
-            border: 1px solid #334155;
+            border-radius: 8px;
+            border: 1px solid rgba(51, 65, 85, 0.4);
         }
         .resim-onizleme .kaldir-btn {
-            background: #ef4444;
+            background: rgba(239, 68, 68, 0.8);
             color: white;
             border: none;
-            padding: 4px 12px;
-            border-radius: 4px;
+            padding: 4px 14px;
+            border-radius: 50px;
             cursor: pointer;
             margin-top: 4px;
             font-size: 12px;
+            transition: all 0.3s;
         }
-        .resim-onizleme .kaldir-btn:hover {
-            background: #dc2626;
+        .resim-onizleme .kaldir-btn:hover { background: #dc2626; }
+
+        /* ===== ONAY MODAL ===== */
+        .onay-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
         }
+        .onay-modal.active { display: flex; }
+        .onay-icerik {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 16px;
+            max-width: 420px;
+            width: 90%;
+            padding: 30px;
+            color: #cbd5e1;
+            text-align: center;
+            animation: modalIn 0.4s ease;
+        }
+        .onay-icerik h3 { color: #ef4444; margin-top: 0; }
+        .onay-icerik .onay-butonlar {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        .onay-icerik .onay-butonlar button {
+            padding: 10px 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .onay-icerik .onay-butonlar button:hover { transform: scale(1.05); }
+        .onay-icerik .onay-butonlar .evet-btn { background: #ef4444; color: white; }
+        .onay-icerik .onay-butonlar .evet-btn:hover { background: #dc2626; }
+        .onay-icerik .onay-butonlar .hayir-btn { background: #475569; color: white; }
+        .onay-icerik .onay-butonlar .hayir-btn:hover { background: #334155; }
+        .onay-icerik .kullanici-listesi {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 10px;
+            padding: 10px;
+            margin: 15px 0;
+            max-height: 150px;
+            overflow-y: auto;
+            text-align: left;
+        }
+        .onay-icerik .kullanici-item {
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .onay-icerik .kullanici-item:hover { background: rgba(30, 41, 59, 0.5); }
+        .onay-icerik .kullanici-item.selected {
+            background: rgba(51, 65, 85, 0.5);
+            border-left: 3px solid #ef4444;
+        }
+        .onay-icerik .kullanici-item:last-child { border-bottom: none; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .sohbet-kapsayici, .destek-kapsayici {
+                width: calc(100% - 16px);
+                height: calc(100% - 100px);
+                bottom: 90px;
+                left: 8px;
+                right: 8px;
+                border-radius: 16px;
+            }
+            .destek-kapsayici { left: 8px; right: 8px; }
+            .ilan-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+            header { padding: 10px 16px; }
+            .header-sol-bölüm { gap: 10px; }
+            .btn-glow { padding: 8px 16px; font-size: 12px; }
+            .modal-icerik { padding: 20px; }
+        }
+        @media (max-width: 480px) {
+            .ilan-grid { grid-template-columns: 1fr; }
+            .sohbet-butonu, .destek-butonu { width: 50px; height: 50px; bottom: 16px; }
+            .sohbet-butonu { left: 16px; }
+            .destek-butonu { right: 16px; }
+            .cuzdan-buton { font-size: 11px; padding: 4px 12px; }
+            .profil-avatar-btn { width: 32px; height: 32px; }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6366f1; }
     </style>
 </head>
 <body>
+
+    <!-- ===== ARKA PLAN ANİMASYONU ===== -->
+    <div class="bg-animation">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
+
+    <!-- ===== HEADER ===== -->
     <header>
         <div class="header-sol-bölüm">
             <a href="/"><img src="/gif.png" alt="İtemlerinMarketi" class="logo-img" onerror="this.onerror=null; this.outerHTML='İtemlerinMarketi';"></a>
-            <a href="/ilan-ekle" class="oval-ilan-ekle-btn">➕ İlan Ekle</a>
-            <button class="oval-ilan-ekle-btn kurallar-btn" onclick="kurallariGoster(event)">📋 Kurallar</button>
+            <button class="btn-glow" onclick="ilanEkleModalAc()"><i class="fas fa-plus"></i> İlan Ekle</button>
+            <button class="btn-glow btn-glow-gold" onclick="kurallariGoster(event)"><i class="fas fa-book"></i> Kurallar</button>
         </div>
         
         <div class="header-sag-grup">
+            <!-- BİLDİRİM -->
             <div class="bildirim-dropdown" id="bildirimKapsayici" style="display: none;">
-                <div class="bildirim-buton" onclick="bildirimMenuAcKapat(event)">
-                    🔔 <span class="bildirim-sayac" id="bSayac">0</span>
-                </div>
+                <button class="bildirim-buton" onclick="bildirimMenuAcKapat(event)">
+                    <i class="fas fa-bell"></i>
+                    <span class="bildirim-sayac" id="bSayac">0</span>
+                </button>
                 <div class="bildirim-menu" id="bildirimListesiGövde"></div>
             </div>
 
+            <!-- CÜZDAN -->
             <div class="cuzdan-dropdown" id="cuzdanKapsayici" style="display: none;">
                 <div class="cuzdan-buton">
-                    <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                    <i class="fas fa-wallet"></i>
                     <span id="cuzdanBakiyeYazi">0.00 ₺</span>
                 </div>
                 <div class="dropdown-menu">
-                    <a href="/bakiye">💵 Bakiye Yükle</a>
-                    <a href="/para-cek">💳 Para Çek</a>
+                    <a href="/bakiye"><i class="fas fa-arrow-up"></i> Bakiye Yükle</a>
+                    <a href="/para-cek"><i class="fas fa-arrow-down"></i> Para Çek</a>
                 </div>
             </div>
 
-            <div id="userInfo" style="font-weight: bold; color: #10b981; font-size: 13px;">Giriş Yapılmadı</div>
+            <!-- KULLANICI BİLGİSİ -->
+            <div id="userInfo" style="font-weight: 600; color: #10b981; font-size: 13px;">Giriş Yapılmadı</div>
 
+            <!-- PROFİL -->
             <div class="profil-dropdown" id="profilGrup" style="display: none;">
                 <img src="/profil.jpg" id="headerProfilResmi" class="profil-avatar-btn" onclick="profilMenusuAcKapat(event)">
                 <div class="profil-menu" id="profilAçilirMenu">
-                    <a href="/profil">👤 Profilim</a>
-                    <a href="/destek-talebi">🎫 Destek Talebi</a>
-                    <a href="#" onclick="sistemdenCikisYap()">✕ Çıkış Yap</a>
+                    <a href="/profil"><i class="fas fa-user"></i> Profilim</a>
+                    <a href="/destek-talebi"><i class="fas fa-ticket"></i> Destek Talebi</a>
+                    <a href="#" onclick="sistemdenCikisYap()"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a>
                 </div>
             </div>
         </div>
 
-        <nav id="navMenu" style="display: flex; gap: 10px;">
-            <a href="/">Pazar</a>
-            <a href="/login" id="loginLink">Giriş</a>
+        <nav id="navMenu" style="display: flex; gap: 10px; align-items:center;">
+            <a href="/" style="color:#38bdf8; text-decoration:none; font-weight:600;"><i class="fas fa-store"></i> Pazar</a>
+            <a href="/login" id="loginLink" style="color:#94a3b8; text-decoration:none; font-weight:600;"><i class="fas fa-sign-in-alt"></i> Giriş</a>
         </nav>
     </header>
-    
+
+    <!-- ===== ANA SAYFA ===== -->
     <div class="container">
         <div class="pazar-wrapper">
             <div class="ilan-listesi-kutu">
-                <h3 style="color:#38bdf8;">🛒 İtemlerin Pazarı</h3>
-                <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(230px,1fr)); gap:15px;">
+                <h3><i class="fas fa-store-alt"></i> İtemlerin Pazarı</h3>
+                <div class="ilan-grid" id="pazarGrid">
                     <% if (ilanlar && ilanlar.length > 0) { %>
                         <% ilanlar.forEach(ilan => { %>
                             <div class="card" data-satici="<%= ilan.satici %>" data-id="<%= ilan._id %>">
-                                <!-- DÜZENLE BUTONU (admin9595 veya ilan sahibi - JavaScript ile kontrol edilecek) -->
-                                <div id="duzenleAlani-<%= ilan._id %>" style="position:absolute; top:12px; right:12px; z-index:10;"></div>
-                                
-                                <a href="/ilan/<%= ilan._id %>" style="text-decoration:none; color:inherit; display:block;">
+                                <div id="duzenleAlani-<%= ilan._id %>" style="position:absolute; top:16px; right:16px; z-index:10;"></div>
+                                <a href="/ilan/<%= ilan._id %>">
                                     <img src="<%= ilan.resim || 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23334155%22 stroke-width=%222%22><rect x=%223%22 y=%223%22 width=%2218%22 height=%2218%22 rx=%222%22/><circle cx=%228.5%22 cy=%228.5%22 r=%221.5%22/><path d=%22M21 15l-5-5L5 21%22/></svg>' %>" class="pazar-ilan-img" alt="<%= ilan.baslik %>">
-                                    <span class="teslimat-rozet">⏱️ <%= ilan.sure || '24 Saat' %></span>
-                                    <h3 style="color:white;"><%= ilan.baslik %></h3>
-                                    <p style="font-size:13px; color:#94a3b8; margin:5px 0;">Satıcı: <strong><%= ilan.satici %></strong></p>
+                                    <span class="teslimat-rozet"><i class="far fa-clock"></i> <%= ilan.sure || '24 Saat' %></span>
+                                    <div class="ilan-baslik"><%= ilan.baslik %></div>
+                                    <div class="ilan-satici">Satıcı: <strong><%= ilan.satici %></strong></div>
                                     <div class="price"><%= ilan.fiyat %> TL</div>
                                 </a>
-                                <div style="display:flex; gap:10px; margin-top:10px;">
-                                    <button class="btn" style="padding:6px 12px; font-size:13px; flex:1;" onclick="ilanSatinAl('<%= ilan._id %>', <%= ilan.fiyat %>, '<%= ilan.satici %>', '<%= ilan.baslik.replace(/'/g, "\\'") %>')">Satın Al</button>
-                                    <button class="btn" style="padding:6px 12px; font-size:13px; background-color:#1e293b; color:#38bdf8; border:1px solid #38bdf8;" onclick="sohbetOdasiTetikle('<%= ilan.satici %>')">💬 Mesaj At</button>
+                                <div class="kart-buton-grup">
+                                    <button class="btn-kart btn-kart-satin" onclick="ilanSatinAl('<%= ilan._id %>', <%= ilan.fiyat %>, '<%= ilan.satici %>', '<%= ilan.baslik.replace(/'/g, "\\'") %>')"><i class="fas fa-shopping-cart"></i> Satın Al</button>
+                                    <button class="btn-kart btn-kart-mesaj" onclick="sohbetOdasiTetikle('<%= ilan.satici %>')"><i class="fas fa-comment"></i> Mesaj</button>
                                 </div>
                             </div>
                         <% }); %>
                     <% } else { %>
-                        <div style="color:#94a3b8; text-align:center; padding:40px; grid-column:1/-1;">📭 Henüz ilan yok. İlk ilanı sen ekle!</div>
+                        <div style="color:#94a3b8; text-align:center; padding:60px; grid-column:1/-1; background:rgba(30,41,59,0.5); border-radius:16px; border:1px dashed rgba(51,65,85,0.4);">
+                            <i class="fas fa-box-open" style="font-size:48px; display:block; margin-bottom:16px; color:#475569;"></i>
+                            <p style="font-size:18px;">📭 Henüz ilan yok</p>
+                            <p style="font-size:14px; color:#64748b;">İlk ilanı sen ekle! <i class="fas fa-arrow-right"></i></p>
+                        </div>
                     <% } %>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- İLAN EKLEME MODAL -->
+    <!-- ===== İLAN EKLEME MODAL ===== -->
     <div id="ilanEkleModal" class="modal-overlay">
         <div class="modal-icerik">
-            <button class="modal-kapat-btn" onclick="ilanEkleModalKapat()">✕ Kapat</button>
-            <h2>📦 Yeni İlan Ekle</h2>
+            <button class="modal-kapat-btn" onclick="ilanEkleModalKapat()"><i class="fas fa-times"></i> Kapat</button>
+            <h2><i class="fas fa-plus-circle"></i> Yeni İlan Ekle</h2>
             <form id="ilanFormu" class="ilan-form">
-                <input type="text" id="ilanBaslik" placeholder="Ürün başlığı" required style="width:100%; padding:10px; background:#0f172a; border:1px solid #475569; color:white; border-radius:6px; box-sizing:border-box; margin-bottom:12px;">
-                <input type="number" id="ilanFiyat" placeholder="Fiyat (TL)" step="0.01" required style="width:100%; padding:10px; background:#0f172a; border:1px solid #475569; color:white; border-radius:6px; box-sizing:border-box; margin-bottom:12px;">
+                <input type="text" id="ilanBaslik" placeholder="Ürün başlığı" required>
+                <input type="number" id="ilanFiyat" placeholder="Fiyat (TL)" step="0.01" required>
                 
                 <div class="kurallar-checkbox">
                     <input type="checkbox" id="kurallarOnay" required>
@@ -763,151 +1057,138 @@
                     </label>
                 </div>
 
-                <textarea id="ilanDetay" placeholder="Ürün açıklaması..." rows="3" style="width:100%; padding:10px; background:#0f172a; border:1px solid #475569; color:white; border-radius:6px; box-sizing:border-box; margin-bottom:12px;"></textarea>
-                <input type="text" id="ilanSure" placeholder="Teslimat süresi (örn: 15 Dakika)" style="width:100%; padding:10px; background:#0f172a; border:1px solid #475569; color:white; border-radius:6px; box-sizing:border-box; margin-bottom:12px;">
+                <textarea id="ilanDetay" placeholder="Ürün açıklaması..." rows="3"></textarea>
+                <input type="text" id="ilanSure" placeholder="Teslimat süresi (örn: 15 Dakika)" value="24 Saat">
                 
                 <div class="resim-ekle-alani">
-                    <label>📷 Ürün Görseli (Opsiyonel)</label>
+                    <label><i class="fas fa-image"></i> Ürün Görseli (Opsiyonel)</label>
                     <input type="file" id="ilanResimInput" accept="image/*">
                     <div class="resim-onizleme" id="ilanResimOnizleme">
                         <img id="ilanResimGoster" src="#" alt="Görsel önizleme">
-                        <button type="button" class="kaldir-btn" onclick="ilanResimTemizle()">✕ Kaldır</button>
+                        <button type="button" class="kaldir-btn" onclick="ilanResimTemizle()"><i class="fas fa-times"></i> Kaldır</button>
                     </div>
                 </div>
 
-                <button type="submit" class="btn" style="width:100%; padding:12px; background:linear-gradient(135deg, #a855f7, #6366f1); color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">🚀 İlanı Yayınla</button>
+                <button type="submit" class="btn-glow" style="width:100%; justify-content:center; padding:14px;"><i class="fas fa-rocket"></i> İlanı Yayınla</button>
             </form>
         </div>
     </div>
 
-    <!-- İLAN KURALLARI MODAL -->
+    <!-- ===== KURALLAR MODAL ===== -->
     <div id="kurallarModal" class="modal-overlay">
         <div class="modal-icerik">
-            <button class="modal-kapat-btn" onclick="kurallarModalKapat()">✕ Kapat</button>
-            <h2>📋 İTEMLERİNMARKETİ İLAN VERME KURALLARI</h2>
-            <div style="font-size:13px; line-height:1.8; color:#cbd5e1;">
-                <p>Aşağıda yazan ilan verme kuralları bireysel ve kurumsal üyeler dahil ve tüm kategori tipleri için geçerlidir. İlan girişinde bulunan Üye, ilan verme kurallarına, üyelik ve kullanıcı sözleşmeleri ile bu belgenin devamında belirtilen Yasak Ürünler Listesi'nde belirtilen kurallara uymayı kabul ve taahhüt etmiş sayılır.</p>
-                <h3>1. TANIMLAR</h3>
-                <p><strong>İNTERNET SİTESİ :</strong> Tüm hakları Şirket'e ait olan, www.itemlerinmarketi.com alan adını ve bu alan adına bağlı alt alan adlarından oluşan internet sitesidir.</p>
-                <p><strong>MOBİL UYGULAMA :</strong> Tüm hakları Şirket'e ait olan, cep telefonu, tablet ve benzeri taşınabilir cihazlarda çalışan İtemlerinMarketi adlı yazılımdır.</p>
+            <button class="modal-kapat-btn" onclick="kurallarModalKapat()"><i class="fas fa-times"></i> Kapat</button>
+            <h2><i class="fas fa-book"></i> İlan Verme Kuralları</h2>
+            <div style="font-size:13px; line-height:1.8; color:#cbd5e1; max-height:50vh; overflow-y:auto;">
+                <p>Aşağıda yazan ilan verme kuralları bireysel ve kurumsal üyeler dahil ve tüm kategori tipleri için geçerlidir.</p>
+                <h3 style="color:#a855f7;">1. TANIMLAR</h3>
+                <p><strong>İNTERNET SİTESİ :</strong> www.itemlerinmarketi.com</p>
                 <p><strong>İTEMLERİNMARKETİ :</strong> İnternet Sitesi ve Mobil Uygulama ile birlikte "İtemlerinMarketi" olarak anılmaktadır.</p>
-                <p><strong>ÜYE :</strong> İtemlerinMarketi üzerinde üye olmuş ve hizmetlerden faydalanan gerçek veya tüzel kişileri ifade eder.</p>
-                <p><strong>SATICI:</strong> İtemlerinMarketi'ya üye olarak kendisine ait Ürün'ü Alıcıya satan kişidir.</p>
-                <p><strong>ALICI:</strong> İtemlerinMarketi'ya üye olarak ürün satın alan kişidir.</p>
-                <h3>2. GENEL HÜKÜMLER</h3>
+                <h3 style="color:#a855f7;">2. GENEL HÜKÜMLER</h3>
                 <p>2.1. İtemlerinMarketi "Aracı Hizmet Sağlayıcı" sıfatını haizdir.</p>
                 <p>2.2. İtemlerinMarketi'ya üye olmayanlar ilan veremez.</p>
-                <p>2.3. İtemlerinMarketi'nda ilan vermek ücretsizdir.</p>
-                <p>2.4. Satıcı, ilan vermeden önce kuralları okuduğunu ve anladığını kabul eder.</p>
-                <p>2.5. Satıcı, ilanının yasalara uygun olduğunu kabul eder.</p>
-                <p>2.6. İlan ile ilgili tüm sorumluluk Satıcı'ya aittir.</p>
-                <p>2.8. Piyasa fiyatlarının çok altında veya üstünde ilanlar yayından kaldırılabilir.</p>
-                <p>2.10. Aynı ürüne ait ikinci ilan girilemez.</p>
-                <p>2.11. İlan içeriğinde başka platforma yönlendirme yasaktır.</p>
+                <p>2.3. İlan vermek ücretsizdir.</p>
+                <p>2.4. Satıcı, ilan vermeden önce kuralları okuduğunu kabul eder.</p>
                 <p>2.17. Yasak içerikler (ırkçılık, terör, pornografi, hakaret vb.) yasaktır.</p>
-                <p>2.18. Kurallara aykırı ilanlar yayından kaldırılır.</p>
-                <h3>3. YASAKLI ÜRÜNLER LİSTESİ</h3>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; font-size:12px;">
-                    <span>• Sağlık Beyanlı Ürünler</span><span>• Kültür ve Tabiat Varlıkları</span>
-                    <span>• Ateşli Silah ve Kesici Aletler</span><span>• Yanıcı ve Patlayıcı Malzemeler</span>
-                    <span>• Bandrolsüz Ürünler</span><span>• Alkollü İçecek ve Tütün</span>
-                    <span>• Cinsel İçerik ve Pornografi</span><span>• Taklit Ürünler</span>
-                    <span>• Resmi Belge Satışı</span><span>• Trafik Aygıtları ve Plaka</span>
-                    <span>• Fon ve Hisse Senedi</span><span>• Organ</span>
-                    <span>• Evcil Hayvan ve Yasaklı Hayvanlar</span><span>• Şans Oyunu Biletleri</span>
-                    <span>• Tarım İlaçları</span><span>• Telsiz Ürünleri</span>
-                    <span>• Etkinlik Biletleri</span><span>• İlaç Satışı</span>
-                    <span>• Siyasi İçerikli Ürünler</span><span>• Resmi Kıyafet & Askeri Malzemeler</span>
-                    <span>• Uyuşturucu Madde</span><span>• Hack Yazılımları</span>
-                    <span>• Sosyal Medya Pazarlama</span><span>• SEO Hizmetleri</span>
-                    <span>• Her Türlü Gıda</span><span>• Sanal Para Satışı</span>
-                    <span>• IMEI kopyalanmış Telefonlar</span><span>• Çalıntı Ürünler</span>
-                    <span>• Emlak ve Arsa Satışı</span><span>• Her Türlü Vasıta Satışı</span>
-                    <span>• Kozmetik ve Sağlık Ürünleri</span><span>• Film platformu ürünleri</span>
-                    <span>• İç Giyim</span><span>• İş İlanları</span>
-                    <span>• Ön Sipariş İlanları</span><span>• VDS/Sunucu ilanları</span>
-                    <span>• Riot Points, Valorant Points</span><span>• Hile/3. parti yazılımlar</span>
-                    <span>• IPTV, BeinConnect, Digitürk</span><span>• BluTV, Exxen hesapları</span>
-                    <span>• Yemeksepeti, Getir hesapları</span><span>• Mining (madencilik)</span>
-                    <span>• Discord Nitro Generator</span><span>• Twitch bit bağışları</span>
-                    <span>• Telefon onaylama</span><span>• Sonoyuncu</span>
-                    <span>• 1000+ Youtube Abone</span><span>• Minecraft itemsadder plugin</span>
-                    <span>• CD Key satışları</span><span>• NordVPN</span>
+                <h3 style="color:#a855f7;">3. YASAKLI ÜRÜNLER LİSTESİ</h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; font-size:12px;">
+                    <span>• Sağlık Beyanlı Ürünler</span>
+                    <span>• Kültür ve Tabiat Varlıkları</span>
+                    <span>• Ateşli Silah ve Kesici Aletler</span>
+                    <span>• Yanıcı ve Patlayıcı Malzemeler</span>
+                    <span>• Bandrolsüz Ürünler</span>
+                    <span>• Alkollü İçecek ve Tütün</span>
+                    <span>• Cinsel İçerik ve Pornografi</span>
+                    <span>• Taklit Ürünler</span>
+                    <span>• Resmi Belge Satışı</span>
+                    <span>• Trafik Aygıtları ve Plaka</span>
+                    <span>• Fon ve Hisse Senedi</span>
+                    <span>• Organ</span>
+                    <span>• Evcil Hayvan ve Yasaklı Hayvanlar</span>
+                    <span>• Şans Oyunu Biletleri</span>
+                    <span>• Uyuşturucu Madde</span>
+                    <span>• Hack Yazılımları</span>
+                    <span>• Sosyal Medya Pazarlama</span>
+                    <span>• SEO Hizmetleri</span>
+                    <span>• Sanal Para Satışı</span>
+                    <span>• Çalıntı Ürünler</span>
+                    <span>• Emlak ve Arsa Satışı</span>
+                    <span>• Riot Points, Valorant Points</span>
+                    <span>• IPTV, BeinConnect, Digitürk</span>
+                    <span>• Discord Nitro Generator</span>
+                    <span>• NordVPN</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- SOHBET BUTONU -->
+    <!-- ===== SOHBET BUTONU ===== -->
     <button class="sohbet-butonu" onclick="sohbetPencerisiniAcKapat()" aria-label="Sohbet">
         <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
     </button>
 
-    <!-- DESTEK BUTONU -->
+    <!-- ===== DESTEK BUTONU ===== -->
     <button class="destek-butonu" onclick="destekPencerisiniAcKapat()" aria-label="Canlı Destek">
         <img src="/destek.png" alt="Canlı Destek">
     </button>
 
-    <!-- SOHBET KUTUSU -->
+    <!-- ===== SOHBET KUTUSU ===== -->
     <div class="sohbet-kapsayici" id="sohbetKapsayici">
         <div class="chat-baslik sohbet-baslik">
-            <div class="baslik-sol">
-                <span>💬 Sohbet</span>
-            </div>
-            <button class="kapat-btn" onclick="sohbetPencerisiniAcKapat()">✕</button>
+            <div class="baslik-sol"><i class="fas fa-comments"></i> <span>Sohbet</span></div>
+            <button class="kapat-btn" onclick="sohbetPencerisiniAcKapat()"><i class="fas fa-times"></i></button>
         </div>
         <div class="kisiler-listesi" id="kisiListesiGövdeSol"></div>
         <div class="chat-ekran" id="ekranKonusmaSol" style="display: none; flex-direction: column; height: 100%;">
-            <div style="display:flex; align-items:center; padding:10px 15px; background:#1e293b; border-bottom:1px solid #334155; gap:10px;">
-                <span style="cursor:pointer; font-size:18px; color:#94a3b8;" onclick="kisilerEkraninaDonSol()">←</span>
+            <div style="display:flex; align-items:center; padding:10px 16px; background:rgba(15,23,42,0.5); border-bottom:1px solid rgba(51,65,85,0.3); gap:10px;">
+                <span style="cursor:pointer; font-size:18px; color:#94a3b8;" onclick="kisilerEkraninaDonSol()"><i class="fas fa-arrow-left"></i></span>
                 <span id="sohbetHedefAdSol" style="color:white; font-weight:600;">Kullanıcı</span>
             </div>
             <div class="chat-mesajlar" id="chatMesajAlaniSol"></div>
             <form class="chat-form" id="chatFormuSol">
                 <input type="text" id="chatMesajInputSol" placeholder="Mesajınızı yazın..." required autocomplete="off">
-                <button type="submit">Gönder</button>
+                <button type="submit"><i class="fas fa-paper-plane"></i></button>
             </form>
         </div>
     </div>
 
-    <!-- DESTEK KUTUSU -->
+    <!-- ===== DESTEK KUTUSU ===== -->
     <div class="destek-kapsayici" id="destekKapsayici">
         <div class="chat-baslik destek-baslik">
-            <div class="baslik-sol">
-                <span>🛡️ Canlı Destek</span>
-                <span class="online-nokta"></span>
-                <span style="font-size:12px; opacity:0.8; font-weight:400;">Çevrimiçi</span>
-            </div>
+            <div class="baslik-sol"><i class="fas fa-headset"></i> <span>Canlı Destek</span> <span class="online-nokta"></span></div>
             <div style="display:flex; gap:8px; align-items:center;">
-                <button class="sonlandir-btn" id="sonlandirBtn" onclick="destekSonlandirModalAc()" style="display:none;">🔚 Sohbeti Sonlandır</button>
-                <button class="kapat-btn" onclick="destekPencerisiniAcKapat()">✕</button>
+                <button class="sonlandir-btn" id="sonlandirBtn" onclick="destekSonlandirModalAc()" style="display:none; background:rgba(239,68,68,0.8); color:white; border:none; padding:4px 12px; border-radius:50px; font-size:11px; font-weight:700; cursor:pointer; transition:all 0.3s;"><i class="fas fa-stop"></i> Sonlandır</button>
+                <button class="kapat-btn" onclick="destekPencerisiniAcKapat()"><i class="fas fa-times"></i></button>
             </div>
         </div>
         <div class="chat-mesajlar" id="destekMesajAlani">
-            <div class="chat-mesaj sistem">🤖 Hoş geldin! Size nasıl yardımcı olabilirim?</div>
+            <div class="chat-mesaj sistem"><i class="fas fa-robot"></i> Hoş geldin! Size nasıl yardımcı olabilirim?</div>
         </div>
         <form class="chat-form" id="destekFormu">
             <input type="text" id="destekMesajInput" placeholder="Mesajınızı yazın..." required autocomplete="off">
-            <button type="submit" class="destek-gonder">Gönder</button>
+            <button type="submit" class="destek-gonder"><i class="fas fa-paper-plane"></i></button>
         </form>
     </div>
 
-    <!-- DESTEK SONLANDIRMA ONAY MODAL -->
+    <!-- ===== SONLANDIRMA ONAY MODAL ===== -->
     <div class="onay-modal" id="sonlandirModal">
         <div class="onay-icerik">
-            <h3>🔚 Sohbeti Sonlandır</h3>
+            <h3><i class="fas fa-exclamation-triangle"></i> Sohbeti Sonlandır</h3>
             <p style="color:#94a3b8;">Hangi kullanıcının destek sohbetini sonlandırmak istiyorsun?</p>
             <div class="kullanici-listesi" id="kullaniciListesiModal"></div>
             <div class="onay-butonlar">
-                <button class="hayir-btn" onclick="destekSonlandirModalKapat()">❌ İptal</button>
-                <button class="evet-btn" id="sonlandirOnaylaBtn" onclick="destekSonlandir()">🔚 Sonlandır</button>
+                <button class="hayir-btn" onclick="destekSonlandirModalKapat()"><i class="fas fa-times"></i> İptal</button>
+                <button class="evet-btn" id="sonlandirOnaylaBtn" onclick="destekSonlandir()"><i class="fas fa-check"></i> Sonlandır</button>
             </div>
         </div>
     </div>
 
+    <!-- ============================================ -->
+    <!-- ===== JAVASCRIPT ===== -->
+    <!-- ============================================ -->
     <script>
     // ============================================
-    // TAM SCRIPT
+    // TAM SCRIPT - FULL VFX + PREMIUM
     // ============================================
     
     const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
@@ -929,25 +1210,17 @@
             
             if (!satici || !id) return;
             
-            // admin9595 veya ilan sahibi mi?
             if (user.kullaniciAdi === 'admin9595' || user.kullaniciAdi === satici) {
                 const alan = document.getElementById('duzenleAlani-' + id);
                 if (alan) {
-                    const btn = document.createElement('button');
-                    btn.className = 'ilan-ust-eylem-btn btn-duzenle';
-                    btn.textContent = '⚙️ Düzenle';
-                    btn.onclick = function(e) {
-                        e.stopPropagation();
-                        window.location.href = '/ilan-duzenle?id=' + id;
-                    };
-                    alan.appendChild(btn);
+                    alan.innerHTML = `<button class="ilan-ust-eylem-btn btn-duzenle" onclick="event.stopPropagation(); window.location.href='/ilan-duzenle?id=${id}';"><i class="fas fa-edit"></i> Düzenle</button>`;
                 }
             }
         });
     }
 
     // ============================================
-    // RESİM YÜKLEME FONKSİYONLARI
+    // RESİM YÜKLEME
     // ============================================
     document.getElementById('ilanResimInput').addEventListener('change', function(e) {
         const file = e.target.files[0];
@@ -1036,7 +1309,7 @@
         const alan = document.getElementById('destekMesajAlani');
         alan.innerHTML = '';
         if (mesajlar.length === 0) {
-            alan.innerHTML = `<div class="chat-mesaj sistem">🤖 Hoş geldin!</div>`;
+            alan.innerHTML = `<div class="chat-mesaj sistem"><i class="fas fa-robot"></i> Hoş geldin! Size nasıl yardımcı olabilirim?</div>`;
             return;
         }
         mesajlar.forEach(m => {
@@ -1053,7 +1326,7 @@
                 div.innerHTML = `${m.metin}<span class="mesaj-zaman">${new Date().toLocaleTimeString()}</span>`;
             } else {
                 div.classList.add('gelen');
-                div.innerHTML = `<span class="mesaj-gonderen">🛡️ Destek</span>${m.metin}<span class="mesaj-zaman">${new Date().toLocaleTimeString()}</span>`;
+                div.innerHTML = `<span class="mesaj-gonderen"><i class="fas fa-headset"></i> Destek</span>${m.metin}<span class="mesaj-zaman">${new Date().toLocaleTimeString()}</span>`;
             }
             alan.appendChild(div);
         });
@@ -1085,18 +1358,22 @@
         liste.innerHTML = '';
         secilenSonlandirilacakKullanici = null;
         let tumUyeler = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
-        tumUyeler.forEach(u => {
-            if (u.kullaniciAdi === 'admin9595') return;
-            const item = document.createElement('div');
-            item.className = 'kullanici-item';
-            item.textContent = `👤 ${u.kullaniciAdi}`;
-            item.onclick = function() {
-                document.querySelectorAll('.kullanici-item').forEach(el => el.classList.remove('selected'));
-                this.classList.add('selected');
-                secilenSonlandirilacakKullanici = u.kullaniciAdi;
-            };
-            liste.appendChild(item);
-        });
+        if (tumUyeler.length === 0) {
+            liste.innerHTML = '<div style="padding:12px; color:#94a3b8; text-align:center;">Hiç kullanıcı yok.</div>';
+        } else {
+            tumUyeler.forEach(u => {
+                if (u.kullaniciAdi === 'admin9595') return;
+                const item = document.createElement('div');
+                item.className = 'kullanici-item';
+                item.textContent = `👤 ${u.kullaniciAdi}`;
+                item.onclick = function() {
+                    document.querySelectorAll('.kullanici-item').forEach(el => el.classList.remove('selected'));
+                    this.classList.add('selected');
+                    secilenSonlandirilacakKullanici = u.kullaniciAdi;
+                };
+                liste.appendChild(item);
+            });
+        }
         modal.classList.add('active');
     }
 
@@ -1124,15 +1401,10 @@
     function destekSohbetiniTemizle() {
         if (!aktif) return;
         const odaKey = [aktif.kullaniciAdi, 'admin9595'].sort().join('_');
-        // Sadece sistem mesajlarını temizle, kullanıcı mesajlarını değil
         let mesajlar = JSON.parse(localStorage.getItem(`ozel_oda_${odaKey}`) || '[]');
-        // Son 5 mesajı sakla (kullanıcı mesajları)
         mesajlar = mesajlar.filter(m => m.gonderen !== 'SİSTEM' || m.metin.includes('Hoş geldin'));
         localStorage.setItem(`ozel_oda_${odaKey}`, JSON.stringify(mesajlar));
-        if (destekAktif) {
-            destekMesajlariGoster(mesajlar);
-        }
-        console.log('🧹 Destek sohbeti temizlendi (1 saat)');
+        if (destekAktif) destekMesajlariGoster(mesajlar);
     }
 
     // ============================================
@@ -1156,7 +1428,7 @@
         if (list.length === 0) { bGövde.innerHTML = '<div class="bildirim-item">Bildirim yok.</div>'; return; }
         list.forEach(b => {
             const div = document.createElement('div'); div.className = 'bildirim-item';
-            if(b.durum === 'yeni') div.style.background = '#334155';
+            if(b.durum === 'yeni') div.style.background = 'rgba(51,65,85,0.3)';
             div.innerHTML = `${b.metin} <small>${b.tarih}</small>`;
             bGövde.appendChild(div);
         });
@@ -1212,22 +1484,10 @@
     }
 
     // ============================================
-    // İLAN LİSTELEME (EJS ile render edildi, bu fonksiyon boş)
+    // İLAN LİSTELEME (EJS ile render)
     // ============================================
     function ilanlariListele() {
-        console.log('✅ İlanlar EJS ile render edildi');
-        // Düzenle butonlarını göster
         setTimeout(duzenleButonlariniGoster, 100);
-    }
-
-    function ilanRaporlaSimulasyon(satici, baslik) {
-        if (!aktif) { alert('Giriş yap!'); return; }
-        const neden = prompt(`"${satici}" kullanıcısını rapor etme nedenin?`);
-        if (!neden) return;
-        let sikayetler = JSON.parse(localStorage.getItem('kullaniciSikayetleri') || '[]');
-        sikayetler.push({ id: Date.now(), sikayetEden: aktif.kullaniciAdi, suclu: satici, mesaj: `Pazar İlanı Raporu: ${baslik}`, neden: neden, tarih: new Date().toLocaleTimeString() });
-        localStorage.setItem('kullaniciSikayetleri', JSON.stringify(sikayetler));
-        alert("✅ İlan şikayetiniz iletildi!");
     }
 
     // ============================================
@@ -1240,8 +1500,7 @@
         document.getElementById('ilanEkleModal').classList.remove('active');
     }
 
-    document.querySelector('.oval-ilan-ekle-btn:not(.kurallar-btn)').addEventListener('click', function(e) {
-        e.preventDefault();
+    document.querySelector('.btn-glow:not(.btn-glow-gold)').addEventListener('click', function(e) {
         if (!aktif) { alert('Giriş yap!'); window.location.href = '/login'; return; }
         ilanEkleModalAc();
     });
@@ -1345,6 +1604,10 @@
         let konusulacaklar = tumUyeler.map(u => u.kullaniciAdi).filter(name => name !== aktif.kullaniciAdi);
         if (!konusulacaklar.includes('admin9595') && aktif.kullaniciAdi !== 'admin9595') {
             konusulacaklar.push('admin9595');
+        }
+        if (konusulacaklar.length === 0) {
+            govde.innerHTML = '<div style="padding:20px; text-align:center; color:#94a3b8;">Henüz mesajlaşacak kişi yok.</div>';
+            return;
         }
         konusulacaklar.forEach(isim => {
             const kart = document.createElement('div'); 
@@ -1487,10 +1750,9 @@
     // ============================================
     ilanlariListele();
     
-    // 1 SAATTE BİR DESTEK SOHBETİNİ TEMİZLE (3600000 ms)
     setInterval(() => {
         destekSohbetiniTemizle();
-    }, 3600000); // 1 saat = 3600000 ms
+    }, 3600000);
     
     setInterval(() => { 
         if (document.getElementById('ekranKonusmaSol').style.display === 'flex') { 
@@ -1499,7 +1761,6 @@
         destekKontrol();
         bildirimleriYukle(); 
         bakiyeGuncelle(); 
-        // Düzenle butonlarını yeniden kontrol et
         duzenleButonlariniGoster();
     }, 3000);
     </script>
