@@ -1129,7 +1129,24 @@
     let destekAktif = false;
     let secilenSonlandirilacakKullanici = null;
     let yuklenenResimBase64 = "";
+    function sohbetOdasiTetikle(saticiAdi) {
+    if (!aktif) {
+        alert('⚠️ Mesaj atmak için önce giriş yapmalısın kanka!');
+        window.location.href = '/login';
+        return;
+    }
+    if (aktif.kullaniciAdi === saticiAdi) {
+        alert('📝 Kendine mesaj atamazsın kanka!');
+        return;
+    }
+    
+    // --- YENİ EKLENEN SATIR (SES ÇALDIRMA) ---
+    bildirimSesiCal(); 
+    // ------------------------------------------
 
+    localStorage.setItem('sohbet_acilacak_kullanici', saticiAdi);
+    window.location.href = '/';
+}
     // ============================================
     // DÜZENLE BUTONLARI
     // ============================================
