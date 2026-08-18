@@ -525,7 +525,7 @@ app.get('/kvkk', (req, res) => {
                 <h2>7. KVKK Başvuru ve İletişim</h2>
                 <p>
                     KVKK kapsamında haklarınızı kullanmak veya sorularınız için bize 
-                    <span class="highlight">itemlerinmarketi@example.com</span> adresinden ulaşabilirsiniz.
+                    <span class="highlight">itemlerinmarketi@gmail.com</span> adresinden ulaşabilirsiniz.
                     <br><br>
                     Başvurularınız, KVKK'nın 13. maddesi uyarınca <strong>30 gün</strong> içinde sonuçlandırılacaktır.
                 </p>
