@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= ilan.baslik %> - İtemlerinMarketi</title>
+    <title><%= ilan ? ilan.baslik : 'İlan Bulunamadı' %> - İtemlerinMarketi</title>
     <link rel="stylesheet" href="/style.css">
     <style>
         body {
@@ -148,7 +148,6 @@
             background: #7f1d1d;
             color: #fca5a5;
         }
-        /* SATICI BİLGİ KARTI */
         .satici-kart {
             background: #0f172a;
             padding: 15px;
@@ -200,7 +199,6 @@
         .satici-kart .mesaj-at-btn:hover {
             background: #4f46e5;
         }
-        /* GÜVENLİ HAVUZ BADGE */
         .guvenli-havuz {
             display: inline-block;
             background: #1e1b4b;
@@ -210,6 +208,15 @@
             font-size: 12px;
             border: 1px solid #a855f7;
             margin-top: 5px;
+        }
+        .btn-duzenle {
+            background: #38bdf8;
+            color: #0f172a;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
         }
         @media (max-width: 600px) {
             .ilan-detay-container {
@@ -228,76 +235,87 @@
     <div class="ilan-detay-container">
         <a href="/" class="btn btn-geri" style="margin-bottom:20px;">← Ana Sayfaya Dön</a>
 
-        <!-- İLAN GÖRSELİ -->
-        <% if (ilan.resim && ilan.resim.length > 0 && ilan.resim !== 'undefined') { %>
-            <img src="<%= ilan.resim %>" alt="<%= ilan.baslik %>" class="ilan-resim" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23334155%22 stroke-width=%222%22><rect x=%223%22 y=%223%22 width=%2218%22 height=%2218%22 rx=%222%22/><circle cx=%228.5%22 cy=%228.5%22 r=%221.5%22/><path d=%22M21 15l-5-5L5 21%22/></svg>'">
+        <% if (!ilan) { %>
+            <!-- İLAN BULUNAMADI -->
+            <div style="text-align:center; padding:60px 20px;">
+                <h1 style="color:#ef4444; font-size:48px;">🔍 İlan Bulunamadı</h1>
+                <p style="color:#94a3b8; font-size:18px; margin:20px 0;">Bu ilan artık mevcut değil veya kaldırılmış.</p>
+                <a href="/" style="color:#38bdf8; text-decoration:none; display:inline-block; margin-top:20px; padding:12px 30px; background:#1e293b; border-radius:8px; border:1px solid #38bdf8;">🏠 Ana Sayfaya Dön</a>
+            </div>
         <% } else { %>
-            <div style="width:100%; height:200px; background:#0f172a; border-radius:12px; display:flex; align-items:center; justify-content:center; border:1px solid #334155; margin-bottom:20px; color:#475569; font-size:18px;">
-                📦 Ürün Resmi Yok
-            </div>
-        <% } %>
-
-        <!-- BAŞLIK ve DURUM -->
-        <h1 class="ilan-baslik">
-            <%= ilan.baslik %>
-            <span class="durum-rozet <%= ilan.aktiflikDurumu === 'pasif' ? 'durum-pasif' : 'durum-aktif' %>">
-                <%= ilan.aktiflikDurumu === 'pasif' ? '⛔ Liste Dışı' : '✅ Aktif' %>
-            </span>
-        </h1>
-
-        <!-- FİYAT -->
-        <div class="ilan-fiyat"><%= ilan.fiyat %> TL</div>
-
-        <!-- GÜVENLİ HAVUZ BADGE -->
-        <div class="guvenli-havuz">🔒 Güvenli Havuz</div>
-
-        <!-- İLAN BİLGİLERİ -->
-        <div class="ilan-bilgi"><strong>Satıcı:</strong> <%= ilan.satici %></div>
-        <div class="ilan-bilgi"><strong>Teslimat Süresi:</strong> ⏱️ <%= ilan.sure || '24 Saat' %></div>
-        <div class="ilan-bilgi"><strong>İlan No:</strong> #<%= ilan._id || ilan.id %></div>
-        <div class="ilan-bilgi"><strong>Yayınlanma Tarihi:</strong> <%= new Date(ilan.createdAt || Date.now()).toLocaleDateString('tr-TR') %></div>
-
-        <!-- SATICI KARTI -->
-        <div class="satici-kart">
-            <div class="satici-bilgi">
-                <div class="satici-avatar"><%= ilan.satici.charAt(0).toUpperCase() %></div>
-                <div>
-                    <div class="satici-adi"><%= ilan.satici %></div>
-                    <div class="satici-uzmanlik">🛒 Aktif Satıcı</div>
+            <!-- İLAN GÖRSELİ -->
+            <% if (ilan.resim && ilan.resim.length > 0 && ilan.resim !== 'undefined') { %>
+                <img src="<%= ilan.resim %>" alt="<%= ilan.baslik %>" class="ilan-resim" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23334155%22 stroke-width=%222%22><rect x=%223%22 y=%223%22 width=%2218%22 height=%2218%22 rx=%222%22/><circle cx=%228.5%22 cy=%228.5%22 r=%221.5%22/><path d=%22M21 15l-5-5L5 21%22/></svg>'">
+            <% } else { %>
+                <div style="width:100%; height:200px; background:#0f172a; border-radius:12px; display:flex; align-items:center; justify-content:center; border:1px solid #334155; margin-bottom:20px; color:#475569; font-size:18px;">
+                    📦 Ürün Resmi Yok
                 </div>
-            </div>
-            <button class="mesaj-at-btn" onclick="sohbetOdasiTetikle('<%= ilan.satici %>')">💬 Mesaj At</button>
-        </div>
+            <% } %>
 
-        <!-- AÇIKLAMA -->
-        <% if (ilan.detay) { %>
-            <div class="ilan-aciklama">
-                <strong style="color:#38bdf8;">📝 Ürün Açıklaması</strong>
-                <p style="margin-top:10px; margin-bottom:0;"><%= ilan.detay %></p>
+            <!-- BAŞLIK ve DURUM -->
+            <h1 class="ilan-baslik">
+                <%= ilan.baslik %>
+                <span class="durum-rozet <%= ilan.aktiflikDurumu === 'pasif' ? 'durum-pasif' : 'durum-aktif' %>">
+                    <%= ilan.aktiflikDurumu === 'pasif' ? '⛔ Liste Dışı' : '✅ Aktif' %>
+                </span>
+            </h1>
+
+            <!-- FİYAT -->
+            <div class="ilan-fiyat"><%= ilan.fiyat %> TL</div>
+
+            <!-- GÜVENLİ HAVUZ BADGE -->
+            <div class="guvenli-havuz">🔒 Güvenli Havuz</div>
+
+            <!-- İLAN BİLGİLERİ -->
+            <div class="ilan-bilgi"><strong>Satıcı:</strong> <%= ilan.satici %></div>
+            <div class="ilan-bilgi"><strong>Teslimat Süresi:</strong> ⏱️ <%= ilan.sure || '24 Saat' %></div>
+            <div class="ilan-bilgi"><strong>İlan No:</strong> #<%= ilan._id || ilan.id %></div>
+            <div class="ilan-bilgi"><strong>Yayınlanma Tarihi:</strong> <%= new Date(ilan.createdAt || Date.now()).toLocaleDateString('tr-TR') %></div>
+
+            <!-- SATICI KARTI -->
+            <div class="satici-kart">
+                <div class="satici-bilgi">
+                    <div class="satici-avatar"><%= ilan.satici.charAt(0).toUpperCase() %></div>
+                    <div>
+                        <div class="satici-adi"><%= ilan.satici %></div>
+                        <div class="satici-uzmanlik">🛒 Aktif Satıcı</div>
+                    </div>
+                </div>
+                <button class="mesaj-at-btn" onclick="sohbetOdasiTetikle('<%= ilan.satici %>')">💬 Mesaj At</button>
             </div>
+
+            <!-- AÇIKLAMA -->
+            <% if (ilan.detay) { %>
+                <div class="ilan-aciklama">
+                    <strong style="color:#38bdf8;">📝 Ürün Açıklaması</strong>
+                    <p style="margin-top:10px; margin-bottom:0;"><%= ilan.detay %></p>
+                </div>
+            <% } %>
+
+            <!-- BUTONLAR -->
+            <div class="buton-grup">
+                <button class="btn btn-satin-al" id="satinAlBtn" onclick="ilanSatinAl('<%= ilan._id || ilan.id %>', <%= ilan.fiyat %>, '<%= ilan.satici %>', '<%= ilan.baslik.replace(/'/g, "\\'") %>')" <%= ilan.aktiflikDurumu === 'pasif' ? 'disabled' : '' %>>
+                    🛒 Satın Al
+                </button>
+                <button class="btn btn-mesaj" onclick="sohbetOdasiTetikle('<%= ilan.satici %>')">💬 Satıcıya Mesaj At</button>
+            </div>
+
+            <!-- LİNK KOPYALA -->
+            <div class="link-kopyala">
+                <span style="color:#94a3b8; font-size:14px;">🔗 İlan Linki:</span>
+                <input type="text" id="ilanLinkInput" value="https://itemlerinmarketi.onrender.com/ilan/<%= ilan._id || ilan.id %>" readonly>
+                <button onclick="kopyalaLink()">📋 Kopyala</button>
+            </div>
+
+            <!-- İLAN SAHİBİ VEYA ADMIN9595 İSE DÜZENLE BUTONU -->
+            <% if (aktif && (aktif.kullaniciAdi === 'admin9595' || aktif.kullaniciAdi === ilan.satici)) { %>
+                <div style="margin-top:15px;">
+                    <button class="btn btn-duzenle" onclick="window.location.href='/ilan-duzenle?id=<%= ilan._id || ilan.id %>'">
+                        ⚙️ İlanı Düzenle
+                    </button>
+                </div>
+            <% } %>
         <% } %>
-
-        <!-- BUTONLAR -->
-        <div class="buton-grup">
-            <button class="btn btn-satin-al" id="satinAlBtn" onclick="ilanSatinAl('<%= ilan._id || ilan.id %>', <%= ilan.fiyat %>, '<%= ilan.satici %>', '<%= ilan.baslik.replace(/'/g, "\\'") %>')" <%= ilan.aktiflikDurumu === 'pasif' ? 'disabled' : '' %>>
-                🛒 Satın Al
-            </button>
-            <button class="btn btn-mesaj" onclick="sohbetOdasiTetikle('<%= ilan.satici %>')">💬 Satıcıya Mesaj At</button>
-        </div>
-
-        <!-- LİNK KOPYALA -->
-        <div class="link-kopyala">
-            <span style="color:#94a3b8; font-size:14px;">🔗 İlan Linki:</span>
-            <input type="text" id="ilanLinkInput" value="https://itemlerinmarketi.onrender.com/ilan/<%= ilan._id || ilan.id %>" readonly>
-            <button onclick="kopyalaLink()">📋 Kopyala</button>
-        </div>
-
-        <!-- İLAN SAHİBİ İSE DÜZENLE BUTONU -->
-        <div style="margin-top:15px;">
-            <button class="btn btn-duzenle" style="background:#38bdf8; color:#0f172a; padding:10px 20px; border:none; border-radius:8px; cursor:pointer; font-weight:600; display:none;" id="duzenleBtn" onclick="window.location.href='/ilan-duzenle?id=<%= ilan._id || ilan.id %>'">
-                ⚙️ İlanı Düzenle
-            </button>
-        </div>
     </div>
 
     <script>
@@ -306,8 +324,8 @@
     // ============================================
     
     const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
-    const ilanSatici = '<%= ilan.satici %>';
-    const ilanId = '<%= ilan._id || ilan.id %>';
+    const ilanSatici = '<%= ilan ? ilan.satici : "" %>';
+    const ilanId = '<%= ilan ? (ilan._id || ilan.id) : "" %>';
 
     // ============================================
     // KOPYALA
@@ -365,13 +383,22 @@
             bildirimEkle(satici, `🎉 "${baslik}" ilanınız ${aktif.kullaniciAdi} tarafından satın alındı! Teslimat için iletişime geçin.`);
             bildirimEkle(aktif.kullaniciAdi, `🛍️ "${baslik}" ilanını başarıyla satın aldınız! Para havuzda güvende.`);
 
-            // İlanı sil
-            let sistemIlanlari = JSON.parse(localStorage.getItem('pazardakiIlanlar') || '[]');
-            sistemIlanlari = sistemIlanlari.filter(i => i.id != id && i._id != id);
-            localStorage.setItem('pazardakiIlanlar', JSON.stringify(sistemIlanlari));
-
-            alert('✅ Satın alma başarılı! Para güvenli havuzda. Satıcı ile iletişime geçin.');
-            window.location.href = '/';
+            // İlanı sil (MongoDB)
+            fetch(`/api/ilan-sil/${id}`, {
+                method: 'DELETE'
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Satın alma başarılı! Para güvenli havuzda. Satıcı ile iletişime geçin.');
+                    window.location.href = '/';
+                } else {
+                    alert('❌ İlan silinirken hata: ' + data.error);
+                }
+            })
+            .catch(err => {
+                alert('❌ Bağlantı hatası: ' + err.message);
+            });
         }
     }
 
@@ -408,32 +435,31 @@
     }
 
     // ============================================
-    // DÜZENLE BUTONUNU GÖSTER (İlan sahibi ise)
-    // ============================================
-    if (aktif && aktif.kullaniciAdi === ilanSatici) {
-        document.getElementById('duzenleBtn').style.display = 'inline-block';
-    }
-
-    // ============================================
     // SATIN AL BUTONU (pasif ilanlarda devre dışı)
     // ============================================
-    const aktiflikDurumu = '<%= ilan.aktiflikDurumu %>';
+    const aktiflikDurumu = '<%= ilan ? ilan.aktiflikDurumu : "pasif" %>';
     if (aktiflikDurumu === 'pasif') {
-        document.getElementById('satinAlBtn').disabled = true;
-        document.getElementById('satinAlBtn').textContent = '⛔ Liste Dışı';
+        const btn = document.getElementById('satinAlBtn');
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = '⛔ Liste Dışı';
+        }
     }
 
     // ============================================
     // ENTER İLE KOPYALA
     // ============================================
-    document.getElementById('ilanLinkInput').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-            kopyalaLink();
-        }
-    });
+    const linkInput = document.getElementById('ilanLinkInput');
+    if (linkInput) {
+        linkInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                kopyalaLink();
+            }
+        });
+    }
 
     console.log('📄 İlan detay sayfası yüklendi!');
-    console.log('📦 İlan:', '<%= ilan.baslik %>');
+    console.log('📦 İlan:', '<%= ilan ? ilan.baslik : "Bulunamadı" %>');
     console.log('👤 Satıcı:', ilanSatici);
     console.log('📌 ID:', ilanId);
     </script>

@@ -288,6 +288,195 @@ app.listen(PORT, () => {
     console.log(`📧 E-posta gönderimi hazır!`);
     console.log(`🔒 IPv4 zorlama aktif!`);
 });
+// ============================================
+// İLAN DÜZENLEME SAYFASI (GET)
+// ============================================
+app.get('/ilan-duzenle', async (req, res) => {
+    try {
+        const ilanId = req.query.id;
+        
+        if (!ilanId) {
+            return res.status(400).send('❌ İlan ID gerekli!');
+        }
+        
+        // İlanı bul
+        let ilan = null;
+        if (mongoose.Types.ObjectId.isValid(ilanId)) {
+            ilan = await Ilan.findById(ilanId);
+        }
+        
+        if (!ilan) {
+            return res.status(404).send('❌ İlan bulunamadı!');
+        }
+        
+        // Admin kontrolü - sadece admin veya ilan sahibi düzenleyebilir
+        const aktifKullanici = req.query.aktif ? JSON.parse(req.query.aktif) : null;
+        
+        res.render('ilan_duzenle', { 
+            ilan: ilan, 
+            aktif: null 
+        });
+        
+    } catch (hata) {
+        console.error('❌ İlan düzenleme hatası:', hata.message);
+        res.status(500).send('❌ Sunucu hatası: ' + hata.message);
+    }
+});
+
+// ============================================
+// İLAN DÜZENLEME API (POST)
+// ============================================
+app.post('/api/ilan-duzenle', async (req, res) => {
+    try {
+        const { id, baslik, fiyat, detay, sure, resim } = req.body;
+        
+        if (!id || !baslik || !fiyat) {
+            return res.json({ success: false, message: 'Başlık, fiyat ve ID gerekli!' });
+        }
+        
+        // İlanı bul
+        let ilan = null;
+        if (mongoose.Types.ObjectId.isValid(id)) {
+            ilan = await Ilan.findById(id);
+        }
+        
+        if (!ilan) {
+            return res.json({ success: false, message: 'İlan bulunamadı!' });
+        }
+        
+        // İlanı güncelle
+        ilan.baslik = baslik;
+        ilan.fiyat = parseFloat(fiyat);
+        ilan.detay = detay || '';
+        ilan.sure = sure || '24 Saat';
+        if (resim && resim.length > 0) {
+            ilan.resim = resim;
+        }
+        
+        await ilan.save();
+        res.json({ success: true, message: 'İlan başarıyla güncellendi!' });
+        
+    } catch (hata) {
+        console.error('❌ İlan güncelleme hatası:', hata.message);
+        res.json({ success: false, error: hata.message });
+    }
+});
+
+// ============================================
+// İLAN DETAY API (GET)
+// ============================================
+app.get('/api/ilan/:id', async (req, res) => {
+    try {
+        const ilanId = req.params.id;
+        let ilan = null;
+        
+        if (mongoose.Types.ObjectId.isValid(ilanId)) {
+            ilan = await Ilan.findById(ilanId);
+        }
+        
+        if (ilan) {
+            res.json({ success: true, ilan: ilan });
+        } else {
+            res.json({ success: false, message: 'İlan bulunamadı' });
+        }
+    } catch (hata) {
+        console.error('❌ İlan getirme hatası:', hata.message);
+        res.json({ success: false, error: hata.message });
+    }
+});
+
+// ============================================
+// İLAN DÜZENLEME API (POST)
+// ============================================
+app.post('/api/ilan-duzenle', async (req, res) => {
+    try {
+        const { id, baslik, fiyat, detay, sure, resim } = req.body;
+        
+        if (!id || !baslik || !fiyat) {
+            return res.json({ success: false, message: 'Başlık, fiyat ve ID gerekli!' });
+        }
+        
+        let ilan = null;
+        if (mongoose.Types.ObjectId.isValid(id)) {
+            ilan = await Ilan.findById(id);
+        }
+        
+        if (!ilan) {
+            return res.json({ success: false, message: 'İlan bulunamadı!' });
+        }
+        
+        ilan.baslik = baslik;
+        ilan.fiyat = parseFloat(fiyat);
+        ilan.detay = detay || '';
+        ilan.sure = sure || '24 Saat';
+        if (resim && resim.length > 0) {
+            ilan.resim = resim;
+        }
+        
+        await ilan.save();
+        res.json({ success: true, message: 'İlan başarıyla güncellendi!' });
+        
+    } catch (hata) {
+        console.error('❌ İlan güncelleme hatası:', hata.message);
+        res.json({ success: false, error: hata.message });
+    }
+});
+
+// ============================================
+// İLAN DURUM DEĞİŞTİRME API (POST)
+// ============================================
+app.post('/api/ilan-durum-degis', async (req, res) => {
+    try {
+        const { id, durum } = req.body;
+        
+        if (!id || !durum) {
+            return res.json({ success: false, message: 'ID ve durum gerekli!' });
+        }
+        
+        let ilan = null;
+        if (mongoose.Types.ObjectId.isValid(id)) {
+            ilan = await Ilan.findById(id);
+        }
+        
+        if (!ilan) {
+            return res.json({ success: false, message: 'İlan bulunamadı!' });
+        }
+        
+        ilan.aktiflikDurumu = durum;
+        await ilan.save();
+        
+        res.json({ success: true, message: 'İlan durumu güncellendi!' });
+        
+    } catch (hata) {
+        console.error('❌ Durum değiştirme hatası:', hata.message);
+        res.json({ success: false, error: hata.message });
+    }
+});
+
+// ============================================
+// İLAN SİL API (DELETE)
+// ============================================
+app.delete('/api/ilan-sil/:id', async (req, res) => {
+    try {
+        const ilanId = req.params.id;
+        
+        let ilan = null;
+        if (mongoose.Types.ObjectId.isValid(ilanId)) {
+            ilan = await Ilan.findById(ilanId);
+        }
+        
+        if (!ilan) {
+            return res.json({ success: false, message: 'İlan bulunamadı!' });
+        }
+        
+        await Ilan.findByIdAndDelete(ilanId);
+        res.json({ success: true, message: 'İlan silindi!' });
+        
+    } catch (hata) {
+        console.error('❌ İlan silme hatası:', hata.message);
+        res.json({ success: false, error: hata.message });
+    }
+});
 
 process.on('uncaughtException', (err) => console.error('❌ Hata:', err.message));
 process.on('unhandledRejection', (err) => console.error('❌ Promise hatası:', err.message));

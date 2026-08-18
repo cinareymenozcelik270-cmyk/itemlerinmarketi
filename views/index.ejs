@@ -721,7 +721,13 @@
                     <% if (ilanlar && ilanlar.length > 0) { %>
                         <% ilanlar.forEach(ilan => { %>
                             <div class="card">
-                                <!-- ⭐ BURASI ÇOK ÖNEMLİ: ilan._id KULLAN! -->
+                                <!-- ⭐ DÜZENLE BUTONU - admin9595 ve ilan sahibi görebilir -->
+                                <% if (aktif && (aktif.kullaniciAdi === 'admin9595' || ilan.satici === aktif.kullaniciAdi)) { %>
+                                    <button class="ilan-ust-eylem-btn btn-duzenle" onclick="window.location.href='/ilan-duzenle?id=<%= ilan._id %>'">⚙️ Düzenle</button>
+                                <% } else if (aktif) { %>
+                                    <button class="ilan-ust-eylem-btn btn-raporla" onclick="ilanRaporlaSimulasyon('<%= ilan.satici %>', '<%= ilan.baslik.replace(/'/g, "\\'") %>')">🚩 Raporla</button>
+                                <% } %>
+                                
                                 <a href="/ilan/<%= ilan._id %>" style="text-decoration:none; color:inherit; display:block;">
                                     <img src="<%= ilan.resim || 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23334155%22 stroke-width=%222%22><rect x=%223%22 y=%223%22 width=%2218%22 height=%2218%22 rx=%222%22/><circle cx=%228.5%22 cy=%228.5%22 r=%221.5%22/><path d=%22M21 15l-5-5L5 21%22/></svg>' %>" class="pazar-ilan-img" alt="<%= ilan.baslik %>">
                                     <span class="teslimat-rozet">⏱️ <%= ilan.sure || '24 Saat' %></span>
