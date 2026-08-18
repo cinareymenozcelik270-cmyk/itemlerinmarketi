@@ -92,7 +92,7 @@ async function varsayilanIlanEkle() {
 }
 
 // ============================================
-// 6. NODEMAILER (itemlerinmarketi@gmail.com)
+// 6. NODEMAILER
 // ============================================
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -134,23 +134,31 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
 // ============================================
-// 7.5 TÜM EJS SAYFALARINA OTOMATİK ADSENSE EKLEME (YENİ EKLENDİ ✅)
+// 7.5 TÜM EJS SAYFALARINA OTOMATİK ADSENSE EKLEME (DÜZELTİLDİ ✅)
 // ============================================
 app.use((req, res, next) => {
+    // Orijinal render fonksiyonunu kaydet
     const originalRender = res.render;
+    
+    // Render fonksiyonunu override et
     res.render = function(view, options, callback) {
-        // AdSense kodu
+        // Options'ı kontrol et
+        if (!options) options = {};
+        if (typeof options === 'function') {
+            callback = options;
+            options = {};
+        }
+        
+        // AdSense kodunu ekle
         const adsenseScript = `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7453399945201277" crossorigin="anonymous"></script>`;
         
-        // Eğer options undefined ise boş obje oluştur
-        if (!options) options = {};
-        
-        // 'head_extra' değişkenine AdSense kodunu ekle
+        // head_extra değişkenine ekle
         options.head_extra = (options.head_extra || '') + adsenseScript;
         
-        // Orijinal render fonksiyonunu çağır
+        // Orijinal render'ı çağır
         originalRender.call(this, view, options, callback);
     };
+    
     next();
 });
 
@@ -212,26 +220,22 @@ app.get('/', async (req, res) => {
 });
 
 // ============================================
-// 10. İLAN DETAY SAYFASI (DÜZELTİLDİ ✅)
+// 10. İLAN DETAY SAYFASI
 // ============================================
 app.get('/ilan/:id', async (req, res) => {
     try {
         const ilanId = req.params.id;
-        let ilan = null;
         
         console.log('================================');
         console.log('🔎 İstenen ilan ID:', ilanId);
         console.log('📌 ObjectId geçerli mi:', mongoose.Types.ObjectId.isValid(ilanId));
 
-        // --- DÜZELTME BAŞLANGICI ---
-        // Eğer ID formatı geçersizse direkt ana sayfaya yönlendir, hata verme.
         if (!mongoose.Types.ObjectId.isValid(ilanId)) {
             console.log('❌ Geçersiz ID formatı, ana sayfaya yönlendiriliyor!');
             return res.redirect('/');
         }
-        // --- DÜZELTME BİTİŞİ ---
 
-        ilan = await Ilan.findById(ilanId);
+        const ilan = await Ilan.findById(ilanId);
 
         console.log('📦 MongoDB sonucu:', ilan ? 'Bulundu ✅' : 'Bulunamadı ❌');
 
@@ -246,10 +250,7 @@ app.get('/ilan/:id', async (req, res) => {
 
     } catch (hata) {
         console.error('❌ İlan detay hatası:', hata.message);
-        // --- DÜZELTME BAŞLANGICI ---
-        // Sunucu patlarsa kullanıcıyı ana sayfaya at, 500 ekranı gösterme.
         res.redirect('/');
-        // --- DÜZELTME BİTİŞİ ---
     }
 });
 
