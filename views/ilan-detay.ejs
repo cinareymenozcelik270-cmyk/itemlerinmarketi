@@ -234,6 +234,18 @@
         .btn-duzenle:hover {
             transform: scale(1.05);
         }
+        .btn-rapor-et {
+            background: #dc2626;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-rapor-et:hover {
+            transform: scale(1.05);
+        }
         .ilan-bulunamadi {
             text-align: center;
             padding: 60px 20px;
@@ -349,7 +361,7 @@
                 <button onclick="kopyalaLink()">📋 Kopyala</button>
             </div>
 
-            <!-- İLAN SAHİBİ VEYA ADMIN9595 İSE DÜZENLE BUTONU (DÜZELTİLDİ) -->
+            <!-- DÜZENLE / RAPOR ET BUTON ALANI -->
             <div id="duzenleBtnContainer"></div>
             
         <% } %>
@@ -365,16 +377,46 @@
     const ilanId = '<%= ilan ? (ilan._id || ilan.id) : "" %>';
 
     // ============================================
-    // DÜZENLE BUTONU KONTROLÜ (BU KISIM DÜZELTİLDİ)
+    // DÜZENLE / RAPOR ET BUTONU KONTROLÜ
     // ============================================
     const duzenleContainer = document.getElementById('duzenleBtnContainer');
     if (duzenleContainer && ilanSatici) {
         if (aktif && (aktif.kullaniciAdi === 'admin9595' || aktif.kullaniciAdi === ilanSatici)) {
+            // İLAN SAHİBİ VEYA ADMİN İSE: DÜZENLE BUTONU
             duzenleContainer.innerHTML = `
                 <button class="btn btn-duzenle" onclick="window.location.href='/ilan-duzenle?id=${ilanId}'">
                     ⚙️ İlanı Düzenle
                 </button>
             `;
+        } else if (aktif) {
+            // GİRİŞ YAPMIŞSA ANCAK İLAN SAHİBİ DEĞİLSE: RAPOR ET BUTONU
+            duzenleContainer.innerHTML = `
+                <button class="btn btn-rapor-et" onclick="raporEt('${ilanId}')">
+                    🚨 İlanı Rapor Et
+                </button>
+            `;
+        } else {
+            // GİRİŞ YAPMAMIŞSA HİÇBİR ŞEY GÖSTERME
+            duzenleContainer.innerHTML = ``;
+        }
+    }
+
+    // ============================================
+    // İLAN RAPOR ET
+    // ============================================
+    function raporEt(id) {
+        const sebep = prompt("Bu ilanı neden rapor ediyorsun? (Örn: Sahte ilan, dolandırıcılık, uygunsuz içerik vb.)");
+        if (sebep && sebep.trim().length > 0) {
+            // Admin'e bildirim gönder (LocalStorage üzerinden)
+            const adminMesaj = `🚨 YENİ RAPOR!\nRapor eden: ${aktif.kullaniciAdi}\nİlan ID: ${id}\nSebep: ${sebep}`;
+            
+            // Bildirim sistemini kullan
+            bildirimEkle('admin9595', adminMesaj);
+            
+            alert("✅ Raporunuz başarıyla iletilmiştir. Yönetici tarafından incelenecektir.");
+            console.log("Rapor gönderildi:", { id, sebep });
+        } else {
+            alert("Rapor atmak için lütfen bir sebep yazınız.");
         }
     }
 
