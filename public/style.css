@@ -1,0 +1,102 @@
+body {
+    background-color: #0f172a;
+    color: #f8fafc;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+header {
+    background-color: #1e293b;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #334155;
+}
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #38bdf8;
+}
+header nav a {
+    color: #cbd5e1;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: 600;
+}
+header nav a:hover {
+    color: #38bdf8;
+}
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+h1 {
+    margin-bottom: 20px;
+    color: #f1f5f9;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+.card {
+    background-color: #1e293b;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #334155;
+}
+.price {
+    color: #38bdf8;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+.form-box {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: #1e293b;
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #334155;
+    max-width: 400px;
+}
+input {
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #475569;
+    background: #0f172a;
+    color: #fff;
+    font-size: 16px;
+}
+.btn {
+    background-color: #38bdf8;
+    color: #0f172a;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+}
+.btn:hover {
+    background-color: #0ea5e9;
+}
+.alert {
+    background: #065f46;
+    color: #d1fae5;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    max-width: 400px;
+}
+.admin-item {
+    background: #1e293b;
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    list-style: none;
+}

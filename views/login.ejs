@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta name="google-site-verification" content="rXTtLPJavFhXvJ7TGofxQ3XXGZXb_B8dzSBNAPZwLFk" />
+    <link rel="icon" type="image/png" href="/resim.png">
+    <meta charset="UTF-8">
+    <title>Giriş Yap - İtemlerinMarketi</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">İtemlerinMarketi</div>
+        <nav><a href="/">Ana Sayfa</a></nav>
+    </header>
+    <div class="container">
+        <h1>Giriş Yap</h1>
+        <% if (hata) { %>
+            <div class="alert" style="background-color: #ef4444;"><%= hata %></div>
+        <% } %>
+        <form id="loginForm" class="form-box">
+            <input type="text" id="kullaniciAdi" placeholder="Kullanıcı Adın" required>
+            <input type="password" id="sifre" placeholder="Şifren" required>
+            <button type="submit" class="btn">Giriş Yap</button>
+        </form>
+        <p style="margin-top:15px; color:#94a3b8;">Hesabın yok mu? <a href="/register" style="color:#38bdf8;">Kayıt Ol</a></p>
+    </div>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const kAdi = document.getElementById('kullaniciAdi').value;
+            const sifre = document.getElementById('sifre').value;
+
+            // Admin Kontrolü
+            if (kAdi === 'admin9595' && sifre === '1453Cinar') {
+                localStorage.setItem('aktifKullanici', JSON.stringify({ kullaniciAdi: kAdi, rol: 'admin', bakiye: 99999 }));
+                window.location.href = '/yonetici-paneli';
+                return;
+            }
+
+            // Normal Kullanıcı Kontrolü (localStorage'dan okuma)
+            const kayitliKullanicilar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
+            const user = kayitliKullanicilar.find(u => u.kullaniciAdi === kAdi && u.sifre === sifre);
+
+            if (user) {
+                localStorage.setItem('aktifKullanici', JSON.stringify({ kullaniciAdi: user.kullaniciAdi, rol: 'uye', bakiye: user.bakiye }));
+                window.location.href = '/';
+            } else {
+                alert('Kullanıcı adı veya şifre hatalı!');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,904 @@
+<% 
+    // Eğer aktif değişkeni tanımlı değilse null ata (hata vermesin diye)
+    if (typeof aktif === 'undefined') { 
+        var aktif = null; 
+    }
+%>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta name="google-site-verification" content="rXTtLPJavFhXvJ7TGofxQ3XXGZXb_B8dzSBNAPZwLFk" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destek Talebi - İtemlerinMarketi</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .destek-container {
+            background: #1e293b;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            border: 1px solid #334155;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .destek-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #6366f1, #a855f7, #6366f1);
+            background-size: 200% 100%;
+            animation: gradient 3s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .destek-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .destek-header h1 {
+            color: #38bdf8;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .destek-header h1 span {
+            font-size: 32px;
+        }
+
+        .geri-btn {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.3s;
+            padding: 8px 16px;
+            background: #0f172a;
+            border-radius: 8px;
+            border: 1px solid #334155;
+        }
+
+        .geri-btn:hover {
+            color: #38bdf8;
+            border-color: #38bdf8;
+        }
+
+        .destek-aciklama {
+            color: #94a3b8;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-size: 15px;
+            padding: 15px 20px;
+            background: #0f172a;
+            border-radius: 12px;
+            border-left: 3px solid #6366f1;
+        }
+
+        .destek-aciklama strong {
+            color: #38bdf8;
+        }
+
+        .destek-form .form-grup {
+            margin-bottom: 20px;
+        }
+
+        .destek-form label {
+            display: block;
+            color: #cbd5e1;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .destek-form label .required {
+            color: #ef4444;
+            margin-left: 4px;
+        }
+
+        .destek-form input,
+        .destek-form select,
+        .destek-form textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        .destek-form input:focus,
+        .destek-form select:focus,
+        .destek-form textarea:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        .destek-form input::placeholder,
+        .destek-form textarea::placeholder {
+            color: #64748b;
+        }
+
+        .destek-form select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            cursor: pointer;
+        }
+
+        .destek-form select option {
+            background: #1e293b;
+            color: white;
+        }
+
+        .destek-form textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        .destek-form .dosya-ekle {
+            border: 2px dashed #334155;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s, background 0.3s;
+            position: relative;
+        }
+
+        .destek-form .dosya-ekle:hover {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .destek-form .dosya-ekle input[type="file"] {
+            display: none;
+        }
+
+        .destek-form .dosya-ekle .dosya-label {
+            color: #94a3b8;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .destek-form .dosya-ekle .dosya-label .icon {
+            font-size: 32px;
+        }
+
+        .destek-form .dosya-ekle .dosya-label:hover {
+            color: #38bdf8;
+        }
+
+        .destek-form .dosya-ad {
+            color: #10b981;
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .destek-form .dosya-ad.show {
+            display: block;
+        }
+
+        .destek-form .gonder-btn {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .destek-form .gonder-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .destek-form .gonder-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .destek-form .gonder-btn .loader {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .basarili-mesaj {
+            background: #065f46;
+            color: #6ee7b7;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            border: 1px solid #10b981;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+        }
+
+        .basarili-mesaj.show {
+            display: flex;
+        }
+
+        .basarili-mesaj .icon {
+            font-size: 24px;
+        }
+
+        .hata-mesaj {
+            background: #7f1d1d;
+            color: #fca5a5;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            border: 1px solid #ef4444;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+        }
+
+        .hata-mesaj.show {
+            display: flex;
+        }
+
+        .hata-mesaj .icon {
+            font-size: 24px;
+        }
+
+        .karakter-sayac {
+            text-align: right;
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .karakter-sayac.danger {
+            color: #ef4444;
+        }
+
+        /* --- ADMIN PANELİ --- */
+        .admin-panel {
+            margin-top: 40px;
+            border-top: 1px solid #334155;
+            padding-top: 30px;
+        }
+
+        .admin-panel h2 {
+            color: #f59e0b;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .admin-panel .talepler-listesi {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .admin-panel .talep-kart {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 18px 20px;
+            border: 1px solid #334155;
+            transition: border-color 0.3s;
+        }
+
+        .admin-panel .talep-kart:hover {
+            border-color: #6366f1;
+        }
+
+        .admin-panel .talep-kart .talep-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .admin-panel .talep-kart .talep-header .kullanici {
+            color: #38bdf8;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .admin-panel .talep-kart .talep-header .tarih {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .admin-panel .talep-kart .talep-header .durum {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .admin-panel .talep-kart .talep-header .durum.beklemede {
+            background: #92400e;
+            color: #fbbf24;
+        }
+
+        .admin-panel .talep-kart .talep-header .durum.islemde {
+            background: #1e3a5f;
+            color: #60a5fa;
+        }
+
+        .admin-panel .talep-kart .talep-header .durum.cozuldu {
+            background: #065f46;
+            color: #6ee7b7;
+        }
+
+        .admin-panel .talep-kart .talep-header .durum.reddedildi {
+            background: #7f1d1d;
+            color: #fca5a5;
+        }
+
+        .admin-panel .talep-kart .talep-konu {
+            color: #e2e8f0;
+            font-weight: 500;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .admin-panel .talep-kart .talep-mesaj {
+            color: #94a3b8;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .admin-panel .talep-kart .talep-dosya {
+            margin-top: 8px;
+        }
+
+        .admin-panel .talep-kart .talep-dosya a {
+            color: #38bdf8;
+            text-decoration: none;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .admin-panel .talep-kart .talep-dosya a:hover {
+            text-decoration: underline;
+        }
+
+        .admin-panel .talep-kart .talep-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .admin-panel .talep-kart .talep-actions button {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .admin-panel .talep-kart .talep-actions button:hover {
+            transform: scale(1.05);
+        }
+
+        .admin-panel .talep-kart .talep-actions .btn-islemde {
+            background: #1e3a5f;
+            color: #60a5fa;
+        }
+
+        .admin-panel .talep-kart .talep-actions .btn-coz {
+            background: #065f46;
+            color: #6ee7b7;
+        }
+
+        .admin-panel .talep-kart .talep-actions .btn-red {
+            background: #7f1d1d;
+            color: #fca5a5;
+        }
+
+        .admin-panel .talep-kart .talep-actions .btn-sil {
+            background: #374151;
+            color: #94a3b8;
+        }
+
+        .bos-talepler {
+            color: #64748b;
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 15px;
+        }
+
+        .bos-talepler .icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .bos-talepler .alt-yazi {
+            font-size: 13px;
+            color: #475569;
+            margin-top: 6px;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            background: #f59e0b;
+            color: #0f172a;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-left: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .destek-container {
+                padding: 20px;
+            }
+
+            .destek-header h1 {
+                font-size: 22px;
+            }
+
+            .destek-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .admin-panel .talep-kart .talep-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="destek-container">
+        <!-- HEADER -->
+        <div class="destek-header">
+            <h1>
+                <span>🎫</span> Destek Talebi
+                <% if (aktif && aktif.rol === 'admin') { %>
+                    <span class="admin-badge">ADMIN PANELİ</span>
+                <% } %>
+            </h1>
+            <a href="/" class="geri-btn">← Ana Sayfaya Dön</a>
+        </div>
+
+        <!-- AÇIKLAMA -->
+        <div class="destek-aciklama">
+            <strong>📌 Nasıl çalışır?</strong><br>
+            Karşılaştığın herhangi bir sorunu, şikayeti veya önerini buradan bize iletebilirsin.
+            Talebin <strong>admin9595</strong> tarafından incelenecek ve en kısa sürede çözüme kavuşturulacaktır.
+        </div>
+
+        <!-- BAŞARILI MESAJ -->
+        <div class="basarili-mesaj" id="basariliMesaj">
+            <span class="icon">✅</span>
+            <span id="basariliMetin">Talebiniz başarıyla gönderildi! En kısa sürede incelenecektir.</span>
+        </div>
+
+        <!-- HATA MESAJI -->
+        <div class="hata-mesaj" id="hataMesaj">
+            <span class="icon">❌</span>
+            <span id="hataMetin">Lütfen tüm alanları doldurun.</span>
+        </div>
+
+        <!-- FORM -->
+        <form class="destek-form" id="destekFormu">
+            <div class="form-grup">
+                <label>Konu Başlığı <span class="required">*</span></label>
+                <input type="text" id="konu" placeholder="Örn: Satın alma sorunu, Hesap problemi..." required maxlength="100">
+                <div class="karakter-sayac" id="konuSayac">0/100</div>
+            </div>
+
+            <div class="form-grup">
+                <label>Kategori <span class="required">*</span></label>
+                <select id="kategori" required>
+                    <option value="">Kategori seçin...</option>
+                    <option value="satin-alma">🛒 Satın Alma Sorunu</option>
+                    <option value="hesap">👤 Hesap Problemi</option>
+                    <option value="ilan">📦 İlan Sorunu</option>
+                    <option value="odeme">💳 Ödeme / Para Çekme</option>
+                    <option value="sikayet">🚩 Şikayet</option>
+                    <option value="oner">💡 Öneri</option>
+                    <option value="diger">📌 Diğer</option>
+                </select>
+            </div>
+
+            <div class="form-grup">
+                <label>Mesajınız <span class="required">*</span></label>
+                <textarea id="mesaj" placeholder="Sorununuzu veya talebinizi detaylıca açıklayın..." required maxlength="1000"></textarea>
+                <div class="karakter-sayac" id="mesajSayac">0/1000</div>
+            </div>
+
+            <div class="form-grup">
+                <label>Dosya Ekle (Opsiyonel)</label>
+                <div class="dosya-ekle" onclick="document.getElementById('dosyaInput').click()">
+                    <input type="file" id="dosyaInput" accept="image/*,.pdf,.doc,.docx">
+                    <div class="dosya-label">
+                        <span class="icon">📎</span>
+                        <span>Dosya eklemek için tıkla veya sürükle</span>
+                        <span style="font-size:12px; color:#64748b;">PNG, JPG, PDF, DOC (max 5MB)</span>
+                    </div>
+                    <span class="dosya-ad" id="dosyaAd">📄 <span id="dosyaAdi"></span></span>
+                </div>
+            </div>
+
+            <button type="submit" class="gonder-btn" id="gonderBtn">
+                <span class="loader" id="loader"></span>
+                <span id="btnText">🚀 Talebi Gönder</span>
+            </button>
+        </form>
+
+        <!-- ADMIN PANELİ (SADECE ADMIN9595 GÖRÜR) -->
+        <% if (aktif && aktif.rol === 'admin') { %>
+            <div class="admin-panel" id="adminPanel">
+                <h2>📋 Gelen Destek Talepleri</h2>
+                <div class="talepler-listesi" id="taleplerListesi">
+                    <!-- Talepler dinamik olarak doldurulacak -->
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+    <script>
+        // --- KULLANICI KONTROLÜ ---
+        const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
+
+        // Admin değilse admin panelini gizle
+        if (!aktif || aktif.rol !== 'admin') {
+            const adminPanel = document.getElementById('adminPanel');
+            if (adminPanel) adminPanel.style.display = 'none';
+        }
+
+        // --- KARAKTER SAYACI ---
+        document.getElementById('konu').addEventListener('input', function() {
+            const sayac = document.getElementById('konuSayac');
+            const uzunluk = this.value.length;
+            sayac.textContent = `${uzunluk}/100`;
+            sayac.classList.toggle('danger', uzunluk > 90);
+        });
+
+        document.getElementById('mesaj').addEventListener('input', function() {
+            const sayac = document.getElementById('mesajSayac');
+            const uzunluk = this.value.length;
+            sayac.textContent = `${uzunluk}/1000`;
+            sayac.classList.toggle('danger', uzunluk > 900);
+        });
+
+        // --- DOSYA YÜKLEME ---
+        document.getElementById('dosyaInput').addEventListener('change', function(e) {
+            const dosya = this.files[0];
+            const dosyaAd = document.getElementById('dosyaAd');
+            const dosyaAdi = document.getElementById('dosyaAdi');
+            
+            if (dosya) {
+                dosyaAdi.textContent = dosya.name + ' (' + (dosya.size / 1024).toFixed(1) + ' KB)';
+                dosyaAd.classList.add('show');
+            } else {
+                dosyaAd.classList.remove('show');
+            }
+        });
+
+        // --- DRAG & DROP ---
+        const dosyaEkle = document.querySelector('.dosya-ekle');
+        dosyaEkle.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#6366f1';
+            this.style.background = 'rgba(99, 102, 241, 0.05)';
+        });
+
+        dosyaEkle.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#334155';
+            this.style.background = 'transparent';
+        });
+
+        dosyaEkle.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#334155';
+            this.style.background = 'transparent';
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                document.getElementById('dosyaInput').files = files;
+                const event = new Event('change');
+                document.getElementById('dosyaInput').dispatchEvent(event);
+            }
+        });
+
+        // --- FORUM GÖNDERME ---
+        document.getElementById('destekFormu').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (!aktif) {
+                alert('Destek talebi göndermek için önce giriş yapmalısın kanka!');
+                window.location.href = '/login';
+                return;
+            }
+
+            const konu = document.getElementById('konu').value.trim();
+            const kategori = document.getElementById('kategori').value;
+            const mesaj = document.getElementById('mesaj').value.trim();
+            const dosya = document.getElementById('dosyaInput').files[0];
+
+            // Validasyon
+            if (!konu || !kategori || !mesaj) {
+                const hata = document.getElementById('hataMesaj');
+                document.getElementById('hataMetin').textContent = 'Lütfen tüm zorunlu alanları doldurun kanka!';
+                hata.classList.add('show');
+                setTimeout(() => hata.classList.remove('show'), 4000);
+                return;
+            }
+
+            if (mesaj.length < 10) {
+                const hata = document.getElementById('hataMesaj');
+                document.getElementById('hataMetin').textContent = 'Mesajınız en az 10 karakter olmalı kanka!';
+                hata.classList.add('show');
+                setTimeout(() => hata.classList.remove('show'), 4000);
+                return;
+            }
+
+            // LOADER
+            const btn = document.getElementById('gonderBtn');
+            const loader = document.getElementById('loader');
+            const btnText = document.getElementById('btnText');
+            btn.disabled = true;
+            loader.style.display = 'block';
+            btnText.textContent = 'Gönderiliyor...';
+
+            // Dosyayı base64'e çevir (varsa)
+            let dosyaData = null;
+            if (dosya) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    dosyaData = {
+                        name: dosya.name,
+                        type: dosya.type,
+                        size: dosya.size,
+                        data: e.target.result
+                    };
+                    talebiKaydet(dosyaData);
+                };
+                reader.readAsDataURL(dosya);
+            } else {
+                talebiKaydet(null);
+            }
+
+            function talebiKaydet(dosyaData) {
+                // Talebi localStorage'a kaydet
+                let talepler = JSON.parse(localStorage.getItem('destekTalepleri') || '[]');
+                const yeniTalep = {
+                    id: Date.now(),
+                    kullanici: aktif.kullaniciAdi,
+                    konu: konu,
+                    kategori: kategori,
+                    mesaj: mesaj,
+                    dosya: dosyaData,
+                    durum: 'beklemede', // beklemede, islemde, cozuldu, reddedildi
+                    tarih: new Date().toLocaleString('tr-TR'),
+                    timestamp: Date.now()
+                };
+                talepler.unshift(yeniTalep);
+                localStorage.setItem('destekTalepleri', JSON.stringify(talepler));
+
+                // Admin'e bildirim gitmesi için
+                const adminBildirim = {
+                    id: Date.now(),
+                    metin: `🎫 Yeni destek talebi: "${konu}" - ${aktif.kullaniciAdi} tarafından gönderildi.`,
+                    durum: 'yeni',
+                    tarih: new Date().toLocaleTimeString()
+                };
+                let adminBildirimler = JSON.parse(localStorage.getItem('bildirimler_admin9595') || '[]');
+                adminBildirimler.unshift(adminBildirim);
+                localStorage.setItem('bildirimler_admin9595', JSON.stringify(adminBildirimler));
+
+                // BAŞARILI MESAJ
+                const basarili = document.getElementById('basariliMesaj');
+                document.getElementById('basariliMetin').textContent = '✅ Talebiniz başarıyla gönderildi! En kısa sürede incelenecektir.';
+                basarili.classList.add('show');
+
+                // FORM TEMİZLE
+                document.getElementById('konu').value = '';
+                document.getElementById('kategori').value = '';
+                document.getElementById('mesaj').value = '';
+                document.getElementById('dosyaInput').value = '';
+                document.getElementById('dosyaAd').classList.remove('show');
+                document.getElementById('konuSayac').textContent = '0/100';
+                document.getElementById('mesajSayac').textContent = '0/1000';
+
+                // BUTONU GERİ AL
+                btn.disabled = false;
+                loader.style.display = 'none';
+                btnText.textContent = '🚀 Talebi Gönder';
+
+                // Admin ise listeyi yenile
+                if (aktif && aktif.rol === 'admin') {
+                    talepleriListele();
+                }
+
+                setTimeout(() => basarili.classList.remove('show'), 5000);
+            }
+        });
+
+        // --- ADMIN TALEP LİSTELEME ---
+        function talepleriListele() {
+            if (!aktif || aktif.rol !== 'admin') return;
+
+            const liste = document.getElementById('taleplerListesi');
+            const talepler = JSON.parse(localStorage.getItem('destekTalepleri') || '[]');
+
+            if (talepler.length === 0) {
+                liste.innerHTML = `
+                    <div class="bos-talepler">
+                        <span class="icon">📭</span>
+                        <div>Henüz hiç destek talebi yok.</div>
+                        <div class="alt-yazi">Kullanıcılar taleplerini buradan gönderecek.</div>
+                    </div>
+                `;
+                return;
+            }
+
+            liste.innerHTML = '';
+            talepler.forEach(talep => {
+                const durumRenk = {
+                    'beklemede': 'beklemede',
+                    'islemde': 'islemde',
+                    'cozuldu': 'cozuldu',
+                    'reddedildi': 'reddedildi'
+                };
+
+                const durumEtiket = {
+                    'beklemede': '⏳ Beklemede',
+                    'islemde': '🔄 İşlemde',
+                    'cozuldu': '✅ Çözüldü',
+                    'reddedildi': '❌ Reddedildi'
+                };
+
+                const kart = document.createElement('div');
+                kart.className = 'talep-kart';
+                kart.innerHTML = `
+                    <div class="talep-header">
+                        <span class="kullanici">👤 ${talep.kullanici}</span>
+                        <span class="tarih">📅 ${talep.tarih}</span>
+                        <span class="durum ${durumRenk[talep.durum] || 'beklemede'}">${durumEtiket[talep.durum] || '⏳ Beklemede'}</span>
+                    </div>
+                    <div class="talep-konu">📌 ${talep.konu}</div>
+                    <div class="talep-mesaj">${talep.mesaj}</div>
+                    ${talep.dosya ? `<div class="talep-dosya"><a href="${talep.dosya.data}" target="_blank">📎 ${talep.dosya.name}</a></div>` : ''}
+                    <div class="talep-actions">
+                        ${talep.durum === 'beklemede' ? `<button class="btn-islemde" onclick="talepDurumGuncelle(${talep.id}, 'islemde')">🔄 İşleme Al</button>` : ''}
+                        ${talep.durum === 'islemde' ? `<button class="btn-coz" onclick="talepDurumGuncelle(${talep.id}, 'cozuldu')">✅ Çözüldü</button>` : ''}
+                        ${talep.durum === 'beklemede' || talep.durum === 'islemde' ? `<button class="btn-red" onclick="talepDurumGuncelle(${talep.id}, 'reddedildi')">❌ Reddet</button>` : ''}
+                        <button class="btn-sil" onclick="talepSil(${talep.id})">🗑️ Sil</button>
+                    </div>
+                `;
+                liste.appendChild(kart);
+            });
+        }
+
+        // --- TALEP DURUM GÜNCELLE ---
+        function talepDurumGuncelle(id, yeniDurum) {
+            let talepler = JSON.parse(localStorage.getItem('destekTalepleri') || '[]');
+            const index = talepler.findIndex(t => t.id === id);
+            if (index !== -1) {
+                talepler[index].durum = yeniDurum;
+                localStorage.setItem('destekTalepleri', JSON.stringify(talepler));
+                
+                // Kullanıcıya bildirim gitmesi için
+                const durumMesaj = {
+                    'islemde': '🔄 Talebiniz işleme alındı! En kısa sürede çözülecektir.',
+                    'cozuldu': '✅ Talebiniz başarıyla çözüldü!',
+                    'reddedildi': '❌ Talebiniz reddedildi. Daha fazla bilgi için destek ile iletişime geçin.'
+                };
+                
+                let kullaniciBildirimler = JSON.parse(localStorage.getItem(`bildirimler_${talepler[index].kullanici}`) || '[]');
+                kullaniciBildirimler.unshift({
+                    id: Date.now(),
+                    metin: `🎫 Destek talebiniz güncellendi: ${durumMesaj[yeniDurum]}`,
+                    durum: 'yeni',
+                    tarih: new Date().toLocaleTimeString()
+                });
+                localStorage.setItem(`bildirimler_${talepler[index].kullanici}`, JSON.stringify(kullaniciBildirimler));
+                
+                talepleriListele();
+            }
+        }
+
+        // --- TALEP SİL ---
+        function talepSil(id) {
+            if (!confirm('Bu talebi silmek istediğine emin misin kanka?')) return;
+            
+            let talepler = JSON.parse(localStorage.getItem('destekTalepleri') || '[]');
+            talepler = talepler.filter(t => t.id !== id);
+            localStorage.setItem('destekTalepleri', JSON.stringify(talepler));
+            talepleriListele();
+        }
+
+        // --- SAYFA YÜKLENDİĞİNDE ---
+        document.addEventListener('DOMContentLoaded', function() {
+            if (aktif && aktif.rol === 'admin') {
+                talepleriListele();
+            }
+        });
+
+        // --- CANLI GÜNCELLEME (Admin için) ---
+        if (aktif && aktif.rol === 'admin') {
+            setInterval(() => {
+                talepleriListele();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

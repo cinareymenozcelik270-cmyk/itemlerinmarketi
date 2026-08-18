@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta name="google-site-verification" content="rXTtLPJavFhXvJ7TGofxQ3XXGZXb_B8dzSBNAPZwLFk" />
+    <link rel="icon" type="image/png" href="/resim.png">
+    <meta charset="UTF-8">
+    <title>Kayıt Ol - İtemlerinMarketi</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">İtemlerinMarketi</div>
+        <nav><a href="/">Ana Sayfa</a></nav>
+    </header>
+    <div class="container">
+        <h1>Kayıt Ol</h1>
+        <form id="regForm" class="form-box">
+            <input type="text" id="regKAdi" placeholder="Kullanıcı Adı Seç" required>
+            <input type="password" id="regSifre" placeholder="Şifre Belirle" required>
+            <button type="submit" class="btn">Kayıt Ol</label>
+        </form>
+        <p style="margin-top:15px; color:#94a3b8;">Zaten hesabın var mı? <a href="/login" style="color:#38bdf8;">Giriş Yap</a></p>
+    </div>
+    <script>
+        document.getElementById('regForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const kAdi = document.getElementById('regKAdi').value;
+            const sifre = document.getElementById('regSifre').value;
+
+            if(kAdi === 'admin9595') {
+                alert('Bu kullanıcı adı kullanılamaz!');
+                return;
+            }
+
+            let kayitliKullanicilar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
+            if(kayitliKullanicilar.find(u => u.kullaniciAdi === kAdi)) {
+                alert('Bu kullanıcı adı zaten alınmış!');
+                return;
+            }
+
+            kayitliKullanicilar.push({ kullaniciAdi: kAdi, sifre: sifre, bakiye: 0 });
+            localStorage.setItem('kullanicilar', JSON.stringify(kayitliKullanicilar));
+            alert('Kayıt başarılı! Giriş sayfasına yönlendiriliyorsun.');
+            window.location.href = '/login';
+        });
+    </script>
+</body>
+</html>

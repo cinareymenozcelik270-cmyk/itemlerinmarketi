@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta name="google-site-verification" content="rXTtLPJavFhXvJ7TGofxQ3XXGZXb_B8dzSBNAPZwLFk" />
+    <link rel="icon" type="image/png" href="/resim.png">
+    <meta charset="UTF-8">
+    <title>Bakiye Bildir - İtemlerinMarketi</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .bakiye-wrapper {
+            display: flex;
+            gap: 40px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .banka-karti {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 2px dashed #38bdf8;
+            padding: 30px;
+            border-radius: 12px;
+            flex: 1;
+            min-width: 300px;
+            max-width: 450px;
+        }
+        .banka-karti h3 {
+            color: #38bdf8;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        .banka-detay {
+            margin-bottom: 12px;
+            background: #1e293b;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #334155;
+        }
+        .banka-detay small {
+            color: #94a3b8;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .banka-detay strong {
+            color: #fff;
+            font-size: 16px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">İtemlerinMarketi</div>
+        <nav>
+            <a href="/">Ana Sayfa</a>
+        </nav>
+    </header>
+    <div class="container" id="icerik" style="display: none;">
+        <h1>Bakiye Bildirim Formu</h1>
+        <p>Aşağıdaki banka hesabına Havale/EFT yaptıktan sonra bildirim formunu doldur:</p>
+
+        <div class="bakiye-wrapper">
+            <!-- Sol Taraf: Form -->
+            <form id="bakiyeForm" class="form-box" style="flex: 1; min-width: 300px;">
+                <input type="text" id="kullaniciAdiInput" readonly required>
+                <input type="number" id="miktarInput" placeholder="Yatırdığın Tutar (TL)" required>
+                <button type="submit" class="btn">Bildirim Gönder</button>
+            </form>
+
+            <!-- Sağ Taraf: IBAN Alanı -->
+            <div class="banka-karti">
+                <h3>Banka Hesap Bilgilerimiz</h3>
+                <div class="banka-detay">
+                    <small>Alıcı Ad Soyad:</small>
+                    <strong>İlknur Eser Özçelik</strong>
+                </div>
+                <div class="banka-detay">
+                    <small>IBAN Numarası:</small>
+                    <strong style="color: #10b981; font-family: monospace;">TR54 0082 9000 0949 1357 6973 16</strong>
+                </div>
+                <p style="font-size: 12px; color: #94a3b8; margin-top: 15px;">
+                    * Lütfen transfer yaparken açıklama kısmına sitedeki kullanıcı adını yazmayı unutma.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
+        
+        if (!aktif) {
+            alert('Bakiye bildirmek için önce giriş yapmalısın!');
+            window.location.href = '/login';
+        } else {
+            document.getElementById('icerik').style.display = 'block';
+            document.getElementById('kullaniciAdiInput').value = aktif.kullaniciAdi;
+        }
+
+        // Form gönderildiğinde verileri tarayıcı havuzuna (localStorage) ekleme
+        document.getElementById('bakiyeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const miktar = parseFloat(document.getElementById('miktarInput').value);
+            
+            // Tüm bildirimleri ortak listede toplayalım
+            let tumBildirimler = JSON.parse(localStorage.getItem('tumBakiyeBildirimleri') || '[]');
+            
+            tumBildirimler.push({
+                id: tumBildirimler.length + 1,
+                kullaniciAdi: aktif.kullaniciAdi,
+                miktar: miktar,
+                durum: 'Beklemede',
+                tarih: new Date().toLocaleTimeString()
+            });
+            
+            localStorage.setItem('tumBakiyeBildirimleri', JSON.stringify(tumBildirimler));
+            alert('Bildirim başarıyla gönderildi! Yönetici paneline gidip onaylayabilirsin.');
+            document.getElementById('miktarInput').value = '';
+        });
+    </script>
+</body>
+</html>

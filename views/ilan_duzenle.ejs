@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta name="google-site-verification" content="rXTtLPJavFhXvJ7TGofxQ3XXGZXb_B8dzSBNAPZwLFk" />
+    <link rel="icon" type="image/png" href="/resim.png">
+    <meta charset="UTF-8">
+    <title>İlanı Düzenle - İtemlerinMarketi</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .dosya-sec-etiket { display: block; background: #1e293b; border: 1px dashed #38bdf8; padding: 12px; border-radius: 6px; color: #cbd5e1; font-size: 13px; cursor: pointer; margin-bottom: 12px; text-align: center; }
+        .onizleme-img { max-width: 100%; height: 120px; object-fit: contain; border-radius: 6px; margin-bottom: 15px; border: 1px solid #475569; background: #0f172a; }
+        .danger-btn { background-color: #ef4444 !important; color: white !important; margin-top: 10px; width: 100%; }
+        .danger-btn:hover { background-color: #dc2626 !important; }
+        .warning-btn { background-color: #f59e0b !important; color: #0f172a !important; margin-top: 10px; width: 100%; font-weight: bold; }
+        .warning-btn:hover { background-color: #d97706 !important; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">İtemlerinMarketi</div>
+        <nav><a href="/">Ana Sayfa</a></nav>
+    </header>
+    <div class="container" id="icerik" style="max-width: 500px; margin-top: 30px; display: none;">
+        <h1>⚙️ İlan Yönetimi ve Güncelleme</h1>
+        <p style="color: #94a3b8; font-size: 13px;">İlan bilgilerini değiştirebilir, yayından kaldırabilir veya tamamen silebilirsiniz.</p>
+
+        <form id="duzenleIlanFormu" class="form-box" style="margin-top:20px;">
+            <label style="color:#94a3b8; font-size:12px;">Ürün Başlığı:</label>
+            <input type="text" id="ilanBaslik" required autocomplete="off">
+            
+            <label style="color:#94a3b8; font-size:12px;">Ürün Açıklaması:</label>
+            <textarea id="ilanDetay" rows="4" required></textarea>
+            
+            <label style="color:#94a3b8; font-size:12px;">Teslimat Süresi:</label>
+            <select id="teslimatSuresi" required style="width:100%; padding:10px; background:#0f172a; color:white; border:1px solid #475569; border-radius:6px; margin-bottom:12px;">
+                <option value="15 Dakika">Anında (15 Dakika)</option>
+                <option value="1 Saat">1 Saat İçinde</option>
+                <option value="12 Saat">12 Saat İçinde</option>
+                <option value="24 Saat">24 Saat İçinde</option>
+            </select>
+
+            <!-- RESİM DEĞİŞTİRME -->
+            <label style="color:#94a3b8; font-size:12px;">Ürün Görseli:</label>
+            <label class="dosya-sec-etiket" for="ilanResimInput">📷 Yeni Resim Seç (Değiştirmek İçin)</label>
+            <input type="file" id="ilanResimInput" accept="image/*" style="display: none;">
+            <img id="ilanResimOnizleme" class="onizleme-img">
+
+            <label style="color:#94a3b8; font-size:12px;">Satış Fiyatı (TL):</label>
+            <input type="number" id="ilanFiyat" required>
+            
+            <!-- AKSİYON BUTONLARI -->
+            <button type="submit" class="btn" style="width: 100%;">✓ Değişiklikleri Kaydet</button>
+            <button type="button" id="listeDisiBtn" class="warning-btn btn">👁️ İlanı Liste Dışı Yap (Gizle)</button>
+            <button type="button" onclick="ilanSil()" class="danger-btn btn">🗑️ İlanı Tamamen Sil</button>
+        </form>
+    </div>
+
+    <script>
+        const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
+        // URL'den hangi ilanın düzenleneceğini anlama (Örn: /ilan-duzenle?id=123456)
+        const urlParams = new URLSearchParams(window.location.search);
+        const secilenIlanId = parseInt(urlParams.get('id'));
+
+        let pazardakiIlanlar = JSON.parse(localStorage.getItem('pazardakiIlanlar') || '[]');
+        let ilanIdx = pazardakiIlanlar.findIndex(i => i.id === secilenIlanId);
+
+        if (!aktif || ilanIdx === -1 || pazardakiIlanlar[ilanIdx].satici !== aktif.kullaniciAdi) {
+            alert('Hata: Bu ilanı düzenleme yetkiniz yok veya ilan bulunamadı Çınar!');
+            window.location.href = '/';
+        } else {
+            document.getElementById('icerik').style.display = 'block';
+            // Mevcut verileri kutucuklara doldurma
+            const ilan = pazardakiIlanlar[ilanIdx];
+            document.getElementById('ilanBaslik').value = ilan.baslik;
+            document.getElementById('ilanDetay').value = ilan.detay || '';
+            document.getElementById('teslimatSuresi').value = ilan.sure || '24 Saat';
+            document.getElementById('ilanFiyat').value = ilan.fiyat;
+            
+            if (ilan.resim) {
+                document.getElementById('ilanResimOnizleme').src = ilan.resim;
+            } else {
+                document.getElementById('ilanResimOnizleme').style.display = 'none';
+            }
+            
+            // Liste dışı butonunun adını durumuna göre ayarlama
+            const listeDisiBtn = document.getElementById('listeDisiBtn');
+            if (ilan.aktiflikDurumu === 'pasif') {
+                listeDisiBtn.innerText = "👁️ İlanı Listeye Ekle (Pazara Koy)";
+                listeDisiBtn.style.backgroundColor = "#10b981";
+            }
+            listeDisiBtn.onclick = ilanListeDisiYap;
+        }
+
+        let yeniResimBase64 = pazardakiIlanlar[ilanIdx]?.resim || "";
+
+        // Fotoğraf Değiştirme Yakalayıcı
+        document.getElementById('ilanResimInput').addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('ilanResimOnizleme').src = e.target.result;
+                    document.getElementById('ilanResimOnizleme').style.display = 'block';
+                    yeniResimBase64 = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // 1. GÜNCELLEME AKSİYONU
+        document.getElementById('duzenleIlanFormu').addEventListener('submit', function(e) {
+            e.preventDefault();
+            pazardakiIlanlar[ilanIdx].baslik = document.getElementById('ilanBaslik').value;
+            pazardakiIlanlar[ilanIdx].detay = document.getElementById('ilanDetay').value;
+            pazardakiIlanlar[ilanIdx].sure = document.getElementById('teslimatSuresi').value;
+            pazardakiIlanlar[ilanIdx].fiyat = parseFloat(document.getElementById('ilanFiyat').value);
+            pazardakiIlanlar[ilanIdx].resim = yeniResimBase64;
+
+            localStorage.setItem('pazardakiIlanlar', JSON.stringify(pazardakiIlanlar));
+            alert('Müjde! İlan bilgileri başarıyla güncellendi kanka.');
+            window.location.href = '/';
+        });
+
+        // 2. LİSTE DIŞI YAPMA (GİZLEME/GÖSTERME) AKSİYONU
+        function ilanListeDisiYap() {
+            if (pazardakiIlanlar[ilanIdx].aktiflikDurumu === 'pasif') {
+                pazardakiIlanlar[ilanIdx].aktiflikDurumu = 'aktif';
+                alert("İlan tekrar İtemlerin Pazarı'nda aktif olarak listelendi kanka!");
+            } else {
+                pazardakiIlanlar[ilanIdx].aktiflikDurumu = 'pasif';
+                alert("İlan liste dışı yapıldı! Artık sen isteyene kadar pazarda kimse göremez.");
+            }
+            localStorage.setItem('pazardakiIlanlar', JSON.stringify(pazardakiIlanlar));
+            window.location.href = '/';
+        }
+
+        // 3. TAMAMEN SİLME AKSİYONU
+        function ilanSil() {
+            if (confirm("Bu ilanı pazardan tamamen silmek istediğine emin misin Çınar?")) {
+                pazardakiIlanlar.splice(ilanIdx, 1);
+                localStorage.setItem('pazardakiIlanlar', JSON.stringify(pazardakiIlanlar));
+                alert("İlan sistemden tamamen uçuruldu!");
+                window.location.href = '/';
+            }
+        }
+    </script>
+</body>
+</html>

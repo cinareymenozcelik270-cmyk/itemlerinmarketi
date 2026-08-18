@@ -1,0 +1,37 @@
+// ============================================
+// 1. IPv4 ZORLAMA (EN ÜSTTE OLSUN)
+// ============================================
+process.env.NODE_OPTIONS = '--dns-result-order=ipv4first';
+
+const dns = require('dns');
+dns.setDefaultResultOrder('ipv4first');
+
+// ============================================
+// 2. MODÜLLER - NODEMAILER DEFAULT İLE
+// ============================================
+const express = require('express');
+const nodemailer = require('nodemailer').default; // ✅ .default EKLE!
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// ============================================
+// 3. NODEMAILER TRANSPORTER
+// ============================================
+const transporter = nodemailer.createTransporter({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+        user: 'ananiyiyemmm1461@gmail.com',
+        pass: 'gtsi fkgs ypna kran'
+    },
+    tls: {
+        rejectUnauthorized: false,
+        ciphers: 'SSLv3'
+    },
+    socketTimeout: 30000,
+    connectionTimeout: 30000
+});
+
+// ... devamı aynen

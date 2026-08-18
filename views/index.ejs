@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta name="google-site-verification" content="rXTtLPJavFhXvJ7TGofxQ3XXGZXb_B8dzSBNAPZwLFk" />
+    <link rel="icon" type="image/png" href="/resim.png">
+    <meta charset="UTF-8">
+    <title>İtemlerinMarketi - Güvenli Ticaret</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        /* HEADER VE SOL ÜST GRUP ESNEK TASARIMI */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+            flex-wrap: wrap;
+        }
+        .header-sol-bölüm {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .logo-img { height: 60px; width: auto; max-width: 200px; object-fit: contain; cursor: pointer; }
+        
+        .pazar-wrapper { display: flex; gap: 30px; flex-wrap: wrap; margin-top: 20px; }
+        .ilan-listesi-kutu { flex: 1; min-width: 300px; }
+
+        /* --- OVAL GRADYAN BUTON STİLİ --- */
+        .oval-ilan-ekle-btn {
+            background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+        .oval-ilan-ekle-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.5);
+        }
+        .kurallar-btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+        .kurallar-btn:hover {
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.5);
+        }
+
+        /* PAZAR KART VE ÜRÜN GÖRSELLERİNİN TASARIMI */
+        .card {
+            position: relative;
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+        }
+        .card a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .card a:hover .pazar-ilan-img {
+            opacity: 0.9;
+        }
+        .pazar-ilan-img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #334155;
+            background: #0f172a;
+        }
+        .teslimat-rozet {
+            display: inline-block;
+            background: #1e1b4b;
+            color: #a855f7;
+            padding: 2px 8px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 4px;
+            border: 1px solid #a855f7;
+            margin-bottom: 8px;
+        }
+        .price { color: #10b981; font-size: 20px; font-weight: bold; }
+
+        /* --- DÜZENLE / RAPORLA BUTON STİLLERİ --- */
+        .ilan-ust-eylem-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+            transition: transform 0.2s;
+        }
+        .ilan-ust-eylem-btn:hover { transform: scale(1.1); }
+        .btn-duzenle { background: #38bdf8; color: #0f172a; }
+        .btn-raporla { background: #ef4444; color: white; }
+
+        /* CÜZDAN DROPDOWN */
+        .header-sag-grup { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .cuzdan-dropdown { position: relative; display: inline-block; }
+        .cuzdan-buton { background: #15803d; color: white; padding: 6px 14px; border-radius: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; user-select: none; border: 1px solid #166534; }
+        .cuzdan-buton svg { width: 14px; height: 14px; fill: white; }
+        .dropdown-menu { display: none; position: absolute; right: 0; top: 35px; background-color: #1e293b; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5); border-radius: 8px; border: 1px solid #334155; z-index: 1002; overflow: hidden; }
+        .dropdown-menu a { color: #cbd5e1; padding: 10px 14px; text-decoration: none; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500; border-bottom: 1px solid #334155; }
+        .dropdown-menu a:last-child { border-bottom: none; }
+        .dropdown-menu a:hover { background-color: #334155; color: #38bdf8; }
+        .cuzdan-dropdown:hover .dropdown-menu { display: block; }
+        
+        /* BİLDİRİM SEKME TASARIMI */
+        .bildirim-dropdown { position: relative; display: inline-block; }
+        .bildirim-buton { font-size: 20px; cursor: pointer; user-select: none; position: relative; background: none; border: none; padding: 5px; }
+        .bildirim-sayac { position: absolute; top: -2px; right: -5px; background: #ef4444; color: white; font-size: 9px; padding: 1px 5px; border-radius: 10px; font-weight: bold; }
+        .bildirim-menu { display: none; position: absolute; right: 0; top: 40px; background-color: #1e293b; width: 280px; max-height: 300px; overflow-y: auto; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5); border-radius: 8px; border: 1px solid #334155; z-index: 1002; }
+        .bildirim-item { padding: 12px; border-bottom: 1px solid #334155; font-size: 13px; color: #cbd5e1; text-align: left; line-height: 1.4; }
+        .bildirim-item:last-child { border-bottom: none; }
+        .bildirim-item small { display: block; color: #94a3b8; margin-top: 4px; font-size: 11px; }
+
+        /* PROFİL RESMİ VE AÇILIR MENÜ TASARIMI */
+        .profil-dropdown { position: relative; display: inline-block; }
+        .profil-avatar-btn { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 2px solid #10b981; }
+        .profil-menu { display: none; position: absolute; right: 0; top: 45px; background: #1e293b; min-width: 140px; border-radius: 8px; border: 1px solid #334155; z-index: 1005; overflow: hidden; }
+        .profil-menu a { color: #cbd5e1; padding: 10px 15px; text-decoration: none; display: block; font-size: 13px; border-bottom: 1px solid #334155; }
+        .profil-menu a:hover { background: #334155; color: #38bdf8; }
+        .profil-menu a:last-child { border-bottom: none; }
+
+        /* --- SOHBET BUTONU (SOL ALT) --- */
+        .sohbet-butonu {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            border-radius: 50%;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1001;
+            transition: transform 0.2s;
+            border: none;
+        }
+        .sohbet-butonu:hover { transform: scale(1.1); }
+        .sohbet-butonu svg { width: 30px; height: 30px; fill: white; }
+
+        /* --- DESTEK BUTONU (SAĞ ALT) --- */
+        .destek-butonu {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1001;
+            transition: transform 0.2s;
+            border: none;
+        }
+        .destek-butonu:hover { transform: scale(1.1); }
+        .destek-butonu img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+        }
+
+        /* --- SOHBET KUTUSU (SOL) --- */
+        .sohbet-kapsayici {
+            position: fixed;
+            bottom: 100px;
+            left: 25px;
+            width: 350px;
+            max-height: 450px;
+            height: 450px;
+            background: #1e293b;
+            border: 2px solid #6366f1;
+            border-radius: 16px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+            z-index: 1000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .sohbet-kapsayici.acik { display: flex; }
+
+        /* --- DESTEK KUTUSU (SAĞ) --- */
+        .destek-kapsayici {
+            position: fixed;
+            bottom: 100px;
+            right: 25px;
+            width: 350px;
+            max-height: 450px;
+            height: 450px;
+            background: #1e293b;
+            border: 2px solid #10b981;
+            border-radius: 16px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+            z-index: 1000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .destek-kapsayici.acik { display: flex; }
+
+        /* --- ORTAK CHAT STİLLERİ --- */
+        .chat-baslik {
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 15px;
+            flex-shrink: 0;
+            color: white;
+        }
+        .chat-baslik.sohbet-baslik {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+        }
+        .chat-baslik.destek-baslik {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        .chat-baslik .baslik-sol {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .chat-baslik .online-nokta {
+            width: 10px;
+            height: 10px;
+            background: #10b981;
+            border-radius: 50%;
+            display: inline-block;
+            animation: yanipSon 1.5s infinite;
+        }
+        @keyframes yanipSon {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .chat-baslik .kapat-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            padding: 0 5px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .chat-baslik .kapat-btn:hover { opacity: 1; }
+        .chat-baslik .sonlandir-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .chat-baslik .sonlandir-btn:hover { background: #dc2626; }
+
+        .chat-mesajlar {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #0f172a;
+        }
+        .chat-mesajlar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .chat-mesajlar::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        .chat-mesajlar::-webkit-scrollbar-thumb {
+            background: #6366f1;
+            border-radius: 4px;
+        }
+
+        .chat-mesaj {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+        .chat-mesaj.giden {
+            align-self: flex-end;
+            background: #6366f1;
+            color: white;
+            border-radius: 12px 12px 4px 12px;
+        }
+        .chat-mesaj.gelen {
+            align-self: flex-start;
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 12px 12px 12px 4px;
+            border: 1px solid #334155;
+        }
+        .chat-mesaj .mesaj-zaman {
+            font-size: 10px;
+            opacity: 0.6;
+            margin-top: 4px;
+            display: block;
+        }
+        .chat-mesaj .mesaj-gonderen {
+            font-size: 11px;
+            font-weight: 600;
+            color: #a855f7;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .chat-mesaj.sistem {
+            align-self: center;
+            background: #1e1b4b;
+            color: #a855f7;
+            border: 1px solid #a855f7;
+            font-size: 12px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            max-width: 90%;
+            text-align: center;
+        }
+        .chat-mesaj.sonlandirildi {
+            align-self: center;
+            background: #7f1d1d;
+            color: #fca5a5;
+            border: 1px solid #ef4444;
+            font-size: 12px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        .chat-form {
+            display: flex;
+            padding: 12px 15px;
+            background: #1e293b;
+            gap: 10px;
+            border-top: 1px solid #334155;
+            flex-shrink: 0;
+        }
+        .chat-form input {
+            flex: 1;
+            padding: 10px 14px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: white;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .chat-form input:focus {
+            border-color: #6366f1;
+        }
+        .chat-form input::placeholder {
+            color: #64748b;
+        }
+        .chat-form input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .chat-form button {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        .chat-form button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+        .chat-form button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .chat-form button.destek-gonder {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        .chat-form button.destek-gonder:hover {
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        /* KİŞİ LİSTESİ */
+        .kisiler-listesi {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            background: #0f172a;
+        }
+        .kisi-kart {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #1e293b;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid #334155;
+            transition: background 0.2s;
+        }
+        .kisi-kart:hover {
+            background: #334155;
+            border-color: #6366f1;
+        }
+        .kisi-avatar {
+            width: 35px;
+            height: 35px;
+            background: #475569;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: #38bdf8;
+            font-size: 14px;
+        }
+
+        /* İLAN KURALLARI MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-icerik {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 25px;
+            color: #cbd5e1;
+        }
+        .modal-icerik h2 { color: #38bdf8; margin-top: 0; }
+        .modal-icerik h3 { color: #a855f7; }
+        .modal-kapat-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            float: right;
+        }
+        .modal-kapat-btn:hover { background: #dc2626; }
+
+        .kurallar-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 12px 0;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        .kurallar-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #6366f1;
+            cursor: pointer;
+        }
+        .kurallar-link {
+            color: #38bdf8;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .kurallar-link:hover { color: #a855f7; }
+
+        /* RESPONSIVE */
+        @media (max-width: 480px) {
+            .sohbet-kapsayici, .destek-kapsayici {
+                width: 100%;
+                height: 100%;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                border-radius: 0;
+                border: none;
+            }
+            .sohbet-butonu, .destek-butonu {
+                width: 50px;
+                height: 50px;
+            }
+            .sohbet-butonu { left: 15px; }
+            .destek-butonu { right: 15px; }
+        }
+
+        /* DESTEK SONLANDIRMA UYARI MODAL */
+        .onay-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        .onay-modal.active { display: flex; }
+        .onay-icerik {
+            background: #1e293b;
+            border: 1px solid #ef4444;
+            border-radius: 16px;
+            max-width: 450px;
+            width: 90%;
+            padding: 30px;
+            color: #cbd5e1;
+            text-align: center;
+        }
+        .onay-icerik h3 { color: #ef4444; margin-top: 0; }
+        .onay-icerik .onay-butonlar {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        .onay-icerik .onay-butonlar button {
+            padding: 10px 30px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .onay-icerik .onay-butonlar button:hover { transform: scale(1.05); }
+        .onay-icerik .onay-butonlar .evet-btn {
+            background: #ef4444;
+            color: white;
+        }
+        .onay-icerik .onay-butonlar .evet-btn:hover { background: #dc2626; }
+        .onay-icerik .onay-butonlar .hayir-btn {
+            background: #475569;
+            color: white;
+        }
+        .onay-icerik .onay-butonlar .hayir-btn:hover { background: #334155; }
+        .onay-icerik .kullanici-listesi {
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 15px 0;
+            max-height: 150px;
+            overflow-y: auto;
+            text-align: left;
+        }
+        .onay-icerik .kullanici-listesi .kullanici-item {
+            padding: 8px 12px;
+            border-bottom: 1px solid #334155;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .onay-icerik .kullanici-listesi .kullanici-item:hover {
+            background: #1e293b;
+        }
+        .onay-icerik .kullanici-listesi .kullanici-item.selected {
+            background: #334155;
+            border-left: 3px solid #ef4444;
+        }
+        .onay-icerik .kullanici-listesi .kullanici-item:last-child {
+            border-bottom: none;
+        }
+
+        /* RESİM YÜKLEME STİLLERİ */
+        .resim-ekle-alani {
+            margin-bottom: 12px;
+        }
+        .resim-ekle-alani label {
+            color: #94a3b8;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .resim-ekle-alani input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            background: #0f172a;
+            border: 1px solid #475569;
+            color: white;
+            border-radius: 6px;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+        .resim-ekle-alani input[type="file"]::-webkit-file-upload-button {
+            background: #334155;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .resim-ekle-alani input[type="file"]::-webkit-file-upload-button:hover {
+            background: #475569;
+        }
+        .resim-onizleme {
+            margin-top: 8px;
+            display: none;
+            position: relative;
+        }
+        .resim-onizleme img {
+            max-width: 100%;
+            max-height: 150px;
+            border-radius: 6px;
+            border: 1px solid #334155;
+        }
+        .resim-onizleme .kaldir-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 4px;
+            font-size: 12px;
+        }
+        .resim-onizleme .kaldir-btn:hover {
+            background: #dc2626;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-sol-bölüm">
+            <a href="/"><img src="/gif.png" alt="İtemlerinMarketi" class="logo-img" onerror="this.onerror=null; this.outerHTML='İtemlerinMarketi';"></a>
+            <a href="/ilan-ekle" class="oval-ilan-ekle-btn">➕ İlan Ekle</a>
+            <button class="oval-ilan-ekle-btn kurallar-btn" onclick="kurallariGoster(event)">📋 Kurallar</button>
+        </div>
+        
+        <div class="header-sag-grup">
+            <div class="bildirim-dropdown" id="bildirimKapsayici" style="display: none;">
+                <div class="bildirim-buton" onclick="bildirimMenuAcKapat(event)">
+                    🔔 <span class="bildirim-sayac" id="bSayac">0</span>
+                </div>
+                <div class="bildirim-menu" id="bildirimListesiGövde"></div>
+            </div>
+
+            <div class="cuzdan-dropdown" id="cuzdanKapsayici" style="display: none;">
+                <div class="cuzdan-buton">
+                    <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                    <span id="cuzdanBakiyeYazi">0.00 ₺</span>
+                </div>
+                <div class="dropdown-menu">
+                    <a href="/bakiye">💵 Bakiye Yükle</a>
+                    <a href="/para-cek">💳 Para Çek</a>
+                </div>
+            </div>
+
+            <div id="userInfo" style="font-weight: bold; color: #10b981; font-size: 13px;">Giriş Yapılmadı</div>
+
+            <!-- PROFİL RESMİ VE AÇILIR MENÜ -->
+            <div class="profil-dropdown" id="profilGrup" style="display: none;">
+                <img src="/profil.jpg" id="headerProfilResmi" class="profil-avatar-btn" onclick="profilMenusuAcKapat(event)">
+                <div class="profil-menu" id="profilAçilirMenu">
+                    <a href="/profil">👤 Profilim</a>
+                    <a href="/destek-talebi">🎫 Destek Talebi</a>
+                    <a href="#" onclick="sistemdenCikisYap()">✕ Çıkış Yap</a>
+                </div>
+            </div>
+        </div>
+
+        <nav id="navMenu" style="display: flex; gap: 10px;">
+            <a href="/">Pazar</a>
+            <a href="/login" id="loginLink">Giriş</a>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <div class="pazar-wrapper">
+            <div class="ilan-listesi-kutu">
+                <h3 style="color:#38bdf8;">🛒 İtemlerin Pazarı</h3>
+                <!-- İLANLAR EJS İLE RENDER EDİLİYOR -->
+                <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(230px,1fr)); gap:15px;">
+                    <% if (ilanlar && ilanlar.length > 0) { %>
+                        <% ilanlar.forEach(ilan => { %>
+                            <div class="card">
+                                <!-- ⭐ BURASI ÇOK ÖNEMLİ: ilan._id KULLAN! -->
+                                <a href="/ilan/<%= ilan._id %>" style="text-decoration:none; color:inherit; display:block;">
+                                    <img src="<%= ilan.resim || 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23334155%22 stroke-width=%222%22><rect x=%223%22 y=%223%22 width=%2218%22 height=%2218%22 rx=%222%22/><circle cx=%228.5%22 cy=%228.5%22 r=%221.5%22/><path d=%22M21 15l-5-5L5 21%22/></svg>' %>" class="pazar-ilan-img" alt="<%= ilan.baslik %>">
+                                    <span class="teslimat-rozet">⏱️ <%= ilan.sure || '24 Saat' %></span>
+                                    <h3 style="color:white;"><%= ilan.baslik %></h3>
+                                    <p style="font-size:13px; color:#94a3b8; margin:5px 0;">Satıcı: <strong><%= ilan.satici %></strong></p>
+                                    <div class="price"><%= ilan.fiyat %> TL</div>
+                                </a>
+                                <div style="display:flex; gap:10px; margin-top:10px;">
+                                    <button class="btn" style="padding:6px 12px; font-size:13px; flex:1;" onclick="ilanSatinAl('<%= ilan._id %>', <%= ilan.fiyat %>, '<%= ilan.satici %>', '<%= ilan.baslik.replace(/'/g, "\\'") %>')">Satın Al</button>
+                                    <button class="btn" style="padding:6px 12px; font-size:13px; background-color:#1e293b; color:#38bdf8; border:1px solid #38bdf8;" onclick="sohbetOdasiTetikle('<%= ilan.satici %>')">💬 Mesaj At</button>
+                                </div>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <div style="color:#94a3b8; text-align:center; padding:40px; grid-column:1/-1;">📭 Henüz ilan yok. İlk ilanı sen ekle!</div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- İLAN EKLEME MODAL -->
+    <div id="ilanEkleModal" class="modal-overlay">
+        <div class="modal-icerik">
+            <button class="modal-kapat-btn" onclick="ilanEkleModalKapat()">✕ Kapat</button>
+            <h2>📦 Yeni İlan Ekle</h2>
+            <form id="ilanFormu" class="ilan-form">
+                <input type="text" id="ilanBaslik" placeholder="Ürün başlığı" required style="width:100%; padding:10px; background:#0f172a; border:1px solid #475569; color:white; border-radius:6px; box-sizing:border-box; margin-bottom:12px;">
+                <input type="number" id="ilanFiyat" placeholder="Fiyat (TL)" step="0.01" required style="width:100%; padding:10px; background:#0f172a; border:1px solid #475569; color:white; border-radius:6px; box-sizing:border-box; margin-bottom:12px;">
+                
+                <div class="kurallar-checkbox">
+                    <input type="checkbox" id="kurallarOnay" required>
+                    <label for="kurallarOnay">
+                        <span class="kurallar-link" onclick="kurallariGoster(event)">İlan kurallarını</span> okudum ve kabul ediyorum.
+                    </label>
+                </div>
+
+                <textarea id="ilanDetay" placeholder="Ürün açıklaması..." rows="3" style="width:100%; padding:10px; background:#0f172a; border:1px solid #475569; color:white; border-radius:6px; box-sizing:border-box; margin-bottom:12px;"></textarea>
+                <input type="text" id="ilanSure" placeholder="Teslimat süresi (örn: 15 Dakika)" style="width:100%; padding:10px; background:#0f172a; border:1px solid #475569; color:white; border-radius:6px; box-sizing:border-box; margin-bottom:12px;">
+                
+                <!-- RESİM YÜKLEME ALANI -->
+                <div class="resim-ekle-alani">
+                    <label>📷 Ürün Görseli (Opsiyonel)</label>
+                    <input type="file" id="ilanResimInput" accept="image/*">
+                    <div class="resim-onizleme" id="ilanResimOnizleme">
+                        <img id="ilanResimGoster" src="#" alt="Görsel önizleme">
+                        <button type="button" class="kaldir-btn" onclick="ilanResimTemizle()">✕ Kaldır</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn" style="width:100%; padding:12px; background:linear-gradient(135deg, #a855f7, #6366f1); color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">🚀 İlanı Yayınla</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- İLAN KURALLARI MODAL -->
+    <div id="kurallarModal" class="modal-overlay">
+        <div class="modal-icerik">
+            <button class="modal-kapat-btn" onclick="kurallarModalKapat()">✕ Kapat</button>
+            <h2>📋 İTEMLERİNMARKETİ İLAN VERME KURALLARI</h2>
+            <div style="font-size:13px; line-height:1.8; color:#cbd5e1;">
+                <p>Aşağıda yazan ilan verme kuralları bireysel ve kurumsal üyeler dahil ve tüm kategori tipleri için geçerlidir. İlan girişinde bulunan Üye, ilan verme kurallarına, üyelik ve kullanıcı sözleşmeleri ile bu belgenin devamında belirtilen Yasak Ürünler Listesi'nde belirtilen kurallara uymayı kabul ve taahhüt etmiş sayılır.</p>
+                <h3>1. TANIMLAR</h3>
+                <p><strong>İNTERNET SİTESİ :</strong> Tüm hakları Şirket'e ait olan, www.itemlerinmarketi.com alan adını ve bu alan adına bağlı alt alan adlarından oluşan internet sitesidir.</p>
+                <p><strong>MOBİL UYGULAMA :</strong> Tüm hakları Şirket'e ait olan, cep telefonu, tablet ve benzeri taşınabilir cihazlarda çalışan İtemlerinMarketi adlı yazılımdır.</p>
+                <p><strong>İTEMLERİNMARKETİ :</strong> İnternet Sitesi ve Mobil Uygulama ile birlikte "İtemlerinMarketi" olarak anılmaktadır.</p>
+                <p><strong>ÜYE :</strong> İtemlerinMarketi üzerinde üye olmuş ve hizmetlerden faydalanan gerçek veya tüzel kişileri ifade eder.</p>
+                <p><strong>SATICI:</strong> İtemlerinMarketi'ya üye olarak kendisine ait Ürün'ü Alıcıya satan kişidir.</p>
+                <p><strong>ALICI:</strong> İtemlerinMarketi'ya üye olarak ürün satın alan kişidir.</p>
+                <h3>2. GENEL HÜKÜMLER</h3>
+                <p>2.1. İtemlerinMarketi "Aracı Hizmet Sağlayıcı" sıfatını haizdir.</p>
+                <p>2.2. İtemlerinMarketi'ya üye olmayanlar ilan veremez.</p>
+                <p>2.3. İtemlerinMarketi'nda ilan vermek ücretsizdir.</p>
+                <p>2.4. Satıcı, ilan vermeden önce kuralları okuduğunu ve anladığını kabul eder.</p>
+                <p>2.5. Satıcı, ilanının yasalara uygun olduğunu kabul eder.</p>
+                <p>2.6. İlan ile ilgili tüm sorumluluk Satıcı'ya aittir.</p>
+                <p>2.8. Piyasa fiyatlarının çok altında veya üstünde ilanlar yayından kaldırılabilir.</p>
+                <p>2.10. Aynı ürüne ait ikinci ilan girilemez.</p>
+                <p>2.11. İlan içeriğinde başka platforma yönlendirme yasaktır.</p>
+                <p>2.17. Yasak içerikler (ırkçılık, terör, pornografi, hakaret vb.) yasaktır.</p>
+                <p>2.18. Kurallara aykırı ilanlar yayından kaldırılır.</p>
+                <h3>3. YASAKLI ÜRÜNLER LİSTESİ</h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; font-size:12px;">
+                    <span>• Sağlık Beyanlı Ürünler</span>
+                    <span>• Kültür ve Tabiat Varlıkları</span>
+                    <span>• Ateşli Silah ve Kesici Aletler</span>
+                    <span>• Yanıcı ve Patlayıcı Malzemeler</span>
+                    <span>• Bandrolsüz Ürünler</span>
+                    <span>• Alkollü İçecek ve Tütün</span>
+                    <span>• Cinsel İçerik ve Pornografi</span>
+                    <span>• Taklit Ürünler</span>
+                    <span>• Resmi Belge Satışı</span>
+                    <span>• Trafik Aygıtları ve Plaka</span>
+                    <span>• Fon ve Hisse Senedi</span>
+                    <span>• Organ</span>
+                    <span>• Evcil Hayvan ve Yasaklı Hayvanlar</span>
+                    <span>• Şans Oyunu Biletleri</span>
+                    <span>• Tarım İlaçları</span>
+                    <span>• Telsiz Ürünleri</span>
+                    <span>• Etkinlik Biletleri</span>
+                    <span>• İlaç Satışı</span>
+                    <span>• Siyasi İçerikli Ürünler</span>
+                    <span>• Resmi Kıyafet & Askeri Malzemeler</span>
+                    <span>• Uyuşturucu Madde</span>
+                    <span>• Hack Yazılımları</span>
+                    <span>• Sosyal Medya Pazarlama</span>
+                    <span>• SEO Hizmetleri</span>
+                    <span>• Her Türlü Gıda</span>
+                    <span>• Sanal Para Satışı</span>
+                    <span>• IMEI kopyalanmış Telefonlar</span>
+                    <span>• Çalıntı Ürünler</span>
+                    <span>• Emlak ve Arsa Satışı</span>
+                    <span>• Her Türlü Vasıta Satışı</span>
+                    <span>• Kozmetik ve Sağlık Ürünleri</span>
+                    <span>• Film platformu ürünleri</span>
+                    <span>• İç Giyim</span>
+                    <span>• İş İlanları</span>
+                    <span>• Ön Sipariş İlanları</span>
+                    <span>• VDS/Sunucu ilanları</span>
+                    <span>• Riot Points, Valorant Points</span>
+                    <span>• Hile/3. parti yazılımlar</span>
+                    <span>• IPTV, BeinConnect, Digitürk</span>
+                    <span>• BluTV, Exxen hesapları</span>
+                    <span>• Yemeksepeti, Getir hesapları</span>
+                    <span>• Mining (madencilik)</span>
+                    <span>• Discord Nitro Generator</span>
+                    <span>• Twitch bit bağışları</span>
+                    <span>• Telefon onaylama</span>
+                    <span>• Sonoyuncu</span>
+                    <span>• 1000+ Youtube Abone</span>
+                    <span>• Minecraft itemsadder plugin</span>
+                    <span>• CD Key satışları</span>
+                    <span>• NordVPN</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SOHBET BUTONU (SOL ALT) -->
+    <button class="sohbet-butonu" onclick="sohbetPencerisiniAcKapat()" aria-label="Sohbet">
+        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+    </button>
+
+    <!-- DESTEK BUTONU (SAĞ ALT) -->
+    <button class="destek-butonu" onclick="destekPencerisiniAcKapat()" aria-label="Canlı Destek">
+        <img src="/destek.png" alt="Canlı Destek">
+    </button>
+
+    <!-- SOHBET KUTUSU (SOL) -->
+    <div class="sohbet-kapsayici" id="sohbetKapsayici">
+        <div class="chat-baslik sohbet-baslik">
+            <div class="baslik-sol">
+                <span>💬 Sohbet</span>
+            </div>
+            <button class="kapat-btn" onclick="sohbetPencerisiniAcKapat()">✕</button>
+        </div>
+
+        <!-- KİŞİ LİSTESİ -->
+        <div class="kisiler-listesi" id="kisiListesiGövdeSol"></div>
+
+        <!-- SOHBET EKRANI -->
+        <div class="chat-ekran" id="ekranKonusmaSol" style="display: none; flex-direction: column; height: 100%;">
+            <div style="display:flex; align-items:center; padding:10px 15px; background:#1e293b; border-bottom:1px solid #334155; gap:10px;">
+                <span style="cursor:pointer; font-size:18px; color:#94a3b8;" onclick="kisilerEkraninaDonSol()">←</span>
+                <span id="sohbetHedefAdSol" style="color:white; font-weight:600;">Kullanıcı</span>
+            </div>
+            <div class="chat-mesajlar" id="chatMesajAlaniSol"></div>
+            <form class="chat-form" id="chatFormuSol">
+                <input type="text" id="chatMesajInputSol" placeholder="Mesajınızı yazın..." required autocomplete="off">
+                <button type="submit">Gönder</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- DESTEK KUTUSU (SAĞ) -->
+    <div class="destek-kapsayici" id="destekKapsayici">
+        <div class="chat-baslik destek-baslik">
+            <div class="baslik-sol">
+                <span>🛡️ Canlı Destek</span>
+                <span class="online-nokta"></span>
+                <span style="font-size:12px; opacity:0.8; font-weight:400;">Çevrimiçi</span>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center;">
+                <button class="sonlandir-btn" id="sonlandirBtn" onclick="destekSonlandirModalAc()" style="display:none;">🔚 Sohbeti Sonlandır</button>
+                <button class="kapat-btn" onclick="destekPencerisiniAcKapat()">✕</button>
+            </div>
+        </div>
+
+        <div class="chat-mesajlar" id="destekMesajAlani">
+            <div class="chat-mesaj sistem">🤖 Hoş geldin! Size nasıl yardımcı olabilirim?</div>
+        </div>
+
+        <form class="chat-form" id="destekFormu">
+            <input type="text" id="destekMesajInput" placeholder="Mesajınızı yazın..." required autocomplete="off">
+            <button type="submit" class="destek-gonder">Gönder</button>
+        </form>
+    </div>
+
+    <!-- DESTEK SONLANDIRMA ONAY MODAL -->
+    <div class="onay-modal" id="sonlandirModal">
+        <div class="onay-icerik">
+            <h3>🔚 Sohbeti Sonlandır</h3>
+            <p style="color:#94a3b8;">Hangi kullanıcının destek sohbetini sonlandırmak istiyorsun?</p>
+            <div class="kullanici-listesi" id="kullaniciListesiModal"></div>
+            <div class="onay-butonlar">
+                <button class="hayir-btn" onclick="destekSonlandirModalKapat()">❌ İptal</button>
+                <button class="evet-btn" id="sonlandirOnaylaBtn" onclick="destekSonlandir()">🔚 Sonlandır</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ============================================
+    // TAM SCRIPT
+    // ============================================
+    
+    const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
+    let suAnkiSohbetKullaniciSol = "";
+    let destekAktif = false;
+    let secilenSonlandirilacakKullanici = null;
+    let yuklenenResimBase64 = "";
+
+    // ============================================
+    // RESİM YÜKLEME FONKSİYONLARI
+    // ============================================
+    document.getElementById('ilanResimInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            yuklenenResimBase64 = event.target.result;
+            const onizleme = document.getElementById('ilanResimOnizleme');
+            const goster = document.getElementById('ilanResimGoster');
+            goster.src = yuklenenResimBase64;
+            onizleme.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    });
+
+    function ilanResimTemizle() {
+        yuklenenResimBase64 = "";
+        document.getElementById('ilanResimInput').value = '';
+        document.getElementById('ilanResimOnizleme').style.display = 'none';
+        document.getElementById('ilanResimGoster').src = '#';
+    }
+
+    // ============================================
+    // YAPAY ZEKA CEVAP MOTORU
+    // ============================================
+    function aiCevapUret(mesaj) {
+        const msg = mesaj.toLowerCase().trim();
+        const cevaplar = [
+            { anahtar: ["merhaba", "selam", "hey", "naber"], cevap: "Merhaba! Size nasıl yardımcı olabilirim? 😊" },
+            { anahtar: ["teşekkür", "sağol", "tşk"], cevap: "Rica ederim! 🙏" },
+            { anahtar: ["bakiye", "para", "cüzdan"], cevap: "💵 Bakiyenizi cüzdan kısmından kontrol edebilirsiniz." },
+            { anahtar: ["ilan", "ilanlar", "ilan verme"], cevap: "📦 İlan vermek için 'İlan Ekle' butonunu kullanabilirsiniz." },
+            { anahtar: ["destek", "yardım", "sorun"], cevap: "🛡️ Size nasıl yardımcı olabilirim?" },
+            { anahtar: ["güvenli", "güvenlik"], cevap: "🔒 İtemlerinMarketi güvenli ticaret prensibiyle çalışır." }
+        ];
+        for (let i = 0; i < cevaplar.length; i++) {
+            for (let j = 0; j < cevaplar[i].anahtar.length; j++) {
+                if (msg.includes(cevaplar[i].anahtar[j])) {
+                    return cevaplar[i].cevap;
+                }
+            }
+        }
+        return null;
+    }
+
+    // ============================================
+    // DESTEK FONKSİYONLARI
+    // ============================================
+    function destekAiCevapla(kullaniciAdi, mesaj) {
+        const odaKey = [kullaniciAdi, 'admin9595'].sort().join('_');
+        let mesajlar = JSON.parse(localStorage.getItem(`ozel_oda_${odaKey}`) || '[]');
+        const aiCevap = aiCevapUret(mesaj);
+        if (aiCevap) {
+            mesajlar.push({ gonderen: 'SİSTEM', metin: `🤖 ${aiCevap}` });
+            localStorage.setItem(`ozel_oda_${odaKey}`, JSON.stringify(mesajlar));
+            if (destekAktif && aktif.kullaniciAdi === kullaniciAdi) {
+                destekMesajlariGoster(mesajlar);
+            }
+            bildirimEkle(kullaniciAdi, `🤖 AI Asistan: ${aiCevap}`);
+            return true;
+        } else {
+            mesajlar.push({ gonderen: 'SİSTEM', metin: `📨 ${kullaniciAdi} size mesaj gönderdi (AI yönlendirdi)` });
+            localStorage.setItem(`ozel_oda_${odaKey}`, JSON.stringify(mesajlar));
+            bildirimEkle('admin9595', `🤖 AI yönlendirdi! ${kullaniciAdi} mesaj gönderdi.`);
+            return false;
+        }
+    }
+
+    function destekPencerisiniAcKapat() {
+        if (!aktif) { alert('Giriş yapmalısın!'); return; }
+        const kapsayici = document.getElementById('destekKapsayici');
+        kapsayici.classList.toggle('acik');
+        if (kapsayici.classList.contains('acik')) {
+            destekAktif = true;
+            const odaKey = [aktif.kullaniciAdi, 'admin9595'].sort().join('_');
+            const mesajlar = JSON.parse(localStorage.getItem(`ozel_oda_${odaKey}`) || '[]');
+            destekMesajlariGoster(mesajlar);
+            document.getElementById('destekMesajInput').focus();
+        } else {
+            destekAktif = false;
+        }
+    }
+
+    function destekMesajlariGoster(mesajlar) {
+        const alan = document.getElementById('destekMesajAlani');
+        alan.innerHTML = '';
+        if (mesajlar.length === 0) {
+            alan.innerHTML = `<div class="chat-mesaj sistem">🤖 Hoş geldin!</div>`;
+            return;
+        }
+        mesajlar.forEach(m => {
+            const div = document.createElement('div');
+            div.className = 'chat-mesaj';
+            if (m.gonderen === 'SİSTEM') {
+                div.classList.add('sistem');
+                div.textContent = m.metin;
+            } else if (m.gonderen === 'SİSTEM_SONLANDIR') {
+                div.classList.add('sonlandirildi');
+                div.textContent = m.metin;
+            } else if (m.gonderen === aktif.kullaniciAdi) {
+                div.classList.add('giden');
+                div.innerHTML = `${m.metin}<span class="mesaj-zaman">${new Date().toLocaleTimeString()}</span>`;
+            } else {
+                div.classList.add('gelen');
+                div.innerHTML = `<span class="mesaj-gonderen">🛡️ Destek</span>${m.metin}<span class="mesaj-zaman">${new Date().toLocaleTimeString()}</span>`;
+            }
+            alan.appendChild(div);
+        });
+        alan.scrollTop = alan.scrollHeight;
+    }
+
+    document.getElementById('destekFormu').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!aktif) return;
+        const girdi = document.getElementById('destekMesajInput');
+        const mesaj = girdi.value.trim();
+        if (!mesaj) return;
+        const odaKey = [aktif.kullaniciAdi, 'admin9595'].sort().join('_');
+        let mesajlar = JSON.parse(localStorage.getItem(`ozel_oda_${odaKey}`) || '[]');
+        mesajlar.push({ gonderen: aktif.kullaniciAdi, metin: mesaj });
+        localStorage.setItem(`ozel_oda_${odaKey}`, JSON.stringify(mesajlar));
+        destekMesajlariGoster(mesajlar);
+        girdi.value = '';
+        destekAiCevapla(aktif.kullaniciAdi, mesaj);
+    });
+
+    // ============================================
+    // DESTEK SONLANDIRMA
+    // ============================================
+    function destekSonlandirModalAc() {
+        if (aktif.rol !== 'admin') { alert('Sadece admin!'); return; }
+        const modal = document.getElementById('sonlandirModal');
+        const liste = document.getElementById('kullaniciListesiModal');
+        liste.innerHTML = '';
+        secilenSonlandirilacakKullanici = null;
+        let tumUyeler = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
+        tumUyeler.forEach(u => {
+            if (u.kullaniciAdi === 'admin9595') return;
+            const item = document.createElement('div');
+            item.className = 'kullanici-item';
+            item.textContent = `👤 ${u.kullaniciAdi}`;
+            item.onclick = function() {
+                document.querySelectorAll('.kullanici-item').forEach(el => el.classList.remove('selected'));
+                this.classList.add('selected');
+                secilenSonlandirilacakKullanici = u.kullaniciAdi;
+            };
+            liste.appendChild(item);
+        });
+        modal.classList.add('active');
+    }
+
+    function destekSonlandirModalKapat() {
+        document.getElementById('sonlandirModal').classList.remove('active');
+        secilenSonlandirilacakKullanici = null;
+    }
+
+    function destekSonlandir() {
+        if (!secilenSonlandirilacakKullanici) { alert('Kullanıcı seç!'); return; }
+        if (confirm(`"${secilenSonlandirilacakKullanici}" sohbetini sonlandır?`)) {
+            const odaKey = [secilenSonlandirilacakKullanici, 'admin9595'].sort().join('_');
+            let mesajlar = JSON.parse(localStorage.getItem(`ozel_oda_${odaKey}`) || '[]');
+            mesajlar.push({ gonderen: 'SİSTEM_SONLANDIR', metin: `🔚 Sohbet sonlandırıldı.` });
+            localStorage.setItem(`ozel_oda_${odaKey}`, JSON.stringify(mesajlar));
+            bildirimEkle(secilenSonlandirilacakKullanici, `🔚 Destek sohbetiniz sonlandırıldı.`);
+            alert('✅ Sonlandırıldı!');
+            destekSonlandirModalKapat();
+        }
+    }
+
+    // ============================================
+    // DİĞER FONKSİYONLAR
+    // ============================================
+    function bildirimEkle(kime, metin) {
+        let tumBildirimler = JSON.parse(localStorage.getItem(`bildirimler_${kime}`) || '[]');
+        tumBildirimler.unshift({ id: Date.now(), metin: metin, durum: 'yeni', tarih: new Date().toLocaleTimeString() });
+        localStorage.setItem(`bildirimler_${kime}`, JSON.stringify(tumBildirimler));
+    }
+
+    function bildirimleriYukle() {
+        if (!aktif) return;
+        const bGövde = document.getElementById('bildirimListesiGövde');
+        bGövde.innerHTML = '';
+        let list = JSON.parse(localStorage.getItem(`bildirimler_${aktif.kullaniciAdi}`) || '[]');
+        let yeniSayisi = list.filter(b => b.durum === 'yeni').length;
+        document.getElementById('bSayac').innerText = yeniSayisi;
+        if(yeniSayisi === 0) document.getElementById('bSayac').style.display = 'none';
+        else document.getElementById('bSayac').style.display = 'block';
+        if (list.length === 0) { bGövde.innerHTML = '<div class="bildirim-item">Bildirim yok.</div>'; return; }
+        list.forEach(b => {
+            const div = document.createElement('div'); div.className = 'bildirim-item';
+            if(b.durum === 'yeni') div.style.background = '#334155';
+            div.innerHTML = `${b.metin} <small>${b.tarih}</small>`;
+            bGövde.appendChild(div);
+        });
+    }
+
+    function bildirimMenuAcKapat(event) {
+        event.stopPropagation();
+        const menu = document.getElementById('bildirimListesiGövde');
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        if (menu.style.display === 'block') bildirimleriOkunduYap();
+    }
+
+    function bildirimleriOkunduYap() {
+        if (!aktif) return;
+        let list = JSON.parse(localStorage.getItem(`bildirimler_${aktif.kullaniciAdi}`) || '[]');
+        list.forEach(b => b.durum = 'okundu');
+        localStorage.setItem(`bildirimler_${aktif.kullaniciAdi}`, JSON.stringify(list));
+    }
+
+    // ============================================
+    // PROFİL MENÜSÜ
+    // ============================================
+    function profilMenusuAcKapat(event) {
+        event.stopPropagation();
+        const menu = document.getElementById('profilAçilirMenu');
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function sistemdenCikisYap() {
+        document.getElementById('sohbetKapsayici').classList.remove('acik');
+        document.getElementById('destekKapsayici').classList.remove('acik');
+        document.getElementById('profilAçilirMenu').style.display = 'none';
+        localStorage.removeItem('aktifKullanici'); 
+        window.location.reload();
+    }
+
+    window.addEventListener('click', function() {
+        const pMenu = document.getElementById('profilAçilirMenu');
+        if (pMenu) pMenu.style.display = 'none';
+        const menu = document.getElementById('bildirimListesiGövde');
+        if (menu) menu.style.display = 'none';
+    });
+
+    // ============================================
+    // KURALLAR MODAL
+    // ============================================
+    function kurallariGoster(event) {
+        if (event) { event.preventDefault(); event.stopPropagation(); }
+        document.getElementById('kurallarModal').classList.add('active');
+    }
+    function kurallarModalKapat() {
+        document.getElementById('kurallarModal').classList.remove('active');
+    }
+
+    // ============================================
+    // İLAN LİSTELEME (EJS ile render edildi, bu fonksiyon boş)
+    // ============================================
+    function ilanlariListele() {
+        // Artık EJS doğrudan render ediyor, bu fonksiyon boş
+        console.log('✅ İlanlar EJS ile render edildi');
+    }
+
+    function ilanRaporlaSimulasyon(satici, baslik) {
+        if (!aktif) { alert('Giriş yap!'); return; }
+        const neden = prompt(`"${satici}" kullanıcısını rapor etme nedenin?`);
+        if (!neden) return;
+        let sikayetler = JSON.parse(localStorage.getItem('kullaniciSikayetleri') || '[]');
+        sikayetler.push({ id: Date.now(), sikayetEden: aktif.kullaniciAdi, suclu: satici, mesaj: `Pazar İlanı Raporu: ${baslik}`, neden: neden, tarih: new Date().toLocaleTimeString() });
+        localStorage.setItem('kullaniciSikayetleri', JSON.stringify(sikayetler));
+        alert("✅ İlan şikayetiniz iletildi!");
+    }
+
+    // ============================================
+    // İLAN EKLEME MODAL
+    // ============================================
+    function ilanEkleModalAc() {
+        document.getElementById('ilanEkleModal').classList.add('active');
+    }
+    function ilanEkleModalKapat() {
+        document.getElementById('ilanEkleModal').classList.remove('active');
+    }
+
+    document.querySelector('.oval-ilan-ekle-btn:not(.kurallar-btn)').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (!aktif) { alert('Giriş yap!'); window.location.href = '/login'; return; }
+        ilanEkleModalAc();
+    });
+
+    document.getElementById('ilanFormu').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const kurallarOnay = document.getElementById('kurallarOnay');
+        if (!kurallarOnay.checked) { alert('Kuralları kabul et!'); return; }
+        
+        const baslik = document.getElementById('ilanBaslik').value;
+        const fiyat = parseFloat(document.getElementById('ilanFiyat').value);
+        const detay = document.getElementById('ilanDetay').value;
+        const sure = document.getElementById('ilanSure').value || '24 Saat';
+        const resim = yuklenenResimBase64 || '';
+        
+        if (!baslik || !fiyat) { alert('Başlık ve fiyat gir!'); return; }
+        
+        // MongoDB'ye ilan ekle
+        fetch('/api/ilan-ekle', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                baslik, fiyat, detay, sure, resim,
+                satici: aktif.kullaniciAdi
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                ilanEkleModalKapat();
+                document.getElementById('ilanFormu').reset();
+                document.getElementById('kurallarOnay').checked = false;
+                ilanResimTemizle();
+                alert('✅ İlan başarıyla yayınlandı!');
+                window.location.reload();
+            } else {
+                alert('❌ İlan eklenirken hata: ' + data.error);
+            }
+        })
+        .catch(err => {
+            alert('❌ Bağlantı hatası: ' + err.message);
+        });
+    });
+
+    // ============================================
+    // SATIN ALMA (MongoDB'den sil)
+    // ============================================
+    function ilanSatinAl(id, fiyat, satici, baslik) {
+        if (!aktif) { alert('Giriş yap!'); window.location.href = '/login'; return; }
+        if (aktif.kullaniciAdi === satici) { alert('Kendi ilanını satın alamazsın!'); return; }
+        if ((aktif.bakiye || 0) < fiyat) { alert('Bakiyen yetersiz!'); return; }
+        
+        if (confirm(`"${baslik}" ilanını ${fiyat} TL'ye satın almak istediğine emin misin?`)) {
+            // Bakiye düş (localStorage)
+            let kullanicilar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
+            const aIdx = kullanicilar.findIndex(u => u.kullaniciAdi === aktif.kullaniciAdi);
+            if (aIdx !== -1) {
+                kullanicilar[aIdx].bakiye = parseFloat((kullanicilar[aIdx].bakiye - fiyat).toFixed(2));
+                localStorage.setItem('kullanicilar', JSON.stringify(kullanicilar));
+                aktif.bakiye = kullanicilar[aIdx].bakiye;
+                localStorage.setItem('aktifKullanici', JSON.stringify(aktif));
+                document.getElementById('cuzdanBakiyeYazi').innerText = aktif.bakiye + " ₺";
+            }
+            
+            bildirimEkle(satici, `🎉 "${baslik}" ilanınız ${aktif.kullaniciAdi} tarafından satın alındı!`);
+            bildirimEkle(aktif.kullaniciAdi, `🛍️ "${baslik}" ilanını satın aldın!`);
+            
+            // MongoDB'den ilanı sil (API ile)
+            fetch(`/api/ilan-sil/${id}`, {
+                method: 'DELETE'
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert("✅ Satın alma başarılı! Güvenli havuz devrede.");
+                    window.location.reload();
+                } else {
+                    alert('❌ İlan silinirken hata: ' + data.error);
+                }
+            })
+            .catch(err => {
+                alert('❌ Bağlantı hatası: ' + err.message);
+            });
+        }
+    }
+
+    // ============================================
+    // SOHBET (SOL)
+    // ============================================
+    function sohbetPencerisiniAcKapat() {
+        if (!aktif) { alert('Giriş yap!'); return; }
+        const kutu = document.getElementById('sohbetKapsayici');
+        kutu.classList.toggle('acik');
+        if (kutu.classList.contains('acik')) {
+            kisilerListesiniYukleSol();
+            document.getElementById('ekranKonusmaSol').style.display = 'none';
+        }
+    }
+
+    function kisilerListesiniYukleSol() {
+        const govde = document.getElementById('kisiListesiGövdeSol'); 
+        govde.innerHTML = '';
+        let tumUyeler = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
+        let konusulacaklar = tumUyeler.map(u => u.kullaniciAdi).filter(name => name !== aktif.kullaniciAdi);
+        if (!konusulacaklar.includes('admin9595') && aktif.kullaniciAdi !== 'admin9595') {
+            konusulacaklar.push('admin9595');
+        }
+        konusulacaklar.forEach(isim => {
+            const kart = document.createElement('div'); 
+            kart.className = 'kisi-kart'; 
+            kart.onclick = () => ozelKonusmaAcSol(isim);
+            kart.innerHTML = `<div class="kisi-avatar">${isim.toUpperCase().substring(0,2)}</div><div><strong style="color:white; font-size:15px;">${isim}</strong><p style="color:#94a3b8; font-size:12px; margin:2px 0 0 0;">Mesajlaşmak için tıkla</p></div>`;
+            govde.appendChild(kart);
+        });
+    }
+
+    function ozelKonusmaAcSol(hedefAd) { 
+        suAnkiSohbetKullaniciSol = hedefAd; 
+        document.getElementById('sohbetHedefAdSol').innerText = hedefAd; 
+        document.getElementById('kisiListesiGövdeSol').style.display = 'none'; 
+        document.getElementById('ekranKonusmaSol').style.display = 'flex'; 
+        mesajlariYukleSol(); 
+    }
+
+    function kisilerEkraninaDonSol() { 
+        suAnkiSohbetKullaniciSol = ""; 
+        document.getElementById('ekranKonusmaSol').style.display = 'none'; 
+        document.getElementById('kisiListesiGövdeSol').style.display = 'block';
+        document.getElementById('chatMesajAlaniSol').innerHTML = '';
+        kisilerListesiniYukleSol(); 
+    }
+
+    function sohbetOdasiTetikle(saticiAdi) { 
+        if (!aktif) { alert('Giriş yap!'); return; }
+        if (aktif.kullaniciAdi === saticiAdi) return; 
+        document.getElementById('sohbetKapsayici').classList.add('acik');
+        ozelKonusmaAcSol(saticiAdi); 
+    }
+
+    function mesajlariYukleSol() {
+        if (!suAnkiSohbetKullaniciSol) return; 
+        const mesajAlani = document.getElementById('chatMesajAlaniSol'); 
+        mesajAlani.innerHTML = '';
+        const odaKey = [aktif.kullaniciAdi, suAnkiSohbetKullaniciSol].sort().join('_');
+        const mesajlar = JSON.parse(localStorage.getItem(`ozel_oda_${odaKey}`) || '[]');
+        mesajlar.forEach(m => {
+            const blok = document.createElement('div'); 
+            blok.className = 'chat-mesaj'; 
+            if (m.gonderen === 'SİSTEM') {
+                blok.classList.add('sistem');
+                blok.textContent = m.metin;
+            } else if (m.gonderen === 'SİSTEM_SONLANDIR') {
+                blok.classList.add('sonlandirildi');
+                blok.textContent = m.metin;
+            } else if (m.gonderen === aktif.kullaniciAdi) {
+                blok.classList.add('giden');
+                blok.innerHTML = `${m.metin}<span class="mesaj-zaman">${new Date().toLocaleTimeString()}</span>`;
+            } else {
+                blok.classList.add('gelen');
+                blok.innerHTML = `<span class="mesaj-gonderen">${m.gonderen}</span>${m.metin}<span class="mesaj-zaman">${new Date().toLocaleTimeString()}</span>`;
+            }
+            mesajAlani.appendChild(blok);
+        });
+        mesajAlani.scrollTop = mesajAlani.scrollHeight;
+    }
+
+    document.getElementById('chatFormuSol').addEventListener('submit', function(e) {
+        e.preventDefault(); 
+        if (!aktif || !suAnkiSohbetKullaniciSol) { alert('Kişi seç!'); return; }
+        const girdi = document.getElementById('chatMesajInputSol'); 
+        const odaKey = [aktif.kullaniciAdi, suAnkiSohbetKullaniciSol].sort().join('_');
+        let mesajlar = JSON.parse(localStorage.getItem(`ozel_oda_${odaKey}`) || '[]');
+        mesajlar.push({ gonderen: aktif.kullaniciAdi, metin: girdi.value });
+        localStorage.setItem(`ozel_oda_${odaKey}`, JSON.stringify(mesajlar)); 
+        girdi.value = ''; 
+        mesajlariYukleSol();
+    });
+
+    // ============================================
+    // BAKİYE GÜNCELLEME
+    // ============================================
+    function bakiyeGuncelle() {
+        if (!aktif) return;
+        let u = JSON.parse(localStorage.getItem('kullanicilar') || '[]').find(x => x.kullaniciAdi === aktif.kullaniciAdi);
+        if(u) { 
+            aktif.bakiye = u.bakiye; 
+            localStorage.setItem('aktifKullanici', JSON.stringify(aktif)); 
+            document.getElementById('cuzdanBakiyeYazi').innerText = u.bakiye + " ₺"; 
+        }
+    }
+
+    // ============================================
+    // DESTEK KONTROL
+    // ============================================
+    function destekKontrol() {
+        if (destekAktif && aktif) {
+            const odaKey = [aktif.kullaniciAdi, 'admin9595'].sort().join('_');
+            const mesajlar = JSON.parse(localStorage.getItem(`ozel_oda_${odaKey}`) || '[]');
+            destekMesajlariGoster(mesajlar);
+            const sonMesaj = mesajlar[mesajlar.length - 1];
+            if (sonMesaj && sonMesaj.gonderen === 'SİSTEM_SONLANDIR') {
+                document.getElementById('destekMesajInput').disabled = true;
+                document.querySelector('#destekFormu button').disabled = true;
+            } else {
+                document.getElementById('destekMesajInput').disabled = false;
+                document.querySelector('#destekFormu button').disabled = false;
+            }
+        }
+    }
+
+    // ============================================
+    // GİRİŞ YAPMIŞSA
+    // ============================================
+    if (aktif) {
+        document.getElementById('bildirimKapsayici').style.display = 'block';
+        document.getElementById('cuzdanKapsayici').style.display = 'block';
+        document.getElementById('cuzdanBakiyeYazi').innerText = (aktif.bakiye || 0) + " ₺";
+        document.getElementById('userInfo').innerText = aktif.kullaniciAdi;
+        document.getElementById('profilGrup').style.display = 'block';
+        document.getElementById('loginLink').style.display = 'none';
+        
+        let kayitliProfilResmi = localStorage.getItem(`profil_resim_${aktif.kullaniciAdi}`);
+        if (kayitliProfilResmi) {
+            document.getElementById('headerProfilResmi').src = kayitliProfilResmi;
+        } else {
+            document.getElementById('headerProfilResmi').src = '/profil.jpg';
+        }
+        
+        const navMenu = document.getElementById('navMenu');
+        const loginLink = document.getElementById('loginLink');
+        if (aktif.rol === 'admin') {
+            const adminLink = document.createElement('a');
+            adminLink.href = '/yonetici-paneli'; 
+            adminLink.innerText = 'Yönetici Paneli'; 
+            adminLink.style.color = '#f59e0b';
+            navMenu.insertBefore(adminLink, loginLink);
+            document.getElementById('sonlandirBtn').style.display = 'block';
+        }
+        bildirimleriYukle();
+    } else { 
+        document.getElementById('userInfo').style.display = 'none'; 
+    }
+
+    // ============================================
+    // BAŞLANGIÇ
+    // ============================================
+    ilanlariListele();
+    setInterval(() => { 
+        if (document.getElementById('ekranKonusmaSol').style.display === 'flex') { 
+            mesajlariYukleSol(); 
+        }
+        destekKontrol();
+        bildirimleriYukle(); 
+        bakiyeGuncelle(); 
+    }, 3000);
+    </script>
+</body>
+</html>
