@@ -102,7 +102,7 @@
             font-weight: 800;
             color: white;
             text-align: center;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
         .login-container .alt-baslik {
             text-align: center;
@@ -298,7 +298,7 @@
         <h1><i class="fas fa-sign-in-alt" style="color:#6366f1;"></i> Giriş Yap</h1>
         <p class="alt-baslik">Hesabına giriş yap ve alışverişe başla!</p>
 
-        <!-- Hata / Başarı Mesajı -->
+        <!-- ✅ HATA VE MESAJ GÖSTERİMİ - DÜZELTİLDİ -->
         <% if (hata) { %>
             <div class="alert error"><i class="fas fa-exclamation-circle"></i> <%= hata %></div>
         <% } %>
@@ -350,29 +350,19 @@
         // GOOGLE İLE GİRİŞ
         // ============================================
         function googleGiris() {
-            // Google OAuth ile giriş yap
-            // Burada Google'ın OAuth 2.0 endpoint'ine yönlendirme yapılır
-            // Gerçek uygulamada Google Client ID ile çalışır
-            
-            // Demo: Kullanıcıya bilgi ver
             const devam = confirm(
                 '🔐 Google ile giriş yapmak istiyorsan devam et.\n\n' +
                 '(Demo modunda: Google hesabı yerine "google_kullanici" olarak giriş yapılacaktır.)'
             );
-            
             if (devam) {
-                // Google'dan gelen kullanıcı bilgilerini simüle et
                 const googleKullanici = {
                     kullaniciAdi: 'google_kullanici',
                     email: 'googleuser@gmail.com',
                     rol: 'uye',
                     bakiye: 100
                 };
-                
-                // Kullanıcıyı localStorage'a kaydet (yoksa)
                 let kullanicilar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
                 const mevcut = kullanicilar.find(u => u.kullaniciAdi === googleKullanici.kullaniciAdi);
-                
                 if (!mevcut) {
                     kullanicilar.push({
                         kullaniciAdi: googleKullanici.kullaniciAdi,
@@ -383,15 +373,12 @@
                     });
                     localStorage.setItem('kullanicilar', JSON.stringify(kullanicilar));
                 }
-                
-                // Oturum aç
                 localStorage.setItem('aktifKullanici', JSON.stringify({
                     kullaniciAdi: googleKullanici.kullaniciAdi,
                     rol: googleKullanici.rol,
                     bakiye: googleKullanici.bakiye,
                     googleConnected: true
                 }));
-                
                 alert('✅ Google ile başarıyla giriş yaptın kanka!');
                 window.location.href = '/';
             }
@@ -435,7 +422,6 @@
                 }));
                 window.location.href = '/';
             } else {
-                // Kullanıcı var ama şifre yanlış mı?
                 const kullaniciVar = kayitliKullanicilar.find(u => u.kullaniciAdi === kAdi);
                 if (kullaniciVar) {
                     alert('❌ Şifren yanlış kanka! Tekrar dene.');

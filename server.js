@@ -134,31 +134,20 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
 // ============================================
-// 7.5 TÜM EJS SAYFALARINA OTOMATİK ADSENSE EKLEME (DÜZELTİLDİ ✅)
+// 7.5 TÜM EJS SAYFALARINA OTOMATİK ADSENSE EKLEME
 // ============================================
 app.use((req, res, next) => {
-    // Orijinal render fonksiyonunu kaydet
     const originalRender = res.render;
-    
-    // Render fonksiyonunu override et
     res.render = function(view, options, callback) {
-        // Options'ı kontrol et
         if (!options) options = {};
         if (typeof options === 'function') {
             callback = options;
             options = {};
         }
-        
-        // AdSense kodunu ekle
         const adsenseScript = `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7453399945201277" crossorigin="anonymous"></script>`;
-        
-        // head_extra değişkenine ekle
         options.head_extra = (options.head_extra || '') + adsenseScript;
-        
-        // Orijinal render'ı çağır
         originalRender.call(this, view, options, callback);
     };
-    
     next();
 });
 
@@ -167,13 +156,10 @@ app.use((req, res, next) => {
 // ============================================
 app.post('/api/eposta-dogrula', async (req, res) => {
     const { eposta, kullaniciAdi } = req.body;
-    
     if (!eposta || !kullaniciAdi) {
         return res.json({ success: false, message: 'E-posta ve kullanıcı adı gerekli!' });
     }
-
     const kod = Math.floor(100000 + Math.random() * 900000).toString();
-    
     const htmlMesaj = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0f172a; color: #f8fafc; padding: 30px; border-radius: 12px; border: 1px solid #334155;">
             <div style="text-align: center; margin-bottom: 30px;">
@@ -191,9 +177,7 @@ app.post('/api/eposta-dogrula', async (req, res) => {
             </div>
         </div>
     `;
-
     const sonuc = await epostaGonder(eposta, `🔐 İtemlerinMarketi - E-posta Doğrulama Kodu`, htmlMesaj);
-
     if (sonuc.success) {
         res.json({ success: true, message: 'Doğrulama kodu gönderildi!', kod: kod });
     } else {
@@ -202,7 +186,7 @@ app.post('/api/eposta-dogrula', async (req, res) => {
 });
 
 // ============================================
-// 9. ANA SAYFA (SEO DESTEKLİ)
+// 9. ANA SAYFA
 // ============================================
 app.get('/', async (req, res) => {
     try {
@@ -225,29 +209,14 @@ app.get('/', async (req, res) => {
 app.get('/ilan/:id', async (req, res) => {
     try {
         const ilanId = req.params.id;
-        
-        console.log('================================');
-        console.log('🔎 İstenen ilan ID:', ilanId);
-        console.log('📌 ObjectId geçerli mi:', mongoose.Types.ObjectId.isValid(ilanId));
-
         if (!mongoose.Types.ObjectId.isValid(ilanId)) {
-            console.log('❌ Geçersiz ID formatı, ana sayfaya yönlendiriliyor!');
             return res.redirect('/');
         }
-
         const ilan = await Ilan.findById(ilanId);
-
-        console.log('📦 MongoDB sonucu:', ilan ? 'Bulundu ✅' : 'Bulunamadı ❌');
-
         if (!ilan) {
-            return res.status(404).render('ilan-detay', { 
-                ilan: null, 
-                aktif: null 
-            });
+            return res.status(404).render('ilan-detay', { ilan: null, aktif: null });
         }
-
         res.render('ilan-detay', { ilan, aktif: null });
-
     } catch (hata) {
         console.error('❌ İlan detay hatası:', hata.message);
         res.redirect('/');
@@ -284,11 +253,9 @@ app.get('/api/ilan/:id', async (req, res) => {
     try {
         const ilanId = req.params.id;
         let ilan = null;
-        
         if (mongoose.Types.ObjectId.isValid(ilanId)) {
             ilan = await Ilan.findById(ilanId);
         }
-        
         if (ilan) {
             res.json({ success: true, ilan: ilan });
         } else {
@@ -306,20 +273,16 @@ app.get('/api/ilan/:id', async (req, res) => {
 app.post('/api/ilan-duzenle', async (req, res) => {
     try {
         const { id, baslik, fiyat, detay, sure, resim } = req.body;
-        
         if (!id || !baslik || !fiyat) {
             return res.json({ success: false, message: 'Başlık, fiyat ve ID gerekli!' });
         }
-        
         let ilan = null;
         if (mongoose.Types.ObjectId.isValid(id)) {
             ilan = await Ilan.findById(id);
         }
-        
         if (!ilan) {
             return res.json({ success: false, message: 'İlan bulunamadı!' });
         }
-        
         ilan.baslik = baslik;
         ilan.fiyat = parseFloat(fiyat);
         ilan.detay = detay || '';
@@ -327,10 +290,8 @@ app.post('/api/ilan-duzenle', async (req, res) => {
         if (resim && resim.length > 0) {
             ilan.resim = resim;
         }
-        
         await ilan.save();
         res.json({ success: true, message: 'İlan başarıyla güncellendi!' });
-        
     } catch (hata) {
         console.error('❌ İlan güncelleme hatası:', hata.message);
         res.json({ success: false, error: hata.message });
@@ -343,25 +304,19 @@ app.post('/api/ilan-duzenle', async (req, res) => {
 app.post('/api/ilan-durum-degis', async (req, res) => {
     try {
         const { id, durum } = req.body;
-        
         if (!id || !durum) {
             return res.json({ success: false, message: 'ID ve durum gerekli!' });
         }
-        
         let ilan = null;
         if (mongoose.Types.ObjectId.isValid(id)) {
             ilan = await Ilan.findById(id);
         }
-        
         if (!ilan) {
             return res.json({ success: false, message: 'İlan bulunamadı!' });
         }
-        
         ilan.aktiflikDurumu = durum;
         await ilan.save();
-        
         res.json({ success: true, message: 'İlan durumu güncellendi!' });
-        
     } catch (hata) {
         console.error('❌ Durum değiştirme hatası:', hata.message);
         res.json({ success: false, error: hata.message });
@@ -374,19 +329,15 @@ app.post('/api/ilan-durum-degis', async (req, res) => {
 app.delete('/api/ilan-sil/:id', async (req, res) => {
     try {
         const ilanId = req.params.id;
-        
         let ilan = null;
         if (mongoose.Types.ObjectId.isValid(ilanId)) {
             ilan = await Ilan.findById(ilanId);
         }
-        
         if (!ilan) {
             return res.json({ success: false, message: 'İlan bulunamadı!' });
         }
-        
         await Ilan.findByIdAndDelete(ilanId);
         res.json({ success: true, message: 'İlan silindi!' });
-        
     } catch (hata) {
         console.error('❌ İlan silme hatası:', hata.message);
         res.json({ success: false, error: hata.message });
@@ -406,102 +357,27 @@ app.get('/kvkk', (req, res) => {
             <title>KVKK Aydınlatma Metni - İtemlerinMarketi</title>
             <link rel="stylesheet" href="/style.css">
             <style>
-                body {
-                    background: #0f172a;
-                    color: #e2e8f0;
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                    min-height: 100vh;
-                    padding: 20px;
-                }
-                .kvkk-container {
-                    max-width: 800px;
-                    margin: 40px auto;
-                    background: #1e293b;
-                    border-radius: 16px;
-                    padding: 40px;
-                    border: 1px solid #334155;
-                    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
-                }
-                .kvkk-container h1 {
-                    color: #38bdf8;
-                    margin-top: 0;
-                    display: flex;
-                    align-items: center;
-                    gap: 12px;
-                }
-                .kvkk-container h2 {
-                    color: #a855f7;
-                    margin-top: 30px;
-                }
-                .kvkk-container h3 {
-                    color: #fbbf24;
-                    margin-top: 20px;
-                }
-                .kvkk-container p {
-                    color: #94a3b8;
-                    line-height: 1.8;
-                    font-size: 15px;
-                }
-                .kvkk-container ul {
-                    color: #94a3b8;
-                    padding-left: 20px;
-                    line-height: 1.8;
-                }
-                .kvkk-container .highlight {
-                    color: #fbbf24;
-                    font-weight: 600;
-                }
-                .kvkk-container .btn-geri {
-                    background: #334155;
-                    color: #94a3b8;
-                    padding: 10px 20px;
-                    border: none;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    font-weight: 600;
-                    text-decoration: none;
-                    display: inline-block;
-                    transition: background 0.2s;
-                    margin-top: 20px;
-                }
-                .kvkk-container .btn-geri:hover {
-                    background: #475569;
-                    color: white;
-                }
-                .kvkk-container .border-box {
-                    background: #0f172a;
-                    padding: 20px;
-                    border-radius: 8px;
-                    border-left: 3px solid #a855f7;
-                    margin: 15px 0;
-                }
-                .kvkk-container .tarih {
-                    color: #64748b;
-                    font-size: 13px;
-                    margin-top: 30px;
-                    border-top: 1px solid #334155;
-                    padding-top: 20px;
-                }
+                body { background: #0f172a; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; padding: 20px; }
+                .kvkk-container { max-width: 800px; margin: 40px auto; background: #1e293b; border-radius: 16px; padding: 40px; border: 1px solid #334155; box-shadow: 0 8px 40px rgba(0,0,0,0.5); }
+                .kvkk-container h1 { color: #38bdf8; margin-top: 0; display: flex; align-items: center; gap: 12px; }
+                .kvkk-container h2 { color: #a855f7; margin-top: 30px; }
+                .kvkk-container h3 { color: #fbbf24; margin-top: 20px; }
+                .kvkk-container p { color: #94a3b8; line-height: 1.8; font-size: 15px; }
+                .kvkk-container ul { color: #94a3b8; padding-left: 20px; line-height: 1.8; }
+                .kvkk-container .highlight { color: #fbbf24; font-weight: 600; }
+                .kvkk-container .btn-geri { background: #334155; color: #94a3b8; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-decoration: none; display: inline-block; transition: background 0.2s; margin-top: 20px; }
+                .kvkk-container .btn-geri:hover { background: #475569; color: white; }
+                .kvkk-container .border-box { background: #0f172a; padding: 20px; border-radius: 8px; border-left: 3px solid #a855f7; margin: 15px 0; }
+                .kvkk-container .tarih { color: #64748b; font-size: 13px; margin-top: 30px; border-top: 1px solid #334155; padding-top: 20px; }
             </style>
         </head>
         <body>
             <div class="kvkk-container">
                 <a href="/" class="btn-geri">← Ana Sayfaya Dön</a>
-                
-                <h1>
-                    <span>📜</span> KVKK Aydınlatma Metni
-                </h1>
-                <p style="color:#94a3b8; margin-top:-5px; font-size:14px;">
-                    6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında
-                </p>
-
+                <h1><span>📜</span> KVKK Aydınlatma Metni</h1>
+                <p style="color:#94a3b8; margin-top:-5px; font-size:14px;">6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında</p>
                 <h2>1. Veri Sorumlusu</h2>
-                <p>
-                    İtemlerinMarketi olarak, kişisel verilerinizin güvenliğine önem veriyoruz. 
-                    Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) uyarınca 
-                    <span class="highlight">veri sorumlusu</span> sıfatıyla yürütülen veri işleme faaliyetleri hakkında sizi bilgilendirmek amacıyla hazırlanmıştır.
-                </p>
-
+                <p>İtemlerinMarketi olarak, kişisel verilerinizin güvenliğine önem veriyoruz. Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) uyarınca <span class="highlight">veri sorumlusu</span> sıfatıyla yürütülen veri işleme faaliyetleri hakkında sizi bilgilendirmek amacıyla hazırlanmıştır.</p>
                 <h2>2. Hangi Kişisel Verileriniz İşleniyor?</h2>
                 <div class="border-box">
                     <ul>
@@ -512,7 +388,6 @@ app.get('/kvkk', (req, res) => {
                         <li><strong>Kimlik Doğrulama Bilgileri:</strong> Para çekme işlemlerinde talep edilen kimlik fotoğrafları</li>
                     </ul>
                 </div>
-
                 <h2>3. Kişisel Verileriniz Hangi Amaçla İşleniyor?</h2>
                 <ul>
                     <li>✅ Üyelik işlemlerinin gerçekleştirilmesi</li>
@@ -523,22 +398,10 @@ app.get('/kvkk', (req, res) => {
                     <li>✅ Yasal yükümlülüklerin yerine getirilmesi</li>
                     <li>✅ Müşteri hizmetleri ve destek taleplerinin yönetilmesi</li>
                 </ul>
-
                 <h2>4. Kişisel Verileriniz Kimlere ve Hangi Amaçla Aktarılıyor?</h2>
-                <p>
-                    Kişisel verileriniz, yasal yükümlülüklerin yerine getirilmesi amacıyla 
-                    <span class="highlight">resmi kurum ve kuruluşlara</span> aktarılabilir. 
-                    Ayrıca, hizmet sağlayıcılarımız (barındırma, e-posta vb.) ile 
-                    işbirliği içinde çalışmaktayız. Verileriniz <strong>3. şahıslarla ticari amaçla paylaşılmaz</strong>.
-                </p>
-
+                <p>Kişisel verileriniz, yasal yükümlülüklerin yerine getirilmesi amacıyla <span class="highlight">resmi kurum ve kuruluşlara</span> aktarılabilir. Ayrıca, hizmet sağlayıcılarımız (barındırma, e-posta vb.) ile işbirliği içinde çalışmaktayız. Verileriniz <strong>3. şahıslarla ticari amaçla paylaşılmaz</strong>.</p>
                 <h2>5. Kişisel Verileriniz Ne Kadar Süreyle Saklanıyor?</h2>
-                <p>
-                    Kişisel verileriniz, işleme amaçlarının gerektirdiği süre boyunca ve 
-                    yasal saklama yükümlülüklerimiz kapsamında saklanmaktadır. 
-                    Süre sonunda verileriniz <span class="highlight">güvenli bir şekilde imha edilir</span>.
-                </p>
-
+                <p>Kişisel verileriniz, işleme amaçlarının gerektirdiği süre boyunca ve yasal saklama yükümlülüklerimiz kapsamında saklanmaktadır. Süre sonunda verileriniz <span class="highlight">güvenli bir şekilde imha edilir</span>.</p>
                 <h2>6. Kişisel Verileriniz Üzerindeki Haklarınız</h2>
                 <div class="border-box">
                     <p>KVKK’nın 11. maddesi uyarınca aşağıdaki haklara sahipsiniz:</p>
@@ -551,22 +414,12 @@ app.get('/kvkk', (req, res) => {
                         <li>🔹 İşlenen verilerin münhasıran otomatik sistemler ile analiz edilmesi nedeniyle aleyhinize bir sonucun ortaya çıkmasına itiraz etme</li>
                     </ul>
                 </div>
-
                 <h2>7. KVKK Başvuru ve İletişim</h2>
-                <p>
-                    KVKK kapsamında haklarınızı kullanmak veya sorularınız için bize 
-                    <span class="highlight">itemlerinmarketi@gmail.com</span> adresinden ulaşabilirsiniz.
-                    <br><br>
-                    Başvurularınız, KVKK'nın 13. maddesi uyarınca <strong>30 gün</strong> içinde sonuçlandırılacaktır.
-                </p>
-
+                <p>KVKK kapsamında haklarınızı kullanmak veya sorularınız için bize <span class="highlight">itemlerinmarketi@gmail.com</span> adresinden ulaşabilirsiniz. Başvurularınız, KVKK'nın 13. maddesi uyarınca <strong>30 gün</strong> içinde sonuçlandırılacaktır.</p>
                 <div class="tarih">
                     <p>📅 <strong>Son Güncelleme:</strong> 18 Ağustos 2026</p>
-                    <p style="font-size:12px; color:#64748b;">
-                        Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu ve ilgili mevzuat hükümleri doğrultusunda hazırlanmıştır.
-                    </p>
+                    <p style="font-size:12px; color:#64748b;">Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu ve ilgili mevzuat hükümleri doğrultusunda hazırlanmıştır.</p>
                 </div>
-
                 <a href="/" class="btn-geri">🏠 Ana Sayfaya Dön</a>
             </div>
         </body>
@@ -579,14 +432,64 @@ app.get('/kvkk', (req, res) => {
 // ============================================
 let bakiyeBildirimleri = [];
 
-app.get('/bakiye', (req, res) => res.render('bakiye', { mesaj: null, aktif: null }));
-app.get('/login', (req, res) => res.render('login', { hata: null, aktif: null }));
-app.get('/register', (req, res) => res.render('register', { aktif: null }));
-app.get('/yonetici-paneli', (req, res) => res.render('admin', { bakiyeBildirimleri, aktif: null }));
-app.get('/para-cek', (req, res) => res.render('paracek', { aktif: null }));
-app.get('/ilan-duzenle', (req, res) => res.render('ilan_duzenle', { aktif: null }));
-app.get('/profil', (req, res) => res.render('profil', { aktif: null }));
-app.get('/destek-talebi', (req, res) => res.render('destek_talebi', { aktif: null }));
+app.get('/bakiye', (req, res) => {
+    res.render('bakiye', { 
+        mesaj: null, 
+        aktif: null 
+    });
+});
+
+// ✅ LOGIN SAYFASI - DÜZELTİLDİ
+app.get('/login', (req, res) => {
+    const mesaj = req.query.mesaj || null;
+    res.render('login', { 
+        hata: null, 
+        mesaj: mesaj,
+        aktif: null 
+    });
+});
+
+app.get('/register', (req, res) => {
+    res.render('register', { 
+        aktif: null,
+        mesaj: null 
+    });
+});
+
+app.get('/yonetici-paneli', (req, res) => {
+    res.render('admin', { 
+        bakiyeBildirimleri, 
+        aktif: null 
+    });
+});
+
+app.get('/para-cek', (req, res) => {
+    res.render('paracek', { 
+        aktif: null,
+        mesaj: null 
+    });
+});
+
+app.get('/ilan-duzenle', (req, res) => {
+    res.render('ilan_duzenle', { 
+        aktif: null,
+        mesaj: null 
+    });
+});
+
+app.get('/profil', (req, res) => { 
+    res.render('profil', { 
+        aktif: null,
+        mesaj: null 
+    });
+});
+
+app.get('/destek-talebi', (req, res) => {
+    res.render('destek_talebi', { 
+        aktif: null,
+        mesaj: null 
+    });
+});
 
 app.post('/bakiye-bildirimi', (req, res) => {
     const { kullaniciAdi, miktar } = req.body;
@@ -597,7 +500,10 @@ app.post('/bakiye-bildirimi', (req, res) => {
         durum: "Beklemede",
         tarih: new Date()
     });
-    res.render('bakiye', { mesaj: "Havale bildirimin iletildi!", aktif: null });
+    res.render('bakiye', { 
+        mesaj: "Havale bildirimin iletildi!", 
+        aktif: null 
+    });
 });
 
 app.post('/bakiye-islem/:id/:aksiyon', (req, res) => {
