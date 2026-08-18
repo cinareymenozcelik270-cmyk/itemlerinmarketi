@@ -3,7 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= ilan ? ilan.baslik : 'İlan Bulunamadı' %> - İtemlerinMarketi</title>
+    <title><%= ilan ? ilan.baslik + ' - İtemlerinMarketi' : 'İlan Bulunamadı - İtemlerinMarketi' %></title>
+    <meta name="description" content="<%= ilan ? ilan.baslik + ' - ' + ilan.fiyat + ' TL. Satıcı: ' + ilan.satici + '. ' + (ilan.detay || 'Güvenli ticaret platformunda ilan detayı.') : 'İlan bulunamadı. İtemlerinMarketi güvenli ticaret platformu.' %>">
+    <meta name="keywords" content="<%= ilan ? ilan.baslik + ', ' + ilan.satici + ', oyun hesabı, güvenli ticaret, itemlerinmarketi' : 'itemlerinmarketi, güvenli ticaret' %>">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="<%= ilan ? ilan.baslik + ' - İtemlerinMarketi' : 'İlan Bulunamadı' %>">
+    <meta property="og:description" content="<%= ilan ? ilan.baslik + ' - ' + ilan.fiyat + ' TL' : 'İlan bulunamadı' %>">
+    <meta property="og:type" content="product">
+    <meta property="og:url" content="https://itemlerinmarketi.onrender.com/ilan/<%= ilan ? ilan._id || ilan.id : '' %>">
+    
+    <link rel="canonical" href="https://itemlerinmarketi.onrender.com/ilan/<%= ilan ? ilan._id || ilan.id : '' %>" />
+    
     <link rel="stylesheet" href="/style.css">
     <style>
         body {
@@ -218,6 +230,32 @@
             cursor: pointer;
             font-weight: 600;
         }
+        .btn-duzenle:hover {
+            transform: scale(1.05);
+        }
+        .ilan-bulunamadi {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .ilan-bulunamadi h1 {
+            color: #ef4444;
+            font-size: 48px;
+        }
+        .ilan-bulunamadi p {
+            color: #94a3b8;
+            font-size: 18px;
+            margin: 20px 0;
+        }
+        .ilan-bulunamadi a {
+            color: #38bdf8;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: #1e293b;
+            border-radius: 8px;
+            border: 1px solid #38bdf8;
+        }
         @media (max-width: 600px) {
             .ilan-detay-container {
                 padding: 20px;
@@ -237,10 +275,10 @@
 
         <% if (!ilan) { %>
             <!-- İLAN BULUNAMADI -->
-            <div style="text-align:center; padding:60px 20px;">
-                <h1 style="color:#ef4444; font-size:48px;">🔍 İlan Bulunamadı</h1>
-                <p style="color:#94a3b8; font-size:18px; margin:20px 0;">Bu ilan artık mevcut değil veya kaldırılmış.</p>
-                <a href="/" style="color:#38bdf8; text-decoration:none; display:inline-block; margin-top:20px; padding:12px 30px; background:#1e293b; border-radius:8px; border:1px solid #38bdf8;">🏠 Ana Sayfaya Dön</a>
+            <div class="ilan-bulunamadi">
+                <h1>🔍 İlan Bulunamadı</h1>
+                <p>Bu ilan artık mevcut değil veya kaldırılmış.</p>
+                <a href="/">🏠 Ana Sayfaya Dön</a>
             </div>
         <% } else { %>
             <!-- İLAN GÖRSELİ -->
@@ -308,7 +346,10 @@
             </div>
 
             <!-- İLAN SAHİBİ VEYA ADMIN9595 İSE DÜZENLE BUTONU -->
-            <% if (aktif && (aktif.kullaniciAdi === 'admin9595' || aktif.kullaniciAdi === ilan.satici)) { %>
+            <% 
+                const aktifKullanici = aktif || JSON.parse(localStorage.getItem('aktifKullanici') || 'null');
+                if (aktifKullanici && (aktifKullanici.kullaniciAdi === 'admin9595' || aktifKullanici.kullaniciAdi === ilan.satici)) { 
+            %>
                 <div style="margin-top:15px;">
                     <button class="btn btn-duzenle" onclick="window.location.href='/ilan-duzenle?id=<%= ilan._id || ilan.id %>'">
                         ⚙️ İlanı Düzenle
@@ -332,6 +373,7 @@
     // ============================================
     function kopyalaLink() {
         const input = document.getElementById('ilanLinkInput');
+        if (!input) return;
         input.select();
         input.setSelectionRange(0, 99999);
         navigator.clipboard.writeText(input.value).then(() => {

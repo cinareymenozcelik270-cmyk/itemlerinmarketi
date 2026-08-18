@@ -92,14 +92,14 @@ async function varsayilanIlanEkle() {
 }
 
 // ============================================
-// 6. NODEMAILER
+// 6. NODEMAILER (itemlerinmarketi@gmail.com)
 // ============================================
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
     secure: true,
     auth: {
-        user: process.env.GMAIL_USER || 'ananiyiyemmm1461@gmail.com',
+        user: 'itemlerinmarketi@gmail.com',
         pass: process.env.GMAIL_PASS || 'gtsi fkgs ypna kran'
     },
     tls: {
@@ -111,7 +111,7 @@ const transporter = nodemailer.createTransport({
 async function epostaGonder(alici, konu, mesaj) {
     try {
         const mailOptions = {
-            from: process.env.GMAIL_USER || 'ananiyiyemmm1461@gmail.com',
+            from: 'itemlerinmarketi@gmail.com',
             to: alici,
             subject: konu,
             html: mesaj
@@ -173,12 +173,17 @@ app.post('/api/eposta-dogrula', async (req, res) => {
 });
 
 // ============================================
-// 9. ANA SAYFA
+// 9. ANA SAYFA (SEO DESTEKLİ)
 // ============================================
 app.get('/', async (req, res) => {
     try {
         const ilanlar = await Ilan.find().sort({ createdAt: -1 });
-        res.render('index', { ilanlar, aktif: null });
+        res.render('index', { 
+            ilanlar, 
+            aktif: null,
+            title: 'İtemlerinMarketi - Güvenli Ticaret ve Oyun İlanları',
+            description: 'İtemlerinMarketi, güvenli ticaret platformu. Valorant, PUBG, CS:GO ve daha fazlası için oyun hesapları, e-pinler ve sanal ürünler. Hemen ilan ver veya satın al!'
+        });
     } catch (hata) {
         console.error('❌ Ana sayfa hatası:', hata.message);
         res.render('index', { ilanlar: [], aktif: null });
@@ -583,7 +588,7 @@ app.post('/bakiye-islem/:id/:aksiyon', (req, res) => {
 // ============================================
 app.listen(PORT, () => {
     console.log(`✅ İtemlerinMarketi çalışıyor: http://localhost:${PORT}`);
-    console.log(`📧 E-posta gönderimi hazır!`);
+    console.log(`📧 E-posta gönderimi hazır! (itemlerinmarketi@gmail.com)`);
     console.log(`🔒 IPv4 zorlama aktif!`);
     console.log(`📜 KVKK sayfası: /kvkk`);
 });
