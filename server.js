@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 3000;
 // ============================================
 // 3. MONGODB BAĞLANTISI
 // ============================================
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://ananiyiyemmm1461_db_user:hi62FFFCM51crtFs@cluster0.f5jakqu.mongodb.net/itemlerinmarketi?retryWrites=true&w=majority&appName=Cluster0';
 
 const mongooseOptions = {
     serverSelectionTimeoutMS: 30000,
@@ -29,6 +29,7 @@ const mongooseOptions = {
     minPoolSize: 2
 };
 
+console.log('📡 MongoDB bağlanıyor...');
 mongoose.connect(MONGODB_URI, mongooseOptions)
     .then(() => {
         console.log('✅ MongoDB bağlantısı başarılı!');
@@ -37,10 +38,18 @@ mongoose.connect(MONGODB_URI, mongooseOptions)
     })
     .catch(err => {
         console.error('❌ MongoDB bağlantı hatası:', err.message);
+        console.log('⚠️  Bağlantı yeniden deneniyor...');
         setTimeout(() => {
             mongoose.connect(MONGODB_URI, mongooseOptions);
         }, 5000);
     });
+
+mongoose.connection.on('disconnected', () => {
+    console.log('⚠️  MongoDB bağlantısı kesildi, yeniden bağlanılıyor...');
+    setTimeout(() => {
+        mongoose.connect(MONGODB_URI, mongooseOptions);
+    }, 5000);
+});
 
 // ============================================
 // 4. ŞEMALAR
@@ -90,8 +99,8 @@ const transporter = nodemailer.createTransport({
     port: 465,
     secure: true,
     auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASS
+        user: process.env.GMAIL_USER || 'ananiyiyemmm1461@gmail.com',
+        pass: process.env.GMAIL_PASS || 'gtsi fkgs ypna kran'
     },
     tls: {
         rejectUnauthorized: false,
@@ -102,7 +111,7 @@ const transporter = nodemailer.createTransport({
 async function epostaGonder(alici, konu, mesaj) {
     try {
         const mailOptions = {
-            from: process.env.GMAIL_USER,
+            from: process.env.GMAIL_USER || 'ananiyiyemmm1461@gmail.com',
             to: alici,
             subject: konu,
             html: mesaj
@@ -184,9 +193,15 @@ app.get('/ilan/:id', async (req, res) => {
         const ilanId = req.params.id;
         let ilan = null;
         
+        console.log('================================');
+        console.log('🔎 İstenen ilan ID:', ilanId);
+        console.log('📌 ObjectId geçerli mi:', mongoose.Types.ObjectId.isValid(ilanId));
+
         if (mongoose.Types.ObjectId.isValid(ilanId)) {
             ilan = await Ilan.findById(ilanId);
         }
+
+        console.log('📦 MongoDB sonucu:', ilan ? 'Bulundu ✅' : 'Bulunamadı ❌');
 
         if (!ilan) {
             return res.status(404).render('ilan-detay', { 
@@ -233,13 +248,115 @@ app.post('/api/ilan-ekle', async (req, res) => {
 });
 
 // ============================================
-// 12. İLAN SİL API
+// 12. İLAN DETAY API (GET)
+// ============================================
+app.get('/api/ilan/:id', async (req, res) => {
+    try {
+        const ilanId = req.params.id;
+        let ilan = null;
+        
+        if (mongoose.Types.ObjectId.isValid(ilanId)) {
+            ilan = await Ilan.findById(ilanId);
+        }
+        
+        if (ilan) {
+            res.json({ success: true, ilan: ilan });
+        } else {
+            res.json({ success: false, message: 'İlan bulunamadı' });
+        }
+    } catch (hata) {
+        console.error('❌ İlan getirme hatası:', hata.message);
+        res.json({ success: false, error: hata.message });
+    }
+});
+
+// ============================================
+// 13. İLAN DÜZENLEME API (POST)
+// ============================================
+app.post('/api/ilan-duzenle', async (req, res) => {
+    try {
+        const { id, baslik, fiyat, detay, sure, resim } = req.body;
+        
+        if (!id || !baslik || !fiyat) {
+            return res.json({ success: false, message: 'Başlık, fiyat ve ID gerekli!' });
+        }
+        
+        let ilan = null;
+        if (mongoose.Types.ObjectId.isValid(id)) {
+            ilan = await Ilan.findById(id);
+        }
+        
+        if (!ilan) {
+            return res.json({ success: false, message: 'İlan bulunamadı!' });
+        }
+        
+        ilan.baslik = baslik;
+        ilan.fiyat = parseFloat(fiyat);
+        ilan.detay = detay || '';
+        ilan.sure = sure || '24 Saat';
+        if (resim && resim.length > 0) {
+            ilan.resim = resim;
+        }
+        
+        await ilan.save();
+        res.json({ success: true, message: 'İlan başarıyla güncellendi!' });
+        
+    } catch (hata) {
+        console.error('❌ İlan güncelleme hatası:', hata.message);
+        res.json({ success: false, error: hata.message });
+    }
+});
+
+// ============================================
+// 14. İLAN DURUM DEĞİŞTİRME API (POST)
+// ============================================
+app.post('/api/ilan-durum-degis', async (req, res) => {
+    try {
+        const { id, durum } = req.body;
+        
+        if (!id || !durum) {
+            return res.json({ success: false, message: 'ID ve durum gerekli!' });
+        }
+        
+        let ilan = null;
+        if (mongoose.Types.ObjectId.isValid(id)) {
+            ilan = await Ilan.findById(id);
+        }
+        
+        if (!ilan) {
+            return res.json({ success: false, message: 'İlan bulunamadı!' });
+        }
+        
+        ilan.aktiflikDurumu = durum;
+        await ilan.save();
+        
+        res.json({ success: true, message: 'İlan durumu güncellendi!' });
+        
+    } catch (hata) {
+        console.error('❌ Durum değiştirme hatası:', hata.message);
+        res.json({ success: false, error: hata.message });
+    }
+});
+
+// ============================================
+// 15. İLAN SİL API (DELETE)
 // ============================================
 app.delete('/api/ilan-sil/:id', async (req, res) => {
     try {
         const ilanId = req.params.id;
+        
+        let ilan = null;
+        if (mongoose.Types.ObjectId.isValid(ilanId)) {
+            ilan = await Ilan.findById(ilanId);
+        }
+        
+        if (!ilan) {
+            return res.json({ success: false, message: 'İlan bulunamadı!' });
+        }
+        
         await Ilan.findByIdAndDelete(ilanId);
-        res.json({ success: true });
+        res.json({ success: true, message: 'İlan silindi!' });
+        
     } catch (hata) {
         console.error('❌ İlan silme hatası:', hata.message);
         res.json({ success: false, error: hata.message });
@@ -247,7 +364,188 @@ app.delete('/api/ilan-sil/:id', async (req, res) => {
 });
 
 // ============================================
-// 13. ROUTE'LAR
+// 16. KVKK SAYFASI
+// ============================================
+app.get('/kvkk', (req, res) => {
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="tr">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>KVKK Aydınlatma Metni - İtemlerinMarketi</title>
+            <link rel="stylesheet" href="/style.css">
+            <style>
+                body {
+                    background: #0f172a;
+                    color: #e2e8f0;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    min-height: 100vh;
+                    padding: 20px;
+                }
+                .kvkk-container {
+                    max-width: 800px;
+                    margin: 40px auto;
+                    background: #1e293b;
+                    border-radius: 16px;
+                    padding: 40px;
+                    border: 1px solid #334155;
+                    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+                }
+                .kvkk-container h1 {
+                    color: #38bdf8;
+                    margin-top: 0;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                }
+                .kvkk-container h2 {
+                    color: #a855f7;
+                    margin-top: 30px;
+                }
+                .kvkk-container h3 {
+                    color: #fbbf24;
+                    margin-top: 20px;
+                }
+                .kvkk-container p {
+                    color: #94a3b8;
+                    line-height: 1.8;
+                    font-size: 15px;
+                }
+                .kvkk-container ul {
+                    color: #94a3b8;
+                    padding-left: 20px;
+                    line-height: 1.8;
+                }
+                .kvkk-container .highlight {
+                    color: #fbbf24;
+                    font-weight: 600;
+                }
+                .kvkk-container .btn-geri {
+                    background: #334155;
+                    color: #94a3b8;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    text-decoration: none;
+                    display: inline-block;
+                    transition: background 0.2s;
+                    margin-top: 20px;
+                }
+                .kvkk-container .btn-geri:hover {
+                    background: #475569;
+                    color: white;
+                }
+                .kvkk-container .border-box {
+                    background: #0f172a;
+                    padding: 20px;
+                    border-radius: 8px;
+                    border-left: 3px solid #a855f7;
+                    margin: 15px 0;
+                }
+                .kvkk-container .tarih {
+                    color: #64748b;
+                    font-size: 13px;
+                    margin-top: 30px;
+                    border-top: 1px solid #334155;
+                    padding-top: 20px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="kvkk-container">
+                <a href="/" class="btn-geri">← Ana Sayfaya Dön</a>
+                
+                <h1>
+                    <span>📜</span> KVKK Aydınlatma Metni
+                </h1>
+                <p style="color:#94a3b8; margin-top:-5px; font-size:14px;">
+                    6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında
+                </p>
+
+                <h2>1. Veri Sorumlusu</h2>
+                <p>
+                    İtemlerinMarketi olarak, kişisel verilerinizin güvenliğine önem veriyoruz. 
+                    Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) uyarınca 
+                    <span class="highlight">veri sorumlusu</span> sıfatıyla yürütülen veri işleme faaliyetleri hakkında sizi bilgilendirmek amacıyla hazırlanmıştır.
+                </p>
+
+                <h2>2. Hangi Kişisel Verileriniz İşleniyor?</h2>
+                <div class="border-box">
+                    <ul>
+                        <li><strong>Kimlik Bilgileri:</strong> Ad, soyad, kullanıcı adı, e-posta adresi, telefon numarası</li>
+                        <li><strong>İletişim Bilgileri:</strong> E-posta adresi, telefon numarası</li>
+                        <li><strong>İşlem Güvenliği Bilgileri:</strong> IP adresi, cihaz bilgileri, log kayıtları</li>
+                        <li><strong>Finansal Bilgiler:</strong> Cüzdan bakiyesi, para çekme/iade talepleri</li>
+                        <li><strong>Kimlik Doğrulama Bilgileri:</strong> Para çekme işlemlerinde talep edilen kimlik fotoğrafları</li>
+                    </ul>
+                </div>
+
+                <h2>3. Kişisel Verileriniz Hangi Amaçla İşleniyor?</h2>
+                <ul>
+                    <li>✅ Üyelik işlemlerinin gerçekleştirilmesi</li>
+                    <li>✅ İlan verme ve satın alma işlemlerinin yürütülmesi</li>
+                    <li>✅ Para yatırma ve çekme işlemlerinin gerçekleştirilmesi</li>
+                    <li>✅ Güvenli ticaret ortamının sağlanması</li>
+                    <li>✅ Dolandırıcılık ve yasa dışı faaliyetlerin önlenmesi</li>
+                    <li>✅ Yasal yükümlülüklerin yerine getirilmesi</li>
+                    <li>✅ Müşteri hizmetleri ve destek taleplerinin yönetilmesi</li>
+                </ul>
+
+                <h2>4. Kişisel Verileriniz Kimlere ve Hangi Amaçla Aktarılıyor?</h2>
+                <p>
+                    Kişisel verileriniz, yasal yükümlülüklerin yerine getirilmesi amacıyla 
+                    <span class="highlight">resmi kurum ve kuruluşlara</span> aktarılabilir. 
+                    Ayrıca, hizmet sağlayıcılarımız (barındırma, e-posta vb.) ile 
+                    işbirliği içinde çalışmaktayız. Verileriniz <strong>3. şahıslarla ticari amaçla paylaşılmaz</strong>.
+                </p>
+
+                <h2>5. Kişisel Verileriniz Ne Kadar Süreyle Saklanıyor?</h2>
+                <p>
+                    Kişisel verileriniz, işleme amaçlarının gerektirdiği süre boyunca ve 
+                    yasal saklama yükümlülüklerimiz kapsamında saklanmaktadır. 
+                    Süre sonunda verileriniz <span class="highlight">güvenli bir şekilde imha edilir</span>.
+                </p>
+
+                <h2>6. Kişisel Verileriniz Üzerindeki Haklarınız</h2>
+                <div class="border-box">
+                    <p>KVKK’nın 11. maddesi uyarınca aşağıdaki haklara sahipsiniz:</p>
+                    <ul>
+                        <li>🔹 Kişisel verilerinizin işlenip işlenmediğini öğrenme</li>
+                        <li>🔹 İşlenme amacını ve amaca uygun kullanılıp kullanılmadığını öğrenme</li>
+                        <li>🔹 Yurt içinde veya yurt dışında aktarıldığı 3. kişileri bilme</li>
+                        <li>🔹 Eksik veya yanlış işlenen verilerin düzeltilmesini isteme</li>
+                        <li>🔹 Kişisel verilerinizin silinmesini veya yok edilmesini isteme</li>
+                        <li>🔹 İşlenen verilerin münhasıran otomatik sistemler ile analiz edilmesi nedeniyle aleyhinize bir sonucun ortaya çıkmasına itiraz etme</li>
+                    </ul>
+                </div>
+
+                <h2>7. KVKK Başvuru ve İletişim</h2>
+                <p>
+                    KVKK kapsamında haklarınızı kullanmak veya sorularınız için bize 
+                    <span class="highlight">itemlerinmarketi@example.com</span> adresinden ulaşabilirsiniz.
+                    <br><br>
+                    Başvurularınız, KVKK'nın 13. maddesi uyarınca <strong>30 gün</strong> içinde sonuçlandırılacaktır.
+                </p>
+
+                <div class="tarih">
+                    <p>📅 <strong>Son Güncelleme:</strong> 18 Ağustos 2026</p>
+                    <p style="font-size:12px; color:#64748b;">
+                        Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu ve ilgili mevzuat hükümleri doğrultusunda hazırlanmıştır.
+                    </p>
+                </div>
+
+                <a href="/" class="btn-geri">🏠 Ana Sayfaya Dön</a>
+            </div>
+        </body>
+        </html>
+    `);
+});
+
+// ============================================
+// 17. ROUTE'LAR
 // ============================================
 let bakiyeBildirimleri = [];
 
@@ -281,201 +579,13 @@ app.post('/bakiye-islem/:id/:aksiyon', (req, res) => {
 });
 
 // ============================================
-// 14. SUNUCUYU BAŞLAT
+// 18. SUNUCUYU BAŞLAT
 // ============================================
 app.listen(PORT, () => {
     console.log(`✅ İtemlerinMarketi çalışıyor: http://localhost:${PORT}`);
     console.log(`📧 E-posta gönderimi hazır!`);
     console.log(`🔒 IPv4 zorlama aktif!`);
-});
-// ============================================
-// İLAN DÜZENLEME SAYFASI (GET)
-// ============================================
-app.get('/ilan-duzenle', async (req, res) => {
-    try {
-        const ilanId = req.query.id;
-        
-        if (!ilanId) {
-            return res.status(400).send('❌ İlan ID gerekli!');
-        }
-        
-        // İlanı bul
-        let ilan = null;
-        if (mongoose.Types.ObjectId.isValid(ilanId)) {
-            ilan = await Ilan.findById(ilanId);
-        }
-        
-        if (!ilan) {
-            return res.status(404).send('❌ İlan bulunamadı!');
-        }
-        
-        // Admin kontrolü - sadece admin veya ilan sahibi düzenleyebilir
-        const aktifKullanici = req.query.aktif ? JSON.parse(req.query.aktif) : null;
-        
-        res.render('ilan_duzenle', { 
-            ilan: ilan, 
-            aktif: null 
-        });
-        
-    } catch (hata) {
-        console.error('❌ İlan düzenleme hatası:', hata.message);
-        res.status(500).send('❌ Sunucu hatası: ' + hata.message);
-    }
-});
-
-// ============================================
-// İLAN DÜZENLEME API (POST)
-// ============================================
-app.post('/api/ilan-duzenle', async (req, res) => {
-    try {
-        const { id, baslik, fiyat, detay, sure, resim } = req.body;
-        
-        if (!id || !baslik || !fiyat) {
-            return res.json({ success: false, message: 'Başlık, fiyat ve ID gerekli!' });
-        }
-        
-        // İlanı bul
-        let ilan = null;
-        if (mongoose.Types.ObjectId.isValid(id)) {
-            ilan = await Ilan.findById(id);
-        }
-        
-        if (!ilan) {
-            return res.json({ success: false, message: 'İlan bulunamadı!' });
-        }
-        
-        // İlanı güncelle
-        ilan.baslik = baslik;
-        ilan.fiyat = parseFloat(fiyat);
-        ilan.detay = detay || '';
-        ilan.sure = sure || '24 Saat';
-        if (resim && resim.length > 0) {
-            ilan.resim = resim;
-        }
-        
-        await ilan.save();
-        res.json({ success: true, message: 'İlan başarıyla güncellendi!' });
-        
-    } catch (hata) {
-        console.error('❌ İlan güncelleme hatası:', hata.message);
-        res.json({ success: false, error: hata.message });
-    }
-});
-
-// ============================================
-// İLAN DETAY API (GET)
-// ============================================
-app.get('/api/ilan/:id', async (req, res) => {
-    try {
-        const ilanId = req.params.id;
-        let ilan = null;
-        
-        if (mongoose.Types.ObjectId.isValid(ilanId)) {
-            ilan = await Ilan.findById(ilanId);
-        }
-        
-        if (ilan) {
-            res.json({ success: true, ilan: ilan });
-        } else {
-            res.json({ success: false, message: 'İlan bulunamadı' });
-        }
-    } catch (hata) {
-        console.error('❌ İlan getirme hatası:', hata.message);
-        res.json({ success: false, error: hata.message });
-    }
-});
-
-// ============================================
-// İLAN DÜZENLEME API (POST)
-// ============================================
-app.post('/api/ilan-duzenle', async (req, res) => {
-    try {
-        const { id, baslik, fiyat, detay, sure, resim } = req.body;
-        
-        if (!id || !baslik || !fiyat) {
-            return res.json({ success: false, message: 'Başlık, fiyat ve ID gerekli!' });
-        }
-        
-        let ilan = null;
-        if (mongoose.Types.ObjectId.isValid(id)) {
-            ilan = await Ilan.findById(id);
-        }
-        
-        if (!ilan) {
-            return res.json({ success: false, message: 'İlan bulunamadı!' });
-        }
-        
-        ilan.baslik = baslik;
-        ilan.fiyat = parseFloat(fiyat);
-        ilan.detay = detay || '';
-        ilan.sure = sure || '24 Saat';
-        if (resim && resim.length > 0) {
-            ilan.resim = resim;
-        }
-        
-        await ilan.save();
-        res.json({ success: true, message: 'İlan başarıyla güncellendi!' });
-        
-    } catch (hata) {
-        console.error('❌ İlan güncelleme hatası:', hata.message);
-        res.json({ success: false, error: hata.message });
-    }
-});
-
-// ============================================
-// İLAN DURUM DEĞİŞTİRME API (POST)
-// ============================================
-app.post('/api/ilan-durum-degis', async (req, res) => {
-    try {
-        const { id, durum } = req.body;
-        
-        if (!id || !durum) {
-            return res.json({ success: false, message: 'ID ve durum gerekli!' });
-        }
-        
-        let ilan = null;
-        if (mongoose.Types.ObjectId.isValid(id)) {
-            ilan = await Ilan.findById(id);
-        }
-        
-        if (!ilan) {
-            return res.json({ success: false, message: 'İlan bulunamadı!' });
-        }
-        
-        ilan.aktiflikDurumu = durum;
-        await ilan.save();
-        
-        res.json({ success: true, message: 'İlan durumu güncellendi!' });
-        
-    } catch (hata) {
-        console.error('❌ Durum değiştirme hatası:', hata.message);
-        res.json({ success: false, error: hata.message });
-    }
-});
-
-// ============================================
-// İLAN SİL API (DELETE)
-// ============================================
-app.delete('/api/ilan-sil/:id', async (req, res) => {
-    try {
-        const ilanId = req.params.id;
-        
-        let ilan = null;
-        if (mongoose.Types.ObjectId.isValid(ilanId)) {
-            ilan = await Ilan.findById(ilanId);
-        }
-        
-        if (!ilan) {
-            return res.json({ success: false, message: 'İlan bulunamadı!' });
-        }
-        
-        await Ilan.findByIdAndDelete(ilanId);
-        res.json({ success: true, message: 'İlan silindi!' });
-        
-    } catch (hata) {
-        console.error('❌ İlan silme hatası:', hata.message);
-        res.json({ success: false, error: hata.message });
-    }
+    console.log(`📜 KVKK sayfası: /kvkk`);
 });
 
 process.on('uncaughtException', (err) => console.error('❌ Hata:', err.message));
