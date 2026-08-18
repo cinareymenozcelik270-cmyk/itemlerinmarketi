@@ -30,116 +30,285 @@
             display: none;
             border: 1px solid #475569;
         }
+
+        /* NEDEN KİMLİK BUTONU */
+        .neden-kimlik-btn {
+            background: transparent;
+            color: #38bdf8;
+            border: 1px solid #38bdf8;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: 10px;
+        }
+        .neden-kimlik-btn:hover {
+            background: #38bdf8;
+            color: #0f172a;
+        }
+
+        /* MODAL STİLLERİ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-icerik {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 30px;
+            color: #cbd5e1;
+            position: relative;
+        }
+        .modal-icerik h2 {
+            color: #38bdf8;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modal-icerik h2 .emoji { font-size: 28px; }
+        .modal-icerik h3 { color: #a855f7; margin-top: 20px; }
+        .modal-icerik p { line-height: 1.7; font-size: 14px; color: #94a3b8; }
+        .modal-icerik ul { padding-left: 20px; color: #94a3b8; }
+        .modal-icerik ul li { margin-bottom: 8px; }
+        .modal-icerik .highlight { color: #fbbf24; font-weight: 600; }
+        .modal-kapat-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            float: right;
+            transition: background 0.2s;
+        }
+        .modal-kapat-btn:hover { background: #dc2626; }
+        .modal-icerik .kvkk-metni {
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #a855f7;
+            margin: 15px 0;
+            font-size: 13px;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+        .modal-icerik .kvkk-metni strong {
+            color: #e2e8f0;
+        }
     </style>
 </head>
 <body>
     <header>
-        <div class="logo">İtemlerinMarketi</div>
-        <nav><a href="/">Ana Sayfa</a></nav>
+        <div class="header-sol-bölüm">
+            <a href="/"><img src="/gif.png" alt="İtemlerinMarketi" class="logo-img" onerror="this.onerror=null; this.outerHTML='İtemlerinMarketi';"></a>
+        </div>
+        <nav><a href="/">🏠 Ana Sayfaya Dön</a></nav>
     </header>
+
     <div class="container" id="icerik" style="display: none;">
-        <h1>💰 Bankaya Para Çekme Talebi</h1>
-        <p>Dolandırıcılığa karşı yasal koruma amacıyla **Kimlik Kartınızın Ön ve Arka Fotoğrafını** yükleyiniz (Minimum Çekim: 10 TL):</p>
+        <h1 style="display:flex; align-items:center; flex-wrap:wrap; gap:10px;">
+            💰 Bankaya Para Çekme Talebi
+            <button class="neden-kimlik-btn" onclick="aciklamaModalAc()">❓ Neden kimlik lazım?</button>
+        </h1>
+        <p>Dolandırıcılığa karşı yasal koruma amacıyla <strong style="color:#38bdf8;">Kimlik Kartınızın Ön ve Arka Fotoğrafını</strong> yükleyiniz (Minimum Çekim: 10 TL):</p>
 
         <form id="paraCekForm" class="form-box" style="max-width: 450px; margin-top:20px;">
             <label style="color:#94a3b8; font-size:14px;">Mevcut Bakiyeniz:</label>
             <input type="text" id="mevcutBakiyeGosterge" readonly style="color:#10b981; font-weight:bold; margin-bottom: 15px;">
             
-            <label style="color:#38bdf8; font-size:12px; font-weight:bold; display:block; text-align:left; margin-bottom:10px;">Kimlik Kartı Yükleme:</label>
+            <label style="color:#38bdf8; font-size:12px; font-weight:bold; display:block; text-align:left; margin-bottom:10px;">📋 Kimlik Kartı Yükleme:</label>
             
             <!-- KİMLİK ÖN YÜZ BUTONU -->
-            <label class="dosya-sec-etiket" for="kimlikOnInput">📷 Kimlik Kartı ÖN Yüzü Seç</label>
+            <label class="dosya-sec-etiket" for="kimlikOnInput">📷 Kimlik Kartı <span style="color:#38bdf8;">ÖN</span> Yüzü Seç</label>
             <input type="file" id="kimlikOnInput" accept="image/*" required style="display: none;">
             <img id="onOnizleme" class="onizleme-img" alt="Ön Yüz">
 
             <!-- KİMLİK ARKA YÜZ BUTONU -->
-            <label class="dosya-sec-etiket" for="kimlikArkaInput" style="border-color: #a855f7; color: #d8b4fe;">📷 Kimlik Kartı ARKA Yüzü Seç</label>
+            <label class="dosya-sec-etiket" for="kimlikArkaInput" style="border-color: #a855f7; color: #d8b4fe;">📷 Kimlik Kartı <span style="color:#a855f7;">ARKA</span> Yüzü Seç</label>
             <input type="file" id="kimlikArkaInput" accept="image/*" required style="display: none;">
             <img id="arkaOnizleme" class="onizleme-img" alt="Arka Yüz">
 
             <!-- BANKA ALANLARI -->
-            <label style="color:#38bdf8; font-size:12px; font-weight:bold; display:block; text-align:left; margin-top:15px; margin-bottom:5px;">Hesap ve Tutar Bilgileri:</label>
+            <label style="color:#38bdf8; font-size:12px; font-weight:bold; display:block; text-align:left; margin-top:15px; margin-bottom:5px;">🏦 Hesap ve Tutar Bilgileri:</label>
             <input type="text" id="cekilecekIsim" placeholder="Hesap Sahibi Ad Soyad" required>
             <input type="text" id="cekilecekIban" placeholder="Paranın Yatacağı IBAN (TR...)" required>
             <input type="number" id="cekilecekMiktar" placeholder="Çekmek İstediğiniz Tutar (En Az 10 TL)" required>
             
-            <button type="submit" class="btn" style="width: 100%;">Fotoğrafları Onayla ve Para Çek</button>
+            <button type="submit" class="btn" style="width: 100%;">✅ Fotoğrafları Onayla ve Para Çek</button>
         </form>
     </div>
+
+    <!-- ============================================ -->
+    <!-- AÇIKLAMA MODAL (Neden Kimlik?) -->
+    <!-- ============================================ -->
+    <div class="modal-overlay" id="aciklamaModal">
+        <div class="modal-icerik">
+            <button class="modal-kapat-btn" onclick="aciklamaModalKapat()">✕ Kapat</button>
+            
+            <h2>
+                <span class="emoji">🛡️</span> Neden Kimlik İstiyoruz?
+            </h2>
+            
+            <p>İtemlerinMarketi olarak <span class="highlight">güvenli ticaret</span> prensibiyle çalışıyoruz. Para çekme işlemlerinde kimlik doğrulaması istememizin sebepleri:</p>
+
+            <ul>
+                <li>🔒 <strong>Dolandırıcılığa Karşı Koruma</strong> - Hesabınızın başkası tarafından kullanılmasını engeller.</li>
+                <li>📋 <strong>Yasal Zorunluluk</strong> - 6698 sayılı Kişisel Verileri Koruma Kanunu (KVKK) ve MASAK mevzuatı gereği.</li>
+                <li>💰 <strong>Kara Para Aklamayı Önleme</strong> - Yasa dışı para transferlerinin önüne geçer.</li>
+                <li>👤 <strong>Hesap Güvenliği</strong> - Paranızın sadece size ait olduğunu teyit eder.</li>
+                <li>⚖️ <strong>Hukuki Koruma</strong> - Olası anlaşmazlıklarda tarafınızı korur.</li>
+            </ul>
+
+            <div class="kvkk-metni">
+                <strong>📜 KVKK Aydınlatma Metni</strong><br><br>
+                6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında, kimlik ve iletişim bilgileriniz yalnızca <strong>para çekme işlemleri</strong> ve <strong>yasal zorunluluklar</strong> için kullanılır. 
+                Verileriniz <strong>3. şahıslarla paylaşılmaz</strong>, yalnızca resmi kurum talepleri durumunda ilgili mercilere iletilir. 
+                İstediğiniz zaman verilerinizi silebilir veya güncelleyebilirsiniz.
+                <br><br>
+                <span style="color:#94a3b8; font-size:12px;">Detaylı bilgi için <a href="/kvkk" style="color:#38bdf8;">KVKK Politikamızı</a> inceleyebilirsiniz.</span>
+            </div>
+
+            <p style="font-size:13px; color:#64748b; margin-top:10px;">
+                ✅ Kimlik bilgileriniz <span class="highlight">güvenli bir şekilde</span> saklanır ve sadece bu işlem için kullanılır.
+            </p>
+        </div>
+    </div>
+
     <script>
-        const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
-        if (!aktif) { window.location.href = '/login'; } 
-        else {
-            document.getElementById('icerik').style.display = 'block';
-            document.getElementById('mevcutBakiyeGosterge').value = (aktif.bakiye || 0) + " ₺";
-        }
+    // ============================================
+    // PARA ÇEK - TAM SCRIPT
+    // ============================================
+    
+    const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
+    if (!aktif) { 
+        window.location.href = '/login'; 
+    } else {
+        document.getElementById('icerik').style.display = 'block';
+        document.getElementById('mevcutBakiyeGosterge').value = (aktif.bakiye || 0) + " ₺";
+    }
 
-        let kimlikOnBase64 = "";
-        let kimlikArkaBase64 = "";
+    let kimlikOnBase64 = "";
+    let kimlikArkaBase64 = "";
 
-        function resimOku(inputElement, onizlemeId, callback) {
-            inputElement.addEventListener('change', function() {
-                const file = this.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        document.getElementById(onizlemeId).src = e.target.result;
-                        document.getElementById(onizlemeId).style.display = 'block';
-                        callback(e.target.result);
-                    }
-                    reader.readAsDataURL(file);
+    // ============================================
+    // RESİM OKUMA
+    // ============================================
+    function resimOku(inputElement, onizlemeId, callback) {
+        inputElement.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(onizlemeId).src = e.target.result;
+                    document.getElementById(onizlemeId).style.display = 'block';
+                    callback(e.target.result);
                 }
-            });
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    resimOku(document.getElementById('kimlikOnInput'), 'onOnizleme', function(base64) { kimlikOnBase64 = base64; });
+    resimOku(document.getElementById('kimlikArkaInput'), 'arkaOnizleme', function(base64) { kimlikArkaBase64 = base64; });
+
+    // ============================================
+    // FORM GÖNDERME
+    // ============================================
+    document.getElementById('paraCekForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const miktar = parseFloat(document.getElementById('cekilecekMiktar').value);
+        const iban = document.getElementById('cekilecekIban').value;
+        const isim = document.getElementById('cekilecekIsim').value;
+
+        // KONTROLLER
+        if (miktar < 10) { 
+            alert("❌ Hata: Para çekebilmek için miktar en az 10 TL olmalıdır!"); 
+            return; 
+        }
+        if (miktar > aktif.bakiye) { 
+            alert("❌ Hata: Cüzdanınızdaki mevcut paradan daha fazlasını çekemezsiniz!"); 
+            return; 
+        }
+        if (!kimlikOnBase64 || !kimlikArkaBase64) { 
+            alert("❌ Hata: Lütfen kimlik fotoğraflarını yükleyin!"); 
+            return; 
+        }
+        if (!iban || iban.length < 10) {
+            alert("❌ Hata: Lütfen geçerli bir IBAN girin!");
+            return;
+        }
+        if (!isim || isim.length < 3) {
+            alert("❌ Hata: Lütfen hesap sahibi adını girin!");
+            return;
         }
 
-        resimOku(document.getElementById('kimlikOnInput'), 'onOnizleme', function(base64) { kimlikOnBase64 = base64; });
-        resimOku(document.getElementById('kimlikArkaInput'), 'arkaOnizleme', function(base64) { kimlikArkaBase64 = base64; });
+        // BAKİYE DÜŞ
+        let kullanicilar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
+        const idx = kullanicilar.findIndex(u => u.kullaniciAdi === aktif.kullaniciAdi);
+        if (idx !== -1) {
+            kullanicilar[idx].bakiye = parseFloat((kullanicilar[idx].bakiye - miktar).toFixed(2));
+            localStorage.setItem('kullanicilar', JSON.stringify(kullanicilar));
+            aktif.bakiye = kullanicilar[idx].bakiye;
+            localStorage.setItem('aktifKullanici', JSON.stringify(aktif));
+        }
 
-        document.getElementById('paraCekForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const miktar = parseFloat(document.getElementById('cekilecekMiktar').value);
-            const iban = document.getElementById('cekilecekIban').value;
-            const isim = document.getElementById('cekilecekIsim').value;
-
-            // KURAL GÜNCELLEMESİ: EN AZ 10 TL KONTROLÜ (ÜST LİMİT KALDIRILDI)
-            if (miktar < 10) { 
-                alert("Hata: Para çekebilmek için miktar en az 10 TL olmalıdır Çınar!"); 
-                return; 
-            }
-            if (miktar > aktif.bakiye) { 
-                alert("Hata: Cüzdanınızdaki mevcut paradan daha fazlasını çekemezsiniz!"); 
-                return; 
-            }
-            if (!kimlikOnBase64 || !kimlikArkaBase64) { 
-                alert("Hata: Lütfen kimlik fotoğraflarını yükleyin!"); 
-                return; 
-            }
-
-            let kullanicilar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
-            const idx = kullanicilar.findIndex(u => u.kullaniciAdi === aktif.kullaniciAdi);
-            if (idx !== -1) {
-                kullanicilar[idx].bakiye = parseFloat((kullanicilar[idx].bakiye - miktar).toFixed(2));
-                localStorage.setItem('kullanicilar', JSON.stringify(kullanicilar));
-                aktif.bakiye = kullanicilar[idx].bakiye;
-                localStorage.setItem('aktifKullanici', JSON.stringify(aktif));
-            }
-
-            let talepler = JSON.parse(localStorage.getItem('paraCekmeTalepleri') || '[]');
-            talepler.push({
-                id: Date.now(),
-                kullanici: aktif.kullaniciAdi,
-                miktar: miktar,
-                iban: iban,
-                isim: isim,
-                kimlikOn: kimlikOnBase64,
-                kimlikArka: kimlikArkaBase64,
-                durum: 'Beklemede'
-            });
-            localStorage.setItem('paraCekmeTalepleri', JSON.stringify(talepler));
-
-            alert(`Kimlik fotoğraflarınız başarıyla alındı! 10 TL komisyon kesildi. Net ${miktar - 10} TL aktarımı için Çınar Eymen'e iletildi.`);
-            window.location.href = '/';
+        // TALEP KAYDET
+        let talepler = JSON.parse(localStorage.getItem('paraCekmeTalepleri') || '[]');
+        talepler.push({
+            id: Date.now(),
+            kullanici: aktif.kullaniciAdi,
+            miktar: miktar,
+            iban: iban,
+            isim: isim,
+            kimlikOn: kimlikOnBase64,
+            kimlikArka: kimlikArkaBase64,
+            durum: 'Beklemede',
+            tarih: new Date().toLocaleString('tr-TR')
         });
+        localStorage.setItem('paraCekmeTalepleri', JSON.stringify(talepler));
+
+        alert(`✅ Kimlik fotoğraflarınız başarıyla alındı! ${miktar} TL çekim talebiniz yöneticiye iletildi. En kısa sürede işleme alınacaktır.`);
+        window.location.href = '/';
+    });
+
+    // ============================================
+    // MODAL FONKSİYONLARI
+    // ============================================
+    function aciklamaModalAc() {
+        document.getElementById('aciklamaModal').classList.add('active');
+    }
+
+    function aciklamaModalKapat() {
+        document.getElementById('aciklamaModal').classList.remove('active');
+    }
+
+    // Modal dışına tıklayınca kapat
+    document.getElementById('aciklamaModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            aciklamaModalKapat();
+        }
+    });
+
+    // ESC tuşu ile kapat
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            aciklamaModalKapat();
+        }
+    });
     </script>
 </body>
 </html>
