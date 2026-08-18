@@ -37,7 +37,11 @@
 
         <!-- 3. BÖLÜM: FOTOĞRAFLI KİMLİK KONTROLÜ VE LIMITSIZ PARA ÇEKME ALANI -->
         <h1>Gelen Para Çekme Talepleri (📷 Fotoğraflı Onay)</h1>
-        <div class="admin-list" id="paraCekmeListesiGövde"></div>
+        <div class="admin-list" id="paraCekmeListesiGövde" style="margin-bottom: 50px;"></div>
+
+        <!-- 4. BÖLÜM: İLAN RAPORLARI (YENİ EKLENDİ ✅) -->
+        <h1 style="margin-top: 40px;">Gelen İlan Raporları (🚨)</h1>
+        <div class="admin-list" id="ilanRaporlariListesiGövde"></div>
 
     </div>
 
@@ -98,7 +102,7 @@
             }
         }
 
-        // Şikayet Modülü (GÜNCELLENDİ - Hesap Silme Butonu Eklendi)
+        // Şikayet Modülü (Hesap Silme Butonu Eklendi)
         function sikayetListesiniYukle() {
             const govde = document.getElementById('sikayetListesiGövde'); 
             govde.innerHTML = '';
@@ -308,10 +312,72 @@
             }
         }
 
+        // ============================================
+        // YENİ EKLENEN MODÜL: İLAN RAPORLARI (ŞİKAYETLERİ)
+        // ============================================
+        function ilanRaporlariListesiniYukle() {
+            const govde = document.getElementById('ilanRaporlariListesiGövde');
+            govde.innerHTML = '';
+            let adminBildirimler = JSON.parse(localStorage.getItem('bildirimler_admin9595') || '[]');
+            
+            // Sadece "YENİ RAPOR!" ile başlayan bildirimleri filtrele
+            const raporlar = adminBildirimler.filter(b => b.metin && b.metin.includes('🚨 YENİ RAPOR!'));
+
+            if (raporlar.length === 0) {
+                govde.innerHTML = '<p style="color:#94a3b8;">Henüz hiç ilan raporu (şikayet) yok.</p>';
+                return;
+            }
+
+            // En yeni rapor en üstte olacak şekilde listele (Ters çevir)
+            raporlar.reverse().forEach((rapor) => {
+                const kart = document.createElement('div');
+                kart.className = 'admin-item';
+                kart.style.marginBottom = '15px';
+                kart.style.padding = '15px';
+                kart.style.background = '#1e293b';
+                kart.style.borderRadius = '8px';
+                kart.style.borderLeft = '4px solid #f59e0b';
+                kart.style.display = 'flex';
+                kart.style.justifyContent = 'space-between';
+                kart.style.alignItems = 'center';
+
+                // Rapor metnini ayrıştır
+                const satirlar = rapor.metin.split('\n');
+                const raporEden = satirlar[1] ? satirlar[1].replace('Rapor eden: ', '') : 'Bilinmiyor';
+                const ilanID = satirlar[2] ? satirlar[2].replace('İlan ID: ', '') : 'Bilinmiyor';
+                const sebep = satirlar[3] ? satirlar[3].replace('Sebep: ', '') : 'Belirtilmemiş';
+
+                kart.innerHTML = `
+                    <div>
+                        <strong style="color:#f87171;">🚨 Rapor Eden:</strong> ${raporEden}<br>
+                        <strong style="color:#38bdf8;">📌 İlan ID:</strong> ${ilanID}<br>
+                        <strong style="color:#fbbf24;">📝 Sebep:</strong> "${sebep}"<br>
+                        <span style="color:#94a3b8; font-size:12px;">⏱️ ${rapor.tarih || 'Bilinmiyor'}</span>
+                    </div>
+                    <div>
+                        <button onclick="ilanRaporuCozenSil(${rapor.id})" class="btn" style="background-color: #10b981; padding: 5px 15px; color:white;">✅ Raporu Çözdüm (Sil)</button>
+                    </div>
+                `;
+                govde.appendChild(kart);
+            });
+        }
+
+        // İlan raporunu sildiğimizde, aynı zamanda admin bildirim listesinden de kaldıran fonksiyon
+        function ilanRaporuCozenSil(id) {
+            if (confirm("Bu raporu çözdüyseniz listeden silelim mi?")) {
+                let adminBildirimler = JSON.parse(localStorage.getItem('bildirimler_admin9595') || '[]');
+                adminBildirimler = adminBildirimler.filter(b => b.id !== id);
+                localStorage.setItem('bildirimler_admin9595', JSON.stringify(adminBildirimler));
+                alert("✅ Rapor listeden kaldırıldı.");
+                ilanRaporlariListesiniYukle(); // Listeyi yenile
+            }
+        }
+
         // SAYFA AÇILDIĞINDA TÜM LİSTELERİ SIFIRDAN TETİKLEYEN SİHİRLİ SATIRLAR
         bakiyeListesiniYenile();
         sikayetListesiniYukle();
         paraCekmeListesiniYukle();
+        ilanRaporlariListesiniYukle(); // Bu satırı da ekledik!
     </script>
 </body>
 </html>
