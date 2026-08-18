@@ -191,7 +191,7 @@ app.get('/', async (req, res) => {
 });
 
 // ============================================
-// 10. İLAN DETAY SAYFASI
+// 10. İLAN DETAY SAYFASI (DÜZELTİLDİ ✅)
 // ============================================
 app.get('/ilan/:id', async (req, res) => {
     try {
@@ -202,9 +202,15 @@ app.get('/ilan/:id', async (req, res) => {
         console.log('🔎 İstenen ilan ID:', ilanId);
         console.log('📌 ObjectId geçerli mi:', mongoose.Types.ObjectId.isValid(ilanId));
 
-        if (mongoose.Types.ObjectId.isValid(ilanId)) {
-            ilan = await Ilan.findById(ilanId);
+        // --- DÜZELTME BAŞLANGICI ---
+        // Eğer ID formatı geçersizse direkt ana sayfaya yönlendir, hata verme.
+        if (!mongoose.Types.ObjectId.isValid(ilanId)) {
+            console.log('❌ Geçersiz ID formatı, ana sayfaya yönlendiriliyor!');
+            return res.redirect('/');
         }
+        // --- DÜZELTME BİTİŞİ ---
+
+        ilan = await Ilan.findById(ilanId);
 
         console.log('📦 MongoDB sonucu:', ilan ? 'Bulundu ✅' : 'Bulunamadı ❌');
 
@@ -219,13 +225,10 @@ app.get('/ilan/:id', async (req, res) => {
 
     } catch (hata) {
         console.error('❌ İlan detay hatası:', hata.message);
-        res.status(500).send(`
-            <div style="text-align:center; padding:50px; background:#0f172a; color:white; min-height:100vh;">
-                <h1 style="color:#ef4444;">❌ Hata Oluştu!</h1>
-                <p style="color:#94a3b8;">${hata.message}</p>
-                <a href="/" style="color:#38bdf8; text-decoration:none; display:inline-block; margin-top:20px; padding:10px 20px; background:#1e293b; border-radius:8px;">🏠 Ana Sayfaya Dön</a>
-            </div>
-        `);
+        // --- DÜZELTME BAŞLANGICI ---
+        // Sunucu patlarsa kullanıcıyı ana sayfaya at, 500 ekranı gösterme.
+        res.redirect('/');
+        // --- DÜZELTME BİTİŞİ ---
     }
 });
 
