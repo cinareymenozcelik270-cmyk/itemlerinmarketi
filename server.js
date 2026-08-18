@@ -439,7 +439,6 @@ app.get('/bakiye', (req, res) => {
     });
 });
 
-// ✅ LOGIN SAYFASI - DÜZELTİLDİ
 app.get('/login', (req, res) => {
     const mesaj = req.query.mesaj || null;
     res.render('login', { 
