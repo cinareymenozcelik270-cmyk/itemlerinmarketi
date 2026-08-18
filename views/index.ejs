@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <meta name="google-site-verification" content="rXTtLPJavFhXvJ7TGofxQ3XXGZXb_B8dzSBNAPZwLFk" />
     <link rel="icon" type="image/png" href="/resim.png">
     <meta charset="UTF-8">
     
-    <!-- ✅ SEO BAŞLIK VE AÇIKLAMA -->
-    <title>İtemlerinMarketi - Güvenli Ticaret ve Oyun İlanları</title>
+    <!-- SEO -->
+    <title><%= title || 'İtemlerinMarketi - Güvenli Ticaret ve Oyun İlanları' %></title>
     <meta name="description" content="<%= description || 'İtemlerinMarketi, güvenli ticaret platformu. Valorant, PUBG, CS:GO ve daha fazlası için oyun hesapları, e-pinler ve sanal ürünler. Hemen ilan ver veya satın al!' %>">
-    <meta name="keywords" content="itemlerinmarketi, güvenli ticaret, oyun hesabı, valorant hesap, e-pin, riot points, sanal ürün, csgo hesap">
+    <meta name="keywords" content="itemlerinmarketi, güvenli ticaret, oyun hesabı, valorant hesap, e-pin, riot points, sanal ürün">
     <meta name="robots" content="index, follow">
     
-    <!-- Open Graph (Sosyal Medya) -->
+    <!-- Open Graph -->
     <meta property="og:title" content="İtemlerinMarketi - Güvenli Ticaret">
     <meta property="og:description" content="Güvenli ticaret platformu. Oyun hesapları, e-pinler ve sanal ürünler.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://itemlerinmarketi.onrender.com">
     
     <link rel="canonical" href="https://itemlerinmarketi.onrender.com" />
-    
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="/style.css">
     
     <style>
@@ -44,7 +43,6 @@
         .pazar-wrapper { display: flex; gap: 30px; flex-wrap: wrap; margin-top: 20px; }
         .ilan-listesi-kutu { flex: 1; min-width: 300px; }
 
-        /* --- OVAL GRADYAN BUTON STİLİ --- */
         .oval-ilan-ekle-btn {
             background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
             color: white;
@@ -74,7 +72,6 @@
             box-shadow: 0 6px 16px rgba(245, 158, 11, 0.5);
         }
 
-        /* PAZAR KART VE ÜRÜN GÖRSELLERİNİN TASARIMI */
         .card {
             position: relative;
             background: #1e293b;
@@ -112,7 +109,6 @@
         }
         .price { color: #10b981; font-size: 20px; font-weight: bold; }
 
-        /* --- DÜZENLE / RAPORLA BUTON STİLLERİ --- */
         .ilan-ust-eylem-btn {
             position: absolute;
             top: 12px;
@@ -131,7 +127,6 @@
         .btn-duzenle { background: #38bdf8; color: #0f172a; }
         .btn-raporla { background: #ef4444; color: white; }
 
-        /* CÜZDAN DROPDOWN */
         .header-sag-grup { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
         .cuzdan-dropdown { position: relative; display: inline-block; }
         .cuzdan-buton { background: #15803d; color: white; padding: 6px 14px; border-radius: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; user-select: none; border: 1px solid #166534; }
@@ -142,7 +137,6 @@
         .dropdown-menu a:hover { background-color: #334155; color: #38bdf8; }
         .cuzdan-dropdown:hover .dropdown-menu { display: block; }
         
-        /* BİLDİRİM SEKME TASARIMI */
         .bildirim-dropdown { position: relative; display: inline-block; }
         .bildirim-buton { font-size: 20px; cursor: pointer; user-select: none; position: relative; background: none; border: none; padding: 5px; }
         .bildirim-sayac { position: absolute; top: -2px; right: -5px; background: #ef4444; color: white; font-size: 9px; padding: 1px 5px; border-radius: 10px; font-weight: bold; }
@@ -151,7 +145,6 @@
         .bildirim-item:last-child { border-bottom: none; }
         .bildirim-item small { display: block; color: #94a3b8; margin-top: 4px; font-size: 11px; }
 
-        /* PROFİL RESMİ VE AÇILIR MENÜ TASARIMI */
         .profil-dropdown { position: relative; display: inline-block; }
         .profil-avatar-btn { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 2px solid #10b981; }
         .profil-menu { display: none; position: absolute; right: 0; top: 45px; background: #1e293b; min-width: 140px; border-radius: 8px; border: 1px solid #334155; z-index: 1005; overflow: hidden; }
@@ -159,7 +152,7 @@
         .profil-menu a:hover { background: #334155; color: #38bdf8; }
         .profil-menu a:last-child { border-bottom: none; }
 
-        /* --- SOHBET BUTONU (SOL ALT) --- */
+        /* SOHBET BUTONU */
         .sohbet-butonu {
             position: fixed;
             bottom: 25px;
@@ -180,7 +173,7 @@
         .sohbet-butonu:hover { transform: scale(1.1); }
         .sohbet-butonu svg { width: 30px; height: 30px; fill: white; }
 
-        /* --- DESTEK BUTONU (SAĞ ALT) --- */
+        /* DESTEK BUTONU */
         .destek-butonu {
             position: fixed;
             bottom: 25px;
@@ -206,7 +199,7 @@
             filter: brightness(0) invert(1);
         }
 
-        /* --- SOHBET KUTUSU (SOL) --- */
+        /* SOHBET KUTUSU */
         .sohbet-kapsayici {
             position: fixed;
             bottom: 100px;
@@ -226,7 +219,7 @@
         }
         .sohbet-kapsayici.acik { display: flex; }
 
-        /* --- DESTEK KUTUSU (SAĞ) --- */
+        /* DESTEK KUTUSU */
         .destek-kapsayici {
             position: fixed;
             bottom: 100px;
@@ -246,7 +239,6 @@
         }
         .destek-kapsayici.acik { display: flex; }
 
-        /* --- ORTAK CHAT STİLLERİ --- */
         .chat-baslik {
             padding: 14px 18px;
             display: flex;
@@ -438,7 +430,6 @@
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
         }
 
-        /* KİŞİ LİSTESİ */
         .kisiler-listesi {
             flex: 1;
             padding: 10px;
@@ -474,7 +465,6 @@
             font-size: 14px;
         }
 
-        /* İLAN KURALLARI MODAL */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -531,7 +521,6 @@
         }
         .kurallar-link:hover { color: #a855f7; }
 
-        /* RESPONSIVE */
         @media (max-width: 480px) {
             .sohbet-kapsayici, .destek-kapsayici {
                 width: 100%;
@@ -550,7 +539,6 @@
             .destek-butonu { right: 15px; }
         }
 
-        /* DESTEK SONLANDIRMA UYARI MODAL */
         .onay-modal {
             display: none;
             position: fixed;
@@ -624,7 +612,6 @@
             border-bottom: none;
         }
 
-        /* RESİM YÜKLEME STİLLERİ */
         .resim-ekle-alani {
             margin-bottom: 12px;
         }
@@ -711,7 +698,6 @@
 
             <div id="userInfo" style="font-weight: bold; color: #10b981; font-size: 13px;">Giriş Yapılmadı</div>
 
-            <!-- PROFİL RESMİ VE AÇILIR MENÜ -->
             <div class="profil-dropdown" id="profilGrup" style="display: none;">
                 <img src="/profil.jpg" id="headerProfilResmi" class="profil-avatar-btn" onclick="profilMenusuAcKapat(event)">
                 <div class="profil-menu" id="profilAçilirMenu">
@@ -732,17 +718,12 @@
         <div class="pazar-wrapper">
             <div class="ilan-listesi-kutu">
                 <h3 style="color:#38bdf8;">🛒 İtemlerin Pazarı</h3>
-                <!-- İLANLAR EJS İLE RENDER EDİLİYOR -->
                 <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(230px,1fr)); gap:15px;">
                     <% if (ilanlar && ilanlar.length > 0) { %>
                         <% ilanlar.forEach(ilan => { %>
-                            <div class="card">
-                                <!-- ⭐ DÜZENLE BUTONU - admin9595 ve ilan sahibi görebilir -->
-                                <% if (aktif && (aktif.kullaniciAdi === 'admin9595' || ilan.satici === aktif.kullaniciAdi)) { %>
-                                    <button class="ilan-ust-eylem-btn btn-duzenle" onclick="window.location.href='/ilan-duzenle?id=<%= ilan._id %>'">⚙️ Düzenle</button>
-                                <% } else if (aktif) { %>
-                                    <button class="ilan-ust-eylem-btn btn-raporla" onclick="ilanRaporlaSimulasyon('<%= ilan.satici %>', '<%= ilan.baslik.replace(/'/g, "\\'") %>')">🚩 Raporla</button>
-                                <% } %>
+                            <div class="card" data-satici="<%= ilan.satici %>" data-id="<%= ilan._id %>">
+                                <!-- DÜZENLE BUTONU (admin9595 veya ilan sahibi - JavaScript ile kontrol edilecek) -->
+                                <div id="duzenleAlani-<%= ilan._id %>" style="position:absolute; top:12px; right:12px; z-index:10;"></div>
                                 
                                 <a href="/ilan/<%= ilan._id %>" style="text-decoration:none; color:inherit; display:block;">
                                     <img src="<%= ilan.resim || 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23334155%22 stroke-width=%222%22><rect x=%223%22 y=%223%22 width=%2218%22 height=%2218%22 rx=%222%22/><circle cx=%228.5%22 cy=%228.5%22 r=%221.5%22/><path d=%22M21 15l-5-5L5 21%22/></svg>' %>" class="pazar-ilan-img" alt="<%= ilan.baslik %>">
@@ -784,7 +765,6 @@
                 <textarea id="ilanDetay" placeholder="Ürün açıklaması..." rows="3" style="width:100%; padding:10px; background:#0f172a; border:1px solid #475569; color:white; border-radius:6px; box-sizing:border-box; margin-bottom:12px;"></textarea>
                 <input type="text" id="ilanSure" placeholder="Teslimat süresi (örn: 15 Dakika)" style="width:100%; padding:10px; background:#0f172a; border:1px solid #475569; color:white; border-radius:6px; box-sizing:border-box; margin-bottom:12px;">
                 
-                <!-- RESİM YÜKLEME ALANI -->
                 <div class="resim-ekle-alani">
                     <label>📷 Ürün Görseli (Opsiyonel)</label>
                     <input type="file" id="ilanResimInput" accept="image/*">
@@ -827,72 +807,47 @@
                 <p>2.18. Kurallara aykırı ilanlar yayından kaldırılır.</p>
                 <h3>3. YASAKLI ÜRÜNLER LİSTESİ</h3>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; font-size:12px;">
-                    <span>• Sağlık Beyanlı Ürünler</span>
-                    <span>• Kültür ve Tabiat Varlıkları</span>
-                    <span>• Ateşli Silah ve Kesici Aletler</span>
-                    <span>• Yanıcı ve Patlayıcı Malzemeler</span>
-                    <span>• Bandrolsüz Ürünler</span>
-                    <span>• Alkollü İçecek ve Tütün</span>
-                    <span>• Cinsel İçerik ve Pornografi</span>
-                    <span>• Taklit Ürünler</span>
-                    <span>• Resmi Belge Satışı</span>
-                    <span>• Trafik Aygıtları ve Plaka</span>
-                    <span>• Fon ve Hisse Senedi</span>
-                    <span>• Organ</span>
-                    <span>• Evcil Hayvan ve Yasaklı Hayvanlar</span>
-                    <span>• Şans Oyunu Biletleri</span>
-                    <span>• Tarım İlaçları</span>
-                    <span>• Telsiz Ürünleri</span>
-                    <span>• Etkinlik Biletleri</span>
-                    <span>• İlaç Satışı</span>
-                    <span>• Siyasi İçerikli Ürünler</span>
-                    <span>• Resmi Kıyafet & Askeri Malzemeler</span>
-                    <span>• Uyuşturucu Madde</span>
-                    <span>• Hack Yazılımları</span>
-                    <span>• Sosyal Medya Pazarlama</span>
-                    <span>• SEO Hizmetleri</span>
-                    <span>• Her Türlü Gıda</span>
-                    <span>• Sanal Para Satışı</span>
-                    <span>• IMEI kopyalanmış Telefonlar</span>
-                    <span>• Çalıntı Ürünler</span>
-                    <span>• Emlak ve Arsa Satışı</span>
-                    <span>• Her Türlü Vasıta Satışı</span>
-                    <span>• Kozmetik ve Sağlık Ürünleri</span>
-                    <span>• Film platformu ürünleri</span>
-                    <span>• İç Giyim</span>
-                    <span>• İş İlanları</span>
-                    <span>• Ön Sipariş İlanları</span>
-                    <span>• VDS/Sunucu ilanları</span>
-                    <span>• Riot Points, Valorant Points</span>
-                    <span>• Hile/3. parti yazılımlar</span>
-                    <span>• IPTV, BeinConnect, Digitürk</span>
-                    <span>• BluTV, Exxen hesapları</span>
-                    <span>• Yemeksepeti, Getir hesapları</span>
-                    <span>• Mining (madencilik)</span>
-                    <span>• Discord Nitro Generator</span>
-                    <span>• Twitch bit bağışları</span>
-                    <span>• Telefon onaylama</span>
-                    <span>• Sonoyuncu</span>
-                    <span>• 1000+ Youtube Abone</span>
-                    <span>• Minecraft itemsadder plugin</span>
-                    <span>• CD Key satışları</span>
-                    <span>• NordVPN</span>
+                    <span>• Sağlık Beyanlı Ürünler</span><span>• Kültür ve Tabiat Varlıkları</span>
+                    <span>• Ateşli Silah ve Kesici Aletler</span><span>• Yanıcı ve Patlayıcı Malzemeler</span>
+                    <span>• Bandrolsüz Ürünler</span><span>• Alkollü İçecek ve Tütün</span>
+                    <span>• Cinsel İçerik ve Pornografi</span><span>• Taklit Ürünler</span>
+                    <span>• Resmi Belge Satışı</span><span>• Trafik Aygıtları ve Plaka</span>
+                    <span>• Fon ve Hisse Senedi</span><span>• Organ</span>
+                    <span>• Evcil Hayvan ve Yasaklı Hayvanlar</span><span>• Şans Oyunu Biletleri</span>
+                    <span>• Tarım İlaçları</span><span>• Telsiz Ürünleri</span>
+                    <span>• Etkinlik Biletleri</span><span>• İlaç Satışı</span>
+                    <span>• Siyasi İçerikli Ürünler</span><span>• Resmi Kıyafet & Askeri Malzemeler</span>
+                    <span>• Uyuşturucu Madde</span><span>• Hack Yazılımları</span>
+                    <span>• Sosyal Medya Pazarlama</span><span>• SEO Hizmetleri</span>
+                    <span>• Her Türlü Gıda</span><span>• Sanal Para Satışı</span>
+                    <span>• IMEI kopyalanmış Telefonlar</span><span>• Çalıntı Ürünler</span>
+                    <span>• Emlak ve Arsa Satışı</span><span>• Her Türlü Vasıta Satışı</span>
+                    <span>• Kozmetik ve Sağlık Ürünleri</span><span>• Film platformu ürünleri</span>
+                    <span>• İç Giyim</span><span>• İş İlanları</span>
+                    <span>• Ön Sipariş İlanları</span><span>• VDS/Sunucu ilanları</span>
+                    <span>• Riot Points, Valorant Points</span><span>• Hile/3. parti yazılımlar</span>
+                    <span>• IPTV, BeinConnect, Digitürk</span><span>• BluTV, Exxen hesapları</span>
+                    <span>• Yemeksepeti, Getir hesapları</span><span>• Mining (madencilik)</span>
+                    <span>• Discord Nitro Generator</span><span>• Twitch bit bağışları</span>
+                    <span>• Telefon onaylama</span><span>• Sonoyuncu</span>
+                    <span>• 1000+ Youtube Abone</span><span>• Minecraft itemsadder plugin</span>
+                    <span>• CD Key satışları</span><span>• NordVPN</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- SOHBET BUTONU (SOL ALT) -->
+    <!-- SOHBET BUTONU -->
     <button class="sohbet-butonu" onclick="sohbetPencerisiniAcKapat()" aria-label="Sohbet">
         <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
     </button>
 
-    <!-- DESTEK BUTONU (SAĞ ALT) -->
+    <!-- DESTEK BUTONU -->
     <button class="destek-butonu" onclick="destekPencerisiniAcKapat()" aria-label="Canlı Destek">
         <img src="/destek.png" alt="Canlı Destek">
     </button>
 
-    <!-- SOHBET KUTUSU (SOL) -->
+    <!-- SOHBET KUTUSU -->
     <div class="sohbet-kapsayici" id="sohbetKapsayici">
         <div class="chat-baslik sohbet-baslik">
             <div class="baslik-sol">
@@ -900,11 +855,7 @@
             </div>
             <button class="kapat-btn" onclick="sohbetPencerisiniAcKapat()">✕</button>
         </div>
-
-        <!-- KİŞİ LİSTESİ -->
         <div class="kisiler-listesi" id="kisiListesiGövdeSol"></div>
-
-        <!-- SOHBET EKRANI -->
         <div class="chat-ekran" id="ekranKonusmaSol" style="display: none; flex-direction: column; height: 100%;">
             <div style="display:flex; align-items:center; padding:10px 15px; background:#1e293b; border-bottom:1px solid #334155; gap:10px;">
                 <span style="cursor:pointer; font-size:18px; color:#94a3b8;" onclick="kisilerEkraninaDonSol()">←</span>
@@ -918,7 +869,7 @@
         </div>
     </div>
 
-    <!-- DESTEK KUTUSU (SAĞ) -->
+    <!-- DESTEK KUTUSU -->
     <div class="destek-kapsayici" id="destekKapsayici">
         <div class="chat-baslik destek-baslik">
             <div class="baslik-sol">
@@ -931,11 +882,9 @@
                 <button class="kapat-btn" onclick="destekPencerisiniAcKapat()">✕</button>
             </div>
         </div>
-
         <div class="chat-mesajlar" id="destekMesajAlani">
             <div class="chat-mesaj sistem">🤖 Hoş geldin! Size nasıl yardımcı olabilirim?</div>
         </div>
-
         <form class="chat-form" id="destekFormu">
             <input type="text" id="destekMesajInput" placeholder="Mesajınızı yazın..." required autocomplete="off">
             <button type="submit" class="destek-gonder">Gönder</button>
@@ -965,6 +914,36 @@
     let destekAktif = false;
     let secilenSonlandirilacakKullanici = null;
     let yuklenenResimBase64 = "";
+
+    // ============================================
+    // DÜZENLE BUTONLARINI GÖSTER (admin9595 veya ilan sahibi)
+    // ============================================
+    function duzenleButonlariniGoster() {
+        const user = JSON.parse(localStorage.getItem('aktifKullanici'));
+        if (!user) return;
+        
+        document.querySelectorAll('.card').forEach(kart => {
+            const satici = kart.getAttribute('data-satici');
+            const id = kart.getAttribute('data-id');
+            
+            if (!satici || !id) return;
+            
+            // admin9595 veya ilan sahibi mi?
+            if (user.kullaniciAdi === 'admin9595' || user.kullaniciAdi === satici) {
+                const alan = document.getElementById('duzenleAlani-' + id);
+                if (alan) {
+                    const btn = document.createElement('button');
+                    btn.className = 'ilan-ust-eylem-btn btn-duzenle';
+                    btn.textContent = '⚙️ Düzenle';
+                    btn.onclick = function(e) {
+                        e.stopPropagation();
+                        window.location.href = '/ilan-duzenle?id=' + id;
+                    };
+                    alan.appendChild(btn);
+                }
+            }
+        });
+    }
 
     // ============================================
     // RESİM YÜKLEME FONKSİYONLARI
@@ -1139,6 +1118,23 @@
     }
 
     // ============================================
+    // 1 SAATTE BİR DESTEK SOHBETİNİ TEMİZLE
+    // ============================================
+    function destekSohbetiniTemizle() {
+        if (!aktif) return;
+        const odaKey = [aktif.kullaniciAdi, 'admin9595'].sort().join('_');
+        // Sadece sistem mesajlarını temizle, kullanıcı mesajlarını değil
+        let mesajlar = JSON.parse(localStorage.getItem(`ozel_oda_${odaKey}`) || '[]');
+        // Son 5 mesajı sakla (kullanıcı mesajları)
+        mesajlar = mesajlar.filter(m => m.gonderen !== 'SİSTEM' || m.metin.includes('Hoş geldin'));
+        localStorage.setItem(`ozel_oda_${odaKey}`, JSON.stringify(mesajlar));
+        if (destekAktif) {
+            destekMesajlariGoster(mesajlar);
+        }
+        console.log('🧹 Destek sohbeti temizlendi (1 saat)');
+    }
+
+    // ============================================
     // DİĞER FONKSİYONLAR
     // ============================================
     function bildirimEkle(kime, metin) {
@@ -1218,8 +1214,9 @@
     // İLAN LİSTELEME (EJS ile render edildi, bu fonksiyon boş)
     // ============================================
     function ilanlariListele() {
-        // Artık EJS doğrudan render ediyor, bu fonksiyon boş
         console.log('✅ İlanlar EJS ile render edildi');
+        // Düzenle butonlarını göster
+        setTimeout(duzenleButonlariniGoster, 100);
     }
 
     function ilanRaporlaSimulasyon(satici, baslik) {
@@ -1261,7 +1258,6 @@
         
         if (!baslik || !fiyat) { alert('Başlık ve fiyat gir!'); return; }
         
-        // MongoDB'ye ilan ekle
         fetch('/api/ilan-ekle', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1289,7 +1285,7 @@
     });
 
     // ============================================
-    // SATIN ALMA (MongoDB'den sil)
+    // SATIN ALMA
     // ============================================
     function ilanSatinAl(id, fiyat, satici, baslik) {
         if (!aktif) { alert('Giriş yap!'); window.location.href = '/login'; return; }
@@ -1297,7 +1293,6 @@
         if ((aktif.bakiye || 0) < fiyat) { alert('Bakiyen yetersiz!'); return; }
         
         if (confirm(`"${baslik}" ilanını ${fiyat} TL'ye satın almak istediğine emin misin?`)) {
-            // Bakiye düş (localStorage)
             let kullanicilar = JSON.parse(localStorage.getItem('kullanicilar') || '[]');
             const aIdx = kullanicilar.findIndex(u => u.kullaniciAdi === aktif.kullaniciAdi);
             if (aIdx !== -1) {
@@ -1311,7 +1306,6 @@
             bildirimEkle(satici, `🎉 "${baslik}" ilanınız ${aktif.kullaniciAdi} tarafından satın alındı!`);
             bildirimEkle(aktif.kullaniciAdi, `🛍️ "${baslik}" ilanını satın aldın!`);
             
-            // MongoDB'den ilanı sil (API ile)
             fetch(`/api/ilan-sil/${id}`, {
                 method: 'DELETE'
             })
@@ -1491,6 +1485,12 @@
     // BAŞLANGIÇ
     // ============================================
     ilanlariListele();
+    
+    // 1 SAATTE BİR DESTEK SOHBETİNİ TEMİZLE (3600000 ms)
+    setInterval(() => {
+        destekSohbetiniTemizle();
+    }, 3600000); // 1 saat = 3600000 ms
+    
     setInterval(() => { 
         if (document.getElementById('ekranKonusmaSol').style.display === 'flex') { 
             mesajlariYukleSol(); 
@@ -1498,6 +1498,8 @@
         destekKontrol();
         bildirimleriYukle(); 
         bakiyeGuncelle(); 
+        // Düzenle butonlarını yeniden kontrol et
+        duzenleButonlariniGoster();
     }, 3000);
     </script>
 </body>
