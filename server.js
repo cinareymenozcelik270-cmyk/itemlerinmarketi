@@ -134,6 +134,27 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
 // ============================================
+// 7.5 TÜM EJS SAYFALARINA OTOMATİK ADSENSE EKLEME (YENİ EKLENDİ ✅)
+// ============================================
+app.use((req, res, next) => {
+    const originalRender = res.render;
+    res.render = function(view, options, callback) {
+        // AdSense kodu
+        const adsenseScript = `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7453399945201277" crossorigin="anonymous"></script>`;
+        
+        // Eğer options undefined ise boş obje oluştur
+        if (!options) options = {};
+        
+        // 'head_extra' değişkenine AdSense kodunu ekle
+        options.head_extra = (options.head_extra || '') + adsenseScript;
+        
+        // Orijinal render fonksiyonunu çağır
+        originalRender.call(this, view, options, callback);
+    };
+    next();
+});
+
+// ============================================
 // 8. E-POSTA DOĞRULAMA
 // ============================================
 app.post('/api/eposta-dogrula', async (req, res) => {
