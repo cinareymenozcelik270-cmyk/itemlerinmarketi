@@ -1,51 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- ANA SAYFA -->
   <url>
     <loc>https://itemlerinmarketi.onrender.com/</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+
+  <!-- STATİK SAYFALAR -->
   <url>
     <loc>https://itemlerinmarketi.onrender.com/login</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://itemlerinmarketi.onrender.com/register</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://itemlerinmarketi.onrender.com/yonetici-paneli</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://itemlerinmarketi.onrender.com/profil</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://itemlerinmarketi.onrender.com/destek-talebi</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://itemlerinmarketi.onrender.com/para-cek</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://itemlerinmarketi.onrender.com/bakiye</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.4</priority>
+  </url>
+
+  <!-- 📌 KVKK SAYFASI EKLENDİ -->
+  <url>
+    <loc>https://itemlerinmarketi.onrender.com/kvkk</loc>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- ⭐ İLAN DETAYLARI (Dinamik - El ile Eklendi) -->
+  <url>
+    <loc>https://itemlerinmarketi.onrender.com/ilan/6a83a15afce08fb64b8168bc</loc>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>
