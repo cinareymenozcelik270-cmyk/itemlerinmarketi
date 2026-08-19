@@ -2,7 +2,6 @@
 <html lang="tr">
 <head>
     <meta name="google-adsense-account" content="ca-pub-7453399945201277">
-    <!-- GOOGLE ADSENSE -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7453399945201277" crossorigin="anonymous"></script>
     <meta name="google-site-verification" content="rXTtLPJavFhXvJ7TGofxQ3XXGZXb_B8dzSBNAPZwLFk" />
     <meta charset="UTF-8">
@@ -128,6 +127,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            flex-wrap: wrap;
         }
         .bolum-baslik i {
             color: #6366f1;
@@ -274,10 +274,24 @@
             display: flex;
             gap: 6px;
             flex-wrap: wrap;
+            align-items: center;
         }
         .btn-grup .btn {
             font-size: 12px;
             padding: 6px 14px;
+        }
+
+        .btn-x {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+        .btn-x:hover {
+            background: rgba(239, 68, 68, 0.3);
+            color: white;
+            transform: scale(1.1);
         }
 
         .admin-kimlik-img {
@@ -301,7 +315,6 @@
             margin-top: 8px;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             header {
                 padding: 12px 20px;
@@ -424,7 +437,7 @@
         }
 
         // ============================================
-        // 1. BAKİYE BİLDİRİMLERİ
+        // 1. BAKİYE BİLDİRİMLERİ (SİL BUTONU EKLENDİ)
         // ============================================
         function bakiyeListesiniYenile() {
             const listeAlani = document.getElementById('adminListesi');
@@ -442,8 +455,12 @@
                     `<div class="btn-grup">
                         <button onclick="bakiyeIslem(${b.id}, 'onayla')" class="btn btn-yesil"><i class="fas fa-check"></i> Onayla</button>
                         <button onclick="bakiyeIslem(${b.id}, 'reddet')" class="btn btn-kirmizi"><i class="fas fa-times"></i> Reddet</button>
+                        <button onclick="bakiyeSil(${b.id})" class="btn btn-x"><i class="fas fa-times"></i> ✕</button>
                     </div>` :
-                    `<span style="font-weight:600; color:${b.durum === 'Onaylandı' ? '#34d399' : '#f87171'}">${b.durum}</span>`;
+                    `<div class="btn-grup">
+                        <span style="font-weight:600; color:${b.durum === 'Onaylandı' ? '#34d399' : '#f87171'}">${b.durum}</span>
+                        <button onclick="bakiyeSil(${b.id})" class="btn btn-x"><i class="fas fa-times"></i> ✕</button>
+                    </div>`;
 
                 kart.innerHTML = `
                     <div class="bilgi">
@@ -455,6 +472,15 @@
                 `;
                 listeAlani.appendChild(kart);
             });
+        }
+
+        function bakiyeSil(id) {
+            if (confirm('Bu bakiye bildirimini silmek istediğine emin misin?')) {
+                let bildirimler = JSON.parse(localStorage.getItem('tumBakiyeBildirimleri') || '[]');
+                bildirimler = bildirimler.filter(b => b.id !== id);
+                localStorage.setItem('tumBakiyeBildirimleri', JSON.stringify(bildirimler));
+                bakiyeListesiniYenile();
+            }
         }
 
         function bakiyeIslem(id, aksiyon) {
@@ -489,7 +515,7 @@
         }
 
         // ============================================
-        // 2. SOHBET ŞİKAYETLERİ
+        // 2. SOHBET ŞİKAYETLERİ (SİL BUTONU ZATEN VAR)
         // ============================================
         function sikayetListesiniYukle() {
             const govde = document.getElementById('sikayetListesiGövde');
@@ -508,12 +534,16 @@
                 kart.style.borderLeft = '4px solid #ef4444';
 
                 let eylemButonlariHTML = cezalar[s.suclu] ?
-                    `<button onclick="cezayiKaldir('${s.suclu}')" class="btn btn-yesil"><i class="fas fa-unlock"></i> Cezayı Kaldır</button>` :
+                    `<div class="btn-grup">
+                        <button onclick="cezayiKaldir('${s.suclu}')" class="btn btn-yesil"><i class="fas fa-unlock"></i> Cezayı Kaldır</button>
+                        <button onclick="sikayetSil(${s.id})" class="btn btn-x"><i class="fas fa-times"></i> ✕</button>
+                    </div>` :
                     `<div class="btn-grup">
                         <button onclick="cezaVer('${s.suclu}', 'chat_mute')" class="btn btn-sari"><i class="fas fa-microphone-slash"></i> Sustur</button>
                         <button onclick="cezaVer('${s.suclu}', 'sureli_ban')" class="btn btn-kirmizi"><i class="fas fa-clock"></i> 1 Gün Ban</button>
                         <button onclick="cezaVer('${s.suclu}', 'hesap_ban')" class="btn btn-kirmizi" style="background:#991b1b;"><i class="fas fa-ban"></i> Sınırsız</button>
                         <button onclick="adminHesabiTamamenSil('${s.suclu}')" class="btn btn-bordo"><i class="fas fa-trash"></i> Hesabı Sil</button>
+                        <button onclick="sikayetSil(${s.id})" class="btn btn-x"><i class="fas fa-times"></i> ✕</button>
                     </div>`;
 
                 kart.innerHTML = `
@@ -522,10 +552,7 @@
                         <div><span class="etiket">Mesaj:</span> "${s.mesaj}"</div>
                         <div><span class="etiket">Neden:</span> <span class="vurgu sari">${s.neden}</span></div>
                     </div>
-                    <div class="btn-grup">
-                        ${eylemButonlariHTML}
-                        <button onclick="sikayetSil(${s.id})" class="btn btn-gri"><i class="fas fa-trash"></i> Sil</button>
-                    </div>
+                    ${eylemButonlariHTML}
                 `;
                 govde.appendChild(kart);
             });
@@ -566,10 +593,12 @@
         }
 
         function sikayetSil(id) {
-            let sikayetler = JSON.parse(localStorage.getItem('kullaniciSikayetleri') || '[]');
-            localStorage.setItem('kullaniciSikayetleri', JSON.stringify(sikayetler.filter(s => s.id !== id)));
-            alert('Şikayet silindi.');
-            sikayetListesiniYukle();
+            if (confirm('Bu şikayeti silmek istediğine emin misin?')) {
+                let sikayetler = JSON.parse(localStorage.getItem('kullaniciSikayetleri') || '[]');
+                localStorage.setItem('kullaniciSikayetleri', JSON.stringify(sikayetler.filter(s => s.id !== id)));
+                alert('Şikayet silindi.');
+                sikayetListesiniYukle();
+            }
         }
 
         // ============================================
@@ -614,7 +643,7 @@
         }
 
         // ============================================
-        // 4. PARA ÇEKME TALEPLERİ
+        // 4. PARA ÇEKME TALEPLERİ (SİL BUTONU EKLENDİ)
         // ============================================
         function paraCekmeListesiniYukle() {
             const govde = document.getElementById('paraCekmeListesiGövde');
@@ -635,8 +664,12 @@
                     `<div class="btn-grup">
                         <button onclick="paraCekmeKarar(${t.id}, 'onayla')" class="btn btn-yesil"><i class="fas fa-check"></i> Onayla</button>
                         <button onclick="paraCekmeKarar(${t.id}, 'reddet')" class="btn btn-kirmizi"><i class="fas fa-times"></i> Reddet</button>
+                        <button onclick="paraCekmeSil(${t.id})" class="btn btn-x"><i class="fas fa-times"></i> ✕</button>
                     </div>` :
-                    `<span style="font-weight:600; color:${t.durum === 'Ödendi' ? '#34d399' : '#f87171'}">${t.durum}</span>`;
+                    `<div class="btn-grup">
+                        <span style="font-weight:600; color:${t.durum === 'Ödendi' ? '#34d399' : '#f87171'}">${t.durum}</span>
+                        <button onclick="paraCekmeSil(${t.id})" class="btn btn-x"><i class="fas fa-times"></i> ✕</button>
+                    </div>`;
 
                 kart.innerHTML = `
                     <div class="bilgi">
@@ -656,6 +689,15 @@
                 `;
                 govde.appendChild(kart);
             });
+        }
+
+        function paraCekmeSil(id) {
+            if (confirm('Bu para çekme talebini silmek istediğine emin misin?')) {
+                let talepler = JSON.parse(localStorage.getItem('paraCekmeTalepleri') || '[]');
+                talepler = talepler.filter(t => t.id !== id);
+                localStorage.setItem('paraCekmeTalepleri', JSON.stringify(talepler));
+                paraCekmeListesiniYukle();
+            }
         }
 
         function paraCekmeKarar(id, aksiyon) {
@@ -691,7 +733,7 @@
         }
 
         // ============================================
-        // 5. İLAN RAPORLARI (YENİ)
+        // 5. İLAN RAPORLARI (SİL BUTONU ZATEN VAR)
         // ============================================
         function ilanRaporlariListesiniYukle() {
             const govde = document.getElementById('ilanRaporlariListesiGövde');
@@ -722,18 +764,21 @@
                         <div><span class="etiket">📝 Sebep:</span> <span class="vurgu sari">"${sebep}"</span></div>
                         <div style="color:#5a5a7a; font-size:12px;">⏱️ ${rapor.tarih || 'Bilinmiyor'}</div>
                     </div>
-                    <button onclick="ilanRaporuCozenSil(${rapor.id})" class="btn btn-yesil"><i class="fas fa-check"></i> Raporu Çözdüm (Sil)</button>
+                    <div class="btn-grup">
+                        <button onclick="ilanRaporuCozenSil(${rapor.id})" class="btn btn-yesil"><i class="fas fa-check"></i> Çözdüm</button>
+                        <button onclick="ilanRaporuCozenSil(${rapor.id})" class="btn btn-x"><i class="fas fa-times"></i> ✕</button>
+                    </div>
                 `;
                 govde.appendChild(kart);
             });
         }
 
         function ilanRaporuCozenSil(id) {
-            if (confirm('Bu raporu çözdüyseniz listeden silelim mi?')) {
+            if (confirm('Bu raporu silmek istediğine emin misin?')) {
                 let adminBildirimler = JSON.parse(localStorage.getItem('bildirimler_admin9595') || '[]');
                 adminBildirimler = adminBildirimler.filter(b => b.id !== id);
                 localStorage.setItem('bildirimler_admin9595', JSON.stringify(adminBildirimler));
-                alert('✅ Rapor listeden kaldırıldı.');
+                alert('✅ Rapor silindi.');
                 ilanRaporlariListesiniYukle();
             }
         }
