@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta name="google-adsense-account" content="ca-pub-7453399945201277">
+    <meta name="google-site-verification" content="rXTtLPJavFhXvJ7TGofxQ3XXGZXb_B8dzSBNAPZwLFk" />
+    <link rel="icon" type="image/png" href="/resim.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İlan Ekle - İtemlerinMarketi</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0a0a1a;
+            color: #e8e8f0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 40px;
+            background: rgba(10, 10, 26, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        header .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        header .logo i {
+            color: #6366f1;
+        }
+        header nav a {
+            color: #8a8aaa;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        header nav a:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: white;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* ===== STEPPER ===== */
+        .stepper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 32px;
+            padding: 16px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.04);
+            flex-wrap: wrap;
+        }
+        .step-dot {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #5a5a7a;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .step-dot .num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.04);
+            border: 2px solid rgba(255,255,255,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        .step-dot.active .num {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-color: #6366f1;
+            color: white;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+        }
+        .step-dot.done .num {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+        .step-dot .label {
+            display: none;
+        }
+        .step-dot.active .label {
+            display: inline;
+            color: white;
+        }
+        .step-line {
+            width: 30px;
+            height: 2px;
+            background: rgba(255,255,255,0.06);
+            flex-shrink: 0;
+        }
+        .step-line.done {
+            background: #10b981;
+        }
+
+        /* ===== FORM KARTI ===== */
+        .form-card {
+            background: rgba(20, 20, 42, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 36px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            display: none;
+            animation: fadeSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .form-card.active {
+            display: block;
+        }
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(20px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .form-card h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 4px;
+        }
+        .form-card .alt-baslik {
+            color: #8a8aaa;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .form-card label {
+            display: block;
+            color: #c4c4d4;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .form-card input,
+        .form-card textarea,
+        .form-card select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 16px;
+        }
+        .form-card input:focus,
+        .form-card textarea:focus,
+        .form-card select:focus {
+            border-color: #6366f1;
+            outline: none;
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        .form-card input::placeholder,
+        .form-card textarea::placeholder {
+            color: #5a5a7a;
+        }
+        .form-card textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .form-card select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235a5a7a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            cursor: pointer;
+        }
+        .form-card select option {
+            background: #14142a;
+            color: white;
+        }
+
+        /* ===== TEXT EDITOR (Basit) ===== */
+        .editor-toolbar {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        .editor-toolbar button {
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            color: #c4c4d4;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+        }
+        .editor-toolbar button:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+        .editor-toolbar button.active {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: #6366f1;
+            color: white;
+        }
+        .editor-area {
+            min-height: 100px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.8;
+            min-height: 120px;
+            overflow-y: auto;
+        }
+        .editor-area:focus {
+            border-color: #6366f1;
+        }
+        .editor-area[contenteditable="true"]:empty::before {
+            content: 'Açıklamanı yaz...';
+            color: #5a5a7a;
+        }
+
+        /* ===== RESİM YÜKLEME ===== */
+        .resim-yukle-alani {
+            border: 2px dashed rgba(255, 255, 255, 0.06);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.02);
+            margin-bottom: 16px;
+        }
+        .resim-yukle-alani:hover {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.04);
+        }
+        .resim-yukle-alani input[type="file"] {
+            display: none;
+        }
+        .resim-yukle-alani .icon {
+            font-size: 36px;
+            color: #5a5a7a;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .resim-yukle-alani .yazi {
+            color: #8a8aaa;
+            font-size: 14px;
+        }
+        .resim-yukle-alani .alt-yazi {
+            color: #5a5a7a;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        .resim-onizleme {
+            margin-top: 12px;
+            display: none;
+            position: relative;
+        }
+        .resim-onizleme img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .resim-onizleme .kaldir-btn {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.1);
+            padding: 4px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 6px;
+            font-size: 12px;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        .resim-onizleme .kaldir-btn:hover {
+            background: rgba(239, 68, 68, 0.25);
+        }
+
+        /* ===== KURALLAR ===== */
+        .kurallar-kutu {
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.04);
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+        }
+        .kurallar-kutu h3 {
+            color: #fbbf24;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        .kurallar-kutu p {
+            color: #8a8aaa;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+        .kurallar-kutu ul {
+            color: #8a8aaa;
+            padding-left: 20px;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+        .kurallar-kutu ul li {
+            margin-bottom: 4px;
+        }
+        .kurallar-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 16px 0;
+            font-size: 14px;
+            color: #8a8aaa;
+        }
+        .kurallar-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #6366f1;
+            cursor: pointer;
+        }
+        .kurallar-link {
+            color: #a5b4fc;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .kurallar-link:hover {
+            color: white;
+        }
+
+        /* ===== BUTONLAR ===== */
+        .btn-grup {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .btn-grup .btn {
+            flex: 1;
+            min-width: 120px;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.2);
+        }
+        .btn-primary:hover {
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.04);
+            color: #c4c4d4;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2);
+        }
+        .btn-success:hover {
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.3);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* ===== BAŞARI EKRANI ===== */
+        .basarili-ekran {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .basarili-ekran .icon {
+            font-size: 64px;
+            color: #10b981;
+            margin-bottom: 16px;
+            display: block;
+        }
+        .basarili-ekran h2 {
+            color: white;
+            font-size: 28px;
+            font-weight: 800;
+        }
+        .basarili-ekran p {
+            color: #8a8aaa;
+            font-size: 16px;
+            margin: 8px 0 24px;
+        }
+        .basarili-ekran .ilan-link {
+            background: rgba(255,255,255,0.03);
+            padding: 14px 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.06);
+            display: inline-block;
+            color: #38bdf8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            word-break: break-all;
+        }
+        .basarili-ekran .ilan-link:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: #6366f1;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 640px) {
+            header {
+                padding: 12px 20px;
+            }
+            .container {
+                padding: 20px 16px;
+            }
+            .form-card {
+                padding: 24px;
+            }
+            .stepper {
+                gap: 4px;
+                padding: 12px;
+            }
+            .step-dot .label {
+                display: none !important;
+            }
+            .step-line {
+                width: 16px;
+            }
+            .btn-grup .btn {
+                flex: 1 1 100%;
+            }
+            .editor-toolbar button {
+                padding: 4px 10px;
+                font-size: 12px;
+            }
+        }
+        @media (max-width: 480px) {
+            .form-card {
+                padding: 16px;
+            }
+            .sayfa-baslik {
+                font-size: 20px;
+            }
+            .stepper {
+                gap: 2px;
+                padding: 8px;
+            }
+            .step-dot .num {
+                width: 28px;
+                height: 28px;
+                font-size: 11px;
+            }
+            .step-line {
+                width: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <i class="fas fa-store"></i> İtemlerinMarketi
+        </div>
+        <nav>
+            <a href="/"><i class="fas fa-home"></i> Ana Sayfa</a>
+            <a href="/ilan-ekle" style="color:white; background:rgba(99,102,241,0.1);"><i class="fas fa-plus-circle"></i> İlan Ekle</a>
+        </nav>
+    </header>
+
+    <div class="container">
+
+        <!-- ===== STEPPER ===== -->
+        <div class="stepper" id="stepper">
+            <div class="step-dot active" data-step="1">
+                <span class="num">1</span>
+                <span class="label">İlan Bilgileri</span>
+            </div>
+            <div class="step-line" id="line1"></div>
+            <div class="step-dot" data-step="2">
+                <span class="num">2</span>
+                <span class="label">Teslimat & Fiyat</span>
+            </div>
+            <div class="step-line" id="line2"></div>
+            <div class="step-dot" data-step="3">
+                <span class="num">3</span>
+                <span class="label">Kurallar</span>
+            </div>
+            <div class="step-line" id="line3"></div>
+            <div class="step-dot" data-step="4">
+                <span class="num">4</span>
+                <span class="label">Tamam</span>
+            </div>
+        </div>
+
+        <!-- ===== ADIM 1: İLAN BİLGİLERİ ===== -->
+        <div class="form-card active" id="step1">
+            <h2>📝 İlan Bilgileri</h2>
+            <p class="alt-baslik">Ürününü tanıt, başlık ve açıklama ekle.</p>
+
+            <label for="ilanBaslik">📌 Başlık</label>
+            <input type="text" id="ilanBaslik" placeholder="Örn: Valorant Vandal Skinli Hesap" maxlength="100">
+
+            <label>📝 Açıklama</label>
+            <div class="editor-toolbar">
+                <button onclick="formatText('bold')"><b>B</b></button>
+                <button onclick="formatText('italic')"><i>I</i></button>
+                <button onclick="formatText('underline')"><u>U</u></button>
+                <button onclick="formatText('strikeThrough')"><s>S</s></button>
+                <button onclick="formatText('insertUnorderedList')">• Liste</button>
+                <button onclick="formatText('removeFormat')">↺ Temizle</button>
+            </div>
+            <div class="editor-area" id="ilanDetay" contenteditable="true"></div>
+
+            <div class="btn-grup">
+                <button class="btn btn-primary" onclick="nextStep(2)">Sonraki <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <!-- ===== ADIM 2: TESLİMAT & FİYAT ===== -->
+        <div class="form-card" id="step2">
+            <h2>⏱️ Teslimat & Fiyat</h2>
+            <p class="alt-baslik">Teslimat süresini ve fiyatı belirle.</p>
+
+            <label>📦 Teslimat Süresi</label>
+            <select id="teslimatSuresi">
+                <option value="15 Dakika">15 Dakika</option>
+                <option value="30 Dakika">30 Dakika</option>
+                <option value="1 Saat">1 Saat</option>
+                <option value="2 Saat">2 Saat</option>
+                <option value="6 Saat">6 Saat</option>
+                <option value="12 Saat">12 Saat</option>
+                <option value="24 Saat" selected>24 Saat</option>
+                <option value="2 Gün">2 Gün</option>
+                <option value="3 Gün">3 Gün</option>
+                <option value="5 Gün">5 Gün</option>
+                <option value="7 Gün">7 Gün</option>
+            </select>
+
+            <label>💰 Fiyat (TL) <span style="color:#5a5a7a;font-weight:400;">(Minimum 10 TL)</span></label>
+            <input type="number" id="ilanFiyat" placeholder="Örn: 450" min="10" step="0.01">
+
+            <label>🖼️ Ürün Görseli <span style="color:#5a5a7a;font-weight:400;">(Opsiyonel)</span></label>
+            <div class="resim-yukle-alani" onclick="document.getElementById('ilanResimInput').click()">
+                <input type="file" id="ilanResimInput" accept="image/*">
+                <span class="icon"><i class="fas fa-cloud-upload-alt"></i></span>
+                <span class="yazi">Resim eklemek için tıkla</span>
+                <span class="alt-yazi">PNG, JPG, WEBP (max 5MB)</span>
+            </div>
+            <div class="resim-onizleme" id="resimOnizleme">
+                <img id="resimGoster" src="#" alt="Önizleme">
+                <button class="kaldir-btn" onclick="resimTemizle()"><i class="fas fa-times"></i> Kaldır</button>
+            </div>
+
+            <div class="btn-grup">
+                <button class="btn btn-secondary" onclick="prevStep(1)"><i class="fas fa-arrow-left"></i> Geri</button>
+                <button class="btn btn-primary" onclick="nextStep(3)">Sonraki <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <!-- ===== ADIM 3: KURALLAR ===== -->
+        <div class="form-card" id="step3">
+            <h2>📋 İlan Verme Kuralları</h2>
+            <p class="alt-baslik">İlan vermeden önce kuralları oku ve kabul et.</p>
+
+            <div class="kurallar-kutu">
+                <h3>📜 İTEMLERİNMARKETİ İLAN VERME KURALLARI</h3>
+                <p>Aşağıda yazan ilan verme kuralları bireysel ve kurumsal üyeler dahil ve tüm kategori tipleri için geçerlidir. İlan girişinde bulunan Üye, ilan verme kurallarına, üyelik ve kullanıcı sözleşmeleri ile bu belgenin devamında belirtilen Yasak Ürünler Listesi'nde belirtilen kurallara uymayı kabul ve taahhüt etmiş sayılır.</p>
+                <h3 style="color:#a5b4fc;margin-top:12px;">1. TANIMLAR</h3>
+                <p><strong style="color:white;">İNTERNET SİTESİ :</strong> www.itemlerinmarketi.com</p>
+                <p><strong style="color:white;">İTEMLERİNMARKETİ :</strong> İnternet Sitesi ve Mobil Uygulama ile birlikte "İtemlerinMarketi" olarak anılmaktadır.</p>
+                <h3 style="color:#a5b4fc;margin-top:12px;">2. GENEL HÜKÜMLER</h3>
+                <p>2.1. İtemlerinMarketi "Aracı Hizmet Sağlayıcı" sıfatını haizdir.</p>
+                <p>2.2. İtemlerinMarketi'ya üye olmayanlar ilan veremez.</p>
+                <p>2.3. İtemlerinMarketi'nda ilan vermek ücretsizdir.</p>
+                <p>2.4. Satıcı, ilan vermeden önce kuralları okuduğunu ve anladığını kabul eder.</p>
+                <p>2.5. Satıcı, ilanının yasalara uygun olduğunu kabul eder.</p>
+                <p>2.6. İlan ile ilgili tüm sorumluluk Satıcı'ya aittir.</p>
+                <p>2.17. Yasak içerikler (ırkçılık, terör, pornografi, hakaret vb.) yasaktır.</p>
+                <p>2.18. Kurallara aykırı ilanlar yayından kaldırılır.</p>
+                <h3 style="color:#a5b4fc;margin-top:12px;">3. YASAKLI ÜRÜNLER LİSTESİ</h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; font-size:12px;">
+                    <span>• Sağlık Beyanlı Ürünler</span>
+                    <span>• Kültür ve Tabiat Varlıkları</span>
+                    <span>• Ateşli Silah ve Kesici Aletler</span>
+                    <span>• Yanıcı ve Patlayıcı Malzemeler</span>
+                    <span>• Bandrolsüz Ürünler</span>
+                    <span>• Alkollü İçecek ve Tütün</span>
+                    <span>• Cinsel İçerik ve Pornografi</span>
+                    <span>• Taklit Ürünler</span>
+                    <span>• Resmi Belge Satışı</span>
+                    <span>• Uyuşturucu Madde</span>
+                    <span>• Hack Yazılımları</span>
+                    <span>• Sosyal Medya Pazarlama</span>
+                    <span>• Sanal Para Satışı</span>
+                    <span>• Riot Points, Valorant Points</span>
+                    <span>• IPTV, BeinConnect</span>
+                    <span>• Discord Nitro Generator</span>
+                    <span>• NordVPN</span>
+                    <span>• Çalıntı Ürünler</span>
+                </div>
+            </div>
+
+            <div class="kurallar-checkbox">
+                <input type="checkbox" id="kurallarOnay">
+                <label>
+                    <span class="kurallar-link" onclick="kurallariGoster()">İlan kurallarını</span> okudum ve kabul ediyorum.
+                </label>
+            </div>
+
+            <div class="btn-grup">
+                <button class="btn btn-secondary" onclick="prevStep(2)"><i class="fas fa-arrow-left"></i> Geri</button>
+                <button class="btn btn-success" id="ilanOlusturBtn" onclick="ilanOlustur()"><i class="fas fa-check"></i> İlanı Oluştur</button>
+            </div>
+        </div>
+
+        <!-- ===== ADIM 4: BAŞARI EKRANI ===== -->
+        <div class="form-card" id="step4">
+            <div class="basarili-ekran">
+                <span class="icon"><i class="fas fa-check-circle"></i></span>
+                <h2>🎉 İlan Oluşturuldu!</h2>
+                <p>İlanın başarıyla yayınlandı. İlan sayfasına gitmek için tıkla.</p>
+                <a href="#" id="ilanLink" class="ilan-link" target="_blank"><i class="fas fa-external-link-alt"></i> İlanı Görüntüle</a>
+                <br><br>
+                <a href="/" class="btn btn-secondary" style="display:inline-flex;"><i class="fas fa-home"></i> Ana Sayfaya Dön</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ============================================
+        // İLAN EKLE - TAM SCRIPT
+        // ============================================
+
+        let yuklenenResimBase64 = "";
+        let olusturulanIlanId = null;
+        let mevcutAdim = 1;
+        const toplamAdim = 4;
+
+        // ============================================
+        // ADIM GEÇİŞLERİ
+        // ============================================
+        function nextStep(adim) {
+            // Adım 1'den 2'ye geçerken kontrol
+            if (mevcutAdim === 1 && adim === 2) {
+                const baslik = document.getElementById('ilanBaslik').value.trim();
+                if (!baslik) {
+                    alert('❌ Lütfen bir başlık girin!');
+                    return;
+                }
+                const detay = document.getElementById('ilanDetay').innerHTML.trim();
+                if (!detay || detay === '<br>' || detay === '<div><br></div>') {
+                    alert('❌ Lütfen bir açıklama girin!');
+                    return;
+                }
+            }
+
+            // Adım 2'den 3'e geçerken kontrol
+            if (mevcutAdim === 2 && adim === 3) {
+                const fiyat = parseFloat(document.getElementById('ilanFiyat').value);
+                if (!fiyat || fiyat < 10) {
+                    alert('❌ Fiyat en az 10 TL olmalıdır!');
+                    return;
+                }
+            }
+
+            // Adım 3'ten 4'e geçerken kontrol (kurallar onayı)
+            if (mevcutAdim === 3 && adim === 4) {
+                if (!document.getElementById('kurallarOnay').checked) {
+                    alert('❌ İlan vermek için kuralları kabul etmelisin!');
+                    return;
+                }
+            }
+
+            // Adımı değiştir
+            mevcutAdim = adim;
+            adimGuncelle();
+        }
+
+        function prevStep(adim) {
+            mevcutAdim = adim;
+            adimGuncelle();
+        }
+
+        function adimGuncelle() {
+            // Form kartlarını göster/gizle
+            for (let i = 1; i <= toplamAdim; i++) {
+                const kart = document.getElementById('step' + i);
+                if (kart) {
+                    kart.classList.toggle('active', i === mevcutAdim);
+                }
+            }
+
+            // Stepper güncelle
+            const dots = document.querySelectorAll('.step-dot');
+            const lines = document.querySelectorAll('.step-line');
+
+            dots.forEach((dot, index) => {
+                const step = index + 1;
+                dot.classList.remove('active', 'done');
+                if (step === mevcutAdim) {
+                    dot.classList.add('active');
+                } else if (step < mevcutAdim) {
+                    dot.classList.add('done');
+                }
+            });
+
+            lines.forEach((line, index) => {
+                const step = index + 1;
+                line.classList.toggle('done', step < mevcutAdim);
+            });
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ============================================
+        // TEXT EDITOR
+        // ============================================
+        function formatText(command) {
+            document.execCommand(command, false, null);
+            document.getElementById('ilanDetay').focus();
+        }
+
+        // ============================================
+        // RESİM YÜKLEME
+        // ============================================
+        document.getElementById('ilanResimInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert('❌ Dosya boyutu 5MB\'dan büyük!');
+                this.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                yuklenenResimBase64 = event.target.result;
+                document.getElementById('resimOnizleme').style.display = 'block';
+                document.getElementById('resimGoster').src = yuklenenResimBase64;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function resimTemizle() {
+            yuklenenResimBase64 = "";
+            document.getElementById('ilanResimInput').value = '';
+            document.getElementById('resimOnizleme').style.display = 'none';
+            document.getElementById('resimGoster').src = '#';
+        }
+
+        // ============================================
+        // KURALLAR GÖSTER
+        // ============================================
+        function kurallariGoster() {
+            // Kurallar zaten görünüyor, scroll yap
+            const kutu = document.querySelector('.kurallar-kutu');
+            if (kutu) {
+                kutu.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        // ============================================
+        // İLAN OLUŞTUR
+        // ============================================
+        async function ilanOlustur() {
+            const btn = document.getElementById('ilanOlusturBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Oluşturuluyor...';
+
+            const baslik = document.getElementById('ilanBaslik').value.trim();
+            const detay = document.getElementById('ilanDetay').innerHTML.trim();
+            const sure = document.getElementById('teslimatSuresi').value;
+            const fiyat = parseFloat(document.getElementById('ilanFiyat').value);
+            const resim = yuklenenResimBase64 || '';
+
+            // Aktif kullanıcı kontrolü
+            const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
+            if (!aktif) {
+                alert('❌ Lütfen önce giriş yapın!');
+                window.location.href = '/login';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/ilan-ekle', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        baslik: baslik,
+                        fiyat: fiyat,
+                        detay: detay,
+                        sure: sure,
+                        resim: resim,
+                        satici: aktif.kullaniciAdi
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    olusturulanIlanId = data.ilan._id;
+                    const link = `https://itemlerinmarketi.onrender.com/ilan/${olusturulanIlanId}`;
+                    document.getElementById('ilanLink').href = link;
+                    document.getElementById('ilanLink').innerHTML = `<i class="fas fa-external-link-alt"></i> ${link}`;
+
+                    // 4. adıma geç
+                    nextStep(4);
+                } else {
+                    alert('❌ İlan oluşturulamadı: ' + data.error);
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-check"></i> İlanı Oluştur';
+                }
+            } catch (hata) {
+                alert('❌ Bağlantı hatası: ' + hata.message);
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check"></i> İlanı Oluştur';
+            }
+        }
+
+        // ============================================
+        // ENTER İLE GÖNDER
+        // ============================================
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                const aktifAdim = mevcutAdim;
+                if (aktifAdim === 1) nextStep(2);
+                else if (aktifAdim === 2) nextStep(3);
+                else if (aktifAdim === 3) ilanOlustur();
+            }
+        });
+
+        // ============================================
+        // SAYFA YÜKLENDİĞİNDE
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Giriş kontrolü
+            const aktif = JSON.parse(localStorage.getItem('aktifKullanici'));
+            if (!aktif) {
+                alert('⚠️ İlan eklemek için önce giriş yapmalısın kanka!');
+                window.location.href = '/login';
+            }
+        });
+
+        console.log('📦 İtemlerinMarketi - İlan Ekle sayfası yüklendi!');
+    </script>
+
+</body>
+</html>
