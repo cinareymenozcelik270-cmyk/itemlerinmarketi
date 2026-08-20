@@ -52,7 +52,7 @@
     <priority>0.4</priority>
   </url>
 
-  <!-- 📌 KVKK SAYFASI EKLENDİ -->
+  <!-- 📌 KVKK SAYFASI -->
   <url>
     <loc>https://itemlerinmarketi.onrender.com/kvkk</loc>
     <lastmod>2026-08-18</lastmod>
@@ -60,9 +60,9 @@
     <priority>0.3</priority>
   </url>
 
-  <!-- ⭐ İLAN DETAYLARI (Dinamik - El ile Eklendi) -->
+  <!-- ⭐ İLANLAR (Güncellenmiş ID) -->
   <url>
-    <loc>https://itemlerinmarketi.onrender.com/ilan/6a83a15afce08fb64b8168bc</loc>
+    <loc>https://itemlerinmarketi.onrender.com/ilan/6a8541b8a27c115cea2d1cf7</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
