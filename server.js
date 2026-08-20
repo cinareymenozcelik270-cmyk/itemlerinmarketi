@@ -476,6 +476,16 @@ app.get('/ilan-duzenle', (req, res) => {
     });
 });
 
+// ============================================
+// İLAN EKLE SAYFASI (YENİ)
+// ============================================
+app.get('/ilan-ekle', (req, res) => {
+    res.render('ilan_ekle', { 
+        aktif: null,
+        mesaj: null 
+    });
+});
+
 app.get('/profil', (req, res) => { 
     res.render('profil', { 
         aktif: null,
