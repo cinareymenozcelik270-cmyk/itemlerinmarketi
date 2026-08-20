@@ -428,7 +428,7 @@ app.get('/kvkk', (req, res) => {
 });
 
 // ============================================
-// 17. ROUTE'LAR
+// 17. ROUTE'LAR (İlan Ekle ve Düzenle Eklenerek Tamamlandı)
 // ============================================
 let bakiyeBildirimleri = [];
 
@@ -439,12 +439,13 @@ app.get('/bakiye', (req, res) => {
     });
 });
 
+// ✅ LOGIN SAYFASI
 app.get('/login', (req, res) => {
     const mesaj = req.query.mesaj || null;
     res.render('login', { 
         hata: null, 
         mesaj: mesaj,
-        aktif: null 
+        aktif: null
     });
 });
 
@@ -469,18 +470,17 @@ app.get('/para-cek', (req, res) => {
     });
 });
 
-app.get('/ilan-duzenle', (req, res) => {
-    res.render('ilan_duzenle', { 
+// ✅ İLAN EKLE SAYFASI (EKLEYEREK DÜZELTTİK)
+app.get('/ilan-ekle', (req, res) => {
+    res.render('ilan_ekle', { 
         aktif: null,
         mesaj: null 
     });
 });
 
-// ============================================
-// İLAN EKLE SAYFASI (YENİ)
-// ============================================
-app.get('/ilan-ekle', (req, res) => {
-    res.render('ilan_ekle', { 
+// ✅ İLAN DÜZENLE SAYFASI
+app.get('/ilan-duzenle', (req, res) => {
+    res.render('ilan_duzenle', { 
         aktif: null,
         mesaj: null 
     });
