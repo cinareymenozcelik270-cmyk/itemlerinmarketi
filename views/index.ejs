@@ -28,15 +28,15 @@
             overflow-x: hidden;
         }
 
-        /* ===== ARKA PLAN ===== */
+        /* ===== ARKA PLAN ANİMASYONU ===== */
         body::before {
             content: '';
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: 
-                radial-gradient(ellipse at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 90% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 70%);
+                radial-gradient(ellipse at 10% 20%, rgba(99, 102, 241, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 70%);
             z-index: -1;
             pointer-events: none;
         }
@@ -46,11 +46,11 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px 40px;
-            background: rgba(10, 10, 26, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 14px 40px;
+            background: rgba(10, 10, 26, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -60,7 +60,7 @@
         .header-sol-bölüm {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
             flex-wrap: wrap;
         }
         .logo-img {
@@ -72,9 +72,9 @@
         .logo-img:hover { opacity: 0.8; }
 
         .btn {
-            padding: 10px 22px;
+            padding: 9px 20px;
             border: none;
-            border-radius: 10px;
+            border-radius: 50px;
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
@@ -103,26 +103,19 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 30px rgba(245, 158, 11, 0.3);
         }
-        .btn-ghost {
-            background: rgba(255,255,255,0.06);
-            color: #c4c4d4;
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-        .btn-ghost:hover {
-            background: rgba(255,255,255,0.1);
-            color: white;
-        }
 
         .header-sag-grup {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
             flex-wrap: wrap;
         }
+
+        /* CÜZDAN BUTONU */
         .cuzdan-buton {
-            background: rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.05);
             padding: 8px 18px;
-            border-radius: 10px;
+            border-radius: 50px;
             font-size: 13px;
             font-weight: 600;
             display: flex;
@@ -136,44 +129,11 @@
         .cuzdan-buton:hover {
             background: rgba(255,255,255,0.1);
             border-color: rgba(99, 102, 241, 0.3);
+            transform: scale(1.02);
         }
-        .cuzdan-buton svg { width: 16px; height: 16px; fill: #e8e8f0; }
-        .cuzdan-buton .bakiye-renk { color: #34d399; }
+        .cuzdan-buton .bakiye-renk { color: #34d399; font-weight: 700; }
 
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            right: 0;
-            top: 44px;
-            background: #14142a;
-            min-width: 180px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.06);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            z-index: 1002;
-            overflow: hidden;
-            backdrop-filter: blur(20px);
-        }
-        .dropdown:hover .dropdown-menu { display: block; }
-        .dropdown-menu a {
-            color: #c4c4d4;
-            padding: 10px 18px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 13px;
-            font-weight: 500;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-            transition: all 0.2s;
-        }
-        .dropdown-menu a:last-child { border-bottom: none; }
-        .dropdown-menu a:hover { background: rgba(99, 102, 241, 0.1); color: white; }
-
+        /* PROFİL */
         .profil-avatar-btn {
             width: 38px;
             height: 38px;
@@ -245,6 +205,41 @@
             margin-top: 4px;
         }
         .bildirim-item.yeni { background: rgba(99, 102, 241, 0.08); }
+
+        /* ===== DROPDOWN ===== */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 44px;
+            background: #14142a;
+            min-width: 180px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            z-index: 1002;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+        .dropdown:hover .dropdown-menu { display: block; }
+        .dropdown-menu a {
+            color: #c4c4d4;
+            padding: 10px 18px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            transition: all 0.2s;
+        }
+        .dropdown-menu a:last-child { border-bottom: none; }
+        .dropdown-menu a:hover { background: rgba(99, 102, 241, 0.1); color: white; }
 
         /* ===== NAV ===== */
         nav {
@@ -415,48 +410,192 @@
         .bos-ilan i { font-size: 40px; display: block; margin-bottom: 16px; color: #3a3a5a; }
         .bos-ilan p { font-size: 18px; }
 
-        /* ===== MODAL ===== */
+        /* ============================================ */
+        /* ===== CÜZDAN MODAL ===== */
+        /* ============================================ */
         .modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
             z-index: 9999;
             justify-content: center;
             align-items: center;
+            animation: fadeIn 0.3s ease;
         }
         .modal-overlay.active { display: flex; }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .modal-icerik {
             background: #14142a;
             border: 1px solid rgba(255,255,255,0.06);
             border-radius: 20px;
-            max-width: 540px;
+            max-width: 480px;
             width: 92%;
             max-height: 85vh;
             overflow-y: auto;
             padding: 36px;
             color: #e8e8f0;
             box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+            animation: modalIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
-        .modal-icerik h2 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-top: 0;
-            margin-bottom: 24px;
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
         .modal-kapat-btn {
             background: none;
             border: none;
-            font-size: 20px;
+            font-size: 22px;
             cursor: pointer;
             color: #5a5a7a;
             float: right;
-            padding: 4px;
+            padding: 4px 8px;
             transition: color 0.3s;
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            z-index: 10;
         }
         .modal-kapat-btn:hover { color: white; }
 
+        /* CÜZDAN MODAL ÖZEL */
+        .cuzdan-modal .cuzdan-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .cuzdan-modal .cuzdan-header .cuzdan-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.2));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 28px;
+            color: #a5b4fc;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+        .cuzdan-modal .cuzdan-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            margin: 0;
+        }
+        .cuzdan-modal .cuzdan-header .cuzdan-alt {
+            color: #8a8aaa;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .cuzdan-modal .cuzdan-bakiye-box {
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.04);
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .cuzdan-modal .cuzdan-bakiye-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(99, 102, 241, 0.05), transparent 70%);
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+        @keyframes glowPulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+        .cuzdan-modal .cuzdan-bakiye-box .cuzdan-bakiye-label {
+            display: block;
+            color: #8a8aaa;
+            font-size: 13px;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+        .cuzdan-modal .cuzdan-bakiye-box .cuzdan-bakiye {
+            display: block;
+            font-size: 36px;
+            font-weight: 800;
+            color: #34d399;
+            position: relative;
+            z-index: 1;
+            margin-top: 4px;
+        }
+        .cuzdan-modal .cuzdan-bakiye-box .cuzdan-bakiye small {
+            font-size: 16px;
+            font-weight: 400;
+            color: #5a5a7a;
+        }
+
+        .cuzdan-modal .cuzdan-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .cuzdan-modal .cuzdan-actions .cuzdan-btn {
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        .cuzdan-modal .cuzdan-actions .cuzdan-btn:hover {
+            transform: translateY(-2px);
+        }
+        .cuzdan-modal .cuzdan-actions .cuzdan-btn-yukle {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.2);
+        }
+        .cuzdan-modal .cuzdan-actions .cuzdan-btn-yukle:hover {
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.35);
+        }
+        .cuzdan-modal .cuzdan-actions .cuzdan-btn-cek {
+            background: rgba(255,255,255,0.06);
+            color: #c4c4d4;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .cuzdan-modal .cuzdan-actions .cuzdan-btn-cek:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .cuzdan-modal .cuzdan-footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #5a5a7a;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            padding-top: 16px;
+        }
+        .cuzdan-modal .cuzdan-footer i {
+            color: #10b981;
+            margin-right: 4px;
+        }
+
+        /* ===== DİĞER MODALLAR (İlan Ekle, Kurallar) ===== */
         .ilan-form input,
         .ilan-form textarea {
             width: 100%;
@@ -539,7 +678,9 @@
         }
         .resim-onizleme .kaldir-btn:hover { color: #ef4444; }
 
+        /* ============================================ */
         /* ===== SOHBET BUTONLARI ===== */
+        /* ============================================ */
         .sohbet-butonu {
             position: fixed;
             bottom: 28px;
@@ -642,6 +783,11 @@
             border-radius: 50%;
             display: inline-block;
             margin-left: 6px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
         }
         .chat-baslik .kapat-btn {
             background: none;
@@ -685,6 +831,11 @@
             font-size: 14px;
             line-height: 1.5;
             word-break: break-word;
+            animation: messageIn 0.3s ease;
+        }
+        @keyframes messageIn {
+            from { opacity: 0; transform: scale(0.9) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
         .chat-mesaj.giden {
             align-self: flex-end;
@@ -888,8 +1039,7 @@
             .destek-butonu { right: 20px; }
             .sayfa-baslik { font-size: 22px; }
             .modal-icerik { padding: 24px; }
-            .header-sol-bölüm { gap: 12px; }
-            .btn { padding: 8px 16px; font-size: 12px; }
+            .cuzdan-modal .cuzdan-actions { grid-template-columns: 1fr; }
         }
         @media (max-width: 480px) {
             .ilan-grid { grid-template-columns: 1fr; }
@@ -898,6 +1048,7 @@
             .header-sag-grup { justify-content: center; flex-wrap: wrap; }
             nav { justify-content: center; flex-wrap: wrap; }
             .sohbet-kapsayici, .destek-kapsayici { height: calc(100% - 120px); bottom: 72px; }
+            .cuzdan-modal .cuzdan-bakiye-box .cuzdan-bakiye { font-size: 28px; }
         }
     </style>
 </head>
@@ -921,15 +1072,12 @@
                 <div class="bildirim-menu" id="bildirimListesiGövde"></div>
             </div>
 
-            <!-- CÜZDAN -->
-            <div class="dropdown" id="cuzdanKapsayici" style="display:none;">
-                <div class="cuzdan-buton">
+            <!-- CÜZDAN - TIKLAYINCA MODAL AÇILIR -->
+            <div id="cuzdanKapsayici" style="display:none;">
+                <div class="cuzdan-buton" onclick="cuzdanModalAc()">
                     <i class="fas fa-wallet"></i>
-                    <span id="cuzdanBakiyeYazi">0.00 ₺</span>
-                </div>
-                <div class="dropdown-menu">
-                    <a href="/bakiye"><i class="fas fa-arrow-up"></i> Bakiye Yükle</a>
-                    <a href="/para-cek"><i class="fas fa-arrow-down"></i> Para Çek</a>
+                    <span class="bakiye-renk" id="cuzdanBakiyeYazi">0.00 ₺</span>
+                    <i class="fas fa-chevron-down" style="font-size:10px; opacity:0.4;"></i>
                 </div>
             </div>
 
@@ -952,6 +1100,43 @@
             <a href="/login" id="loginLink"><i class="fas fa-sign-in-alt"></i> Giriş</a>
         </nav>
     </header>
+
+    <!-- ============================================ -->
+    <!-- 💰 CÜZDAN MODAL (ŞIK & PREMIUM) -->
+    <!-- ============================================ -->
+    <div class="modal-overlay" id="cuzdanModal">
+        <div class="modal-icerik cuzdan-modal">
+            <button class="modal-kapat-btn" onclick="cuzdanModalKapat()"><i class="fas fa-times"></i></button>
+            
+            <div class="cuzdan-header">
+                <div class="cuzdan-icon">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <h2>Cüzdanım</h2>
+                <p class="cuzdan-alt">Bakiyeni yönet, güvenli ticaret yap!</p>
+            </div>
+
+            <!-- BAKİYE GÖSTER -->
+            <div class="cuzdan-bakiye-box">
+                <span class="cuzdan-bakiye-label">💰 Mevcut Bakiyen</span>
+                <span class="cuzdan-bakiye" id="cuzdanModalBakiye">0.00 <small>₺</small></span>
+            </div>
+
+            <!-- AKSİYON BUTONLARI -->
+            <div class="cuzdan-actions">
+                <a href="/bakiye" class="cuzdan-btn cuzdan-btn-yukle">
+                    <i class="fas fa-arrow-up"></i> Bakiye Yükle
+                </a>
+                <a href="/para-cek" class="cuzdan-btn cuzdan-btn-cek">
+                    <i class="fas fa-arrow-down"></i> Para Çek
+                </a>
+            </div>
+
+            <div class="cuzdan-footer">
+                <i class="fas fa-shield-alt"></i> Güvenli havuz sistemi ile korunuyorsun
+            </div>
+        </div>
+    </div>
 
     <!-- ===== ANA SAYFA ===== -->
     <div class="container">
@@ -1131,58 +1316,35 @@
     let yuklenenResimBase64 = "";
 
     // ============================================
-    // TARAYICI SES İZNİNİ AKTİF ETME (ÇÖZÜM)
+    // CÜZDAN MODAL FONKSİYONLARI
     // ============================================
-    let sesIzniAktif = false;
-
-    function tarayiciSesIzniVer() {
-        if (sesIzniAktif) return; // İzin zaten verildiyse çık
-        try {
-            const testSesi = new Audio('/bildirim.mp3');
-            testSesi.volume = 0.01; // Çok kısık çalsın, rahatsız etmesin
-            testSesi.play().then(() => {
-                sesIzniAktif = true;
-                console.log('✅ Tarayıcı ses izni başarıyla aktif edildi!');
-            }).catch(() => {
-                // İzin vermezse sessizce hata yok say
-            });
-        } catch (e) {}
+    function cuzdanModalAc() {
+        const modal = document.getElementById('cuzdanModal');
+        modal.classList.add('active');
+        // Bakiyeyi güncelle
+        const bakiye = document.getElementById('cuzdanBakiyeYazi').innerText;
+        document.getElementById('cuzdanModalBakiye').innerHTML = bakiye.replace(' ₺', '') + ' <small>₺</small>';
+        document.body.style.overflow = 'hidden';
     }
 
-    // ============================================
-    // BİLDİRİM SESİ ÇALDIRMA (GÜNCELLENDİ)
-    // ============================================
-    function bildirimSesiCal() {
-        if (!sesIzniAktif) return; // İzin alınmadıysa sesi çalma
-        try {
-            const ses = new Audio('/bildirim.mp3');
-            ses.volume = 1.0; 
-            ses.play();
-        } catch (hata) {
-            console.log('Ses çalma hatası:', hata.message);
-        }
+    function cuzdanModalKapat() {
+        document.getElementById('cuzdanModal').classList.remove('active');
+        document.body.style.overflow = '';
     }
 
-    // ============================================
-    // SOHBET ODASI TETİKLE (Düzeltildi)
-    // ============================================
-    function sohbetOdasiTetikle(saticiAdi) {
-        if (!aktif) {
-            alert('⚠️ Mesaj atmak için önce giriş yapmalısın kanka!');
-            window.location.href = '/login';
-            return;
+    // Modal dışına tıklayınca kapat
+    document.getElementById('cuzdanModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            cuzdanModalKapat();
         }
-        if (aktif.kullaniciAdi === saticiAdi) {
-            alert('📝 Kendine mesaj atamazsın kanka!');
-            return;
-        }
-        
-        // --- SESİ BURADA DA ÇALDIR ---
-        bildirimSesiCal(); 
+    });
 
-        localStorage.setItem('sohbet_acilacak_kullanici', saticiAdi);
-        window.location.href = '/';
-    }
+    // ESC tuşu ile kapat
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            cuzdanModalKapat();
+        }
+    });
 
     // ============================================
     // DÜZENLE BUTONLARI
@@ -1480,7 +1642,7 @@
     });
 
     // ============================================
-    // SATIN ALMA (GÜNCELLENDİ - Ses Eklendi)
+    // SATIN ALMA
     // ============================================
     function ilanSatinAl(id, fiyat, satici, baslik) {
         if (!aktif) { alert('Giriş yap!'); window.location.href = '/login'; return; }
@@ -1501,9 +1663,6 @@
         bildirimEkle(satici, `🎉 "${baslik}" ilanınız ${aktif.kullaniciAdi} tarafından satın alındı!`);
         bildirimEkle(aktif.kullaniciAdi, `🛍️ "${baslik}" ilanını satın aldın!`);
         
-        // Satın alma başarılı olduğunda ses çal
-        bildirimSesiCal();
-
         fetch(`/api/ilan-sil/${id}`, { method: 'DELETE' })
         .then(res => res.json())
         .then(data => {
@@ -1518,12 +1677,9 @@
     }
 
     // ============================================
-    // SOHBET (GÜNCELLENDİ - Ses İzni Koyuldu)
+    // SOHBET
     // ============================================
     function sohbetPencerisiniAcKapat() {
-        // Burada kullanıcı tıkladığı için tarayıcıya izin verdiriyoruz
-        tarayiciSesIzniVer(); 
-
         if (!aktif) { alert('Giriş yap!'); return; }
         const kutu = document.getElementById('sohbetKapsayici');
         kutu.classList.toggle('acik');
